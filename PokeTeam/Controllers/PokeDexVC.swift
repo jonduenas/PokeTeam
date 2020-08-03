@@ -17,6 +17,9 @@ class PokeDexVC: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        title = "Pokédex"
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        
         loadPokedex()
     }
     
@@ -24,9 +27,14 @@ class PokeDexVC: UITableViewController {
         PokemonManager.shared.fetchPokedex(name: "national") { (pokedex) in
             DispatchQueue.main.async {
                 self.pokedex = pokedex
+                
                 self.tableView.reloadData()
             }
         }
+    }
+    
+    @objc private func selectPokedex() {
+        
     }
 
     // MARK: Tableview Methods

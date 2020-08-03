@@ -105,13 +105,12 @@
 		6554E7BA24D4E09B00081EA9 /* PokeTeam */ = {
 			isa = PBXGroup;
 			children = (
+				65869DEE24D4FE9100AF897F /* Assets */,
 				6554E7BB24D4E09B00081EA9 /* AppDelegate.swift */,
 				6554E7BD24D4E09B00081EA9 /* SceneDelegate.swift */,
 				6554E7ED24D4E14600081EA9 /* Models */,
-				6554E7EC24D4E12A00081EA9 /* Controllers */,
 				6554E7EB24D4E11C00081EA9 /* Views */,
-				6554E7C424D4E09E00081EA9 /* Assets.xcassets */,
-				6554E7C624D4E09E00081EA9 /* LaunchScreen.storyboard */,
+				6554E7EC24D4E12A00081EA9 /* Controllers */,
 				6554E7C924D4E09E00081EA9 /* Info.plist */,
 			);
 			path = PokeTeam;
@@ -138,6 +137,7 @@
 		6554E7EB24D4E11C00081EA9 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				6554E7C624D4E09E00081EA9 /* LaunchScreen.storyboard */,
 				6554E7C124D4E09B00081EA9 /* Main.storyboard */,
 			);
 			path = Views;
@@ -159,6 +159,14 @@
 				6554E7F024D4E16C00081EA9 /* Pokemon.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		65869DEE24D4FE9100AF897F /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				6554E7C424D4E09E00081EA9 /* Assets.xcassets */,
+			);
+			path = Assets;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -471,6 +479,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = XWQQ29E97Q;
 				INFOPLIST_FILE = PokeTeam/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -489,6 +498,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = XWQQ29E97Q;
 				INFOPLIST_FILE = PokeTeam/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
