@@ -9,36 +9,29 @@
 import Foundation
 
 struct Pokedex: Decodable {
-    let names: [Name]
-    let descriptions: [Description]
-    let pokemonEntries: [PokemonEntry]
-    
-    private enum CodingKeys: String, CodingKey {
-        case names
-        case descriptions
-        case pokemonEntries = "pokemon_entries"
-    }
-}
-
-struct Name: Decodable {
     let name: String
-}
-
-struct Description: Decodable {
-    let description: String
+    let pokemonEntries: [PokemonEntry]
 }
 
 struct PokemonEntry: Decodable {
     let entryNumber: Int
-    let pokemonSpecies: PokemonSpecies
-    
-    private enum CodingKeys: String, CodingKey {
-        case entryNumber = "entry_number"
-        case pokemonSpecies = "pokemon_species"
-    }
-}
-
-struct PokemonSpecies: Decodable {
     let name: String
     let url: String
+    
+    enum PokemonEntryCodingKeys: String, CodingKey {
+        case entryNumber, pokemonSpecies
+    }
+    
+    enum PokemonSpeciesCodingKeys: String, CodingKey {
+        case name, url
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: PokemonEntryCodingKeys.self)
+        entryNumber = try container.decode(Int.self, forKey: .entryNumber)
+        let pokemonSpecies = try container.nestedContainer(keyedBy: PokemonSpeciesCodingKeys.self, forKey: .pokemonSpecies)
+        name = try pokemonSpecies.decode(String.self, forKey: .name)
+        url = try pokemonSpecies.decode(String.self, forKey: .url)
+    }
+    
 }
