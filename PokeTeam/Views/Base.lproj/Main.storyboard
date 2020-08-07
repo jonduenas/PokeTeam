@@ -367,7 +367,7 @@
                         <outlet property="pokemonDescriptionLabel" destination="ss8-Uv-laT" id="onb-dv-Xdt"/>
                         <outlet property="pokemonImageView" destination="9KX-Et-yFh" id="N4l-Wh-jJc"/>
                         <outlet property="pokemonNameLabel" destination="OSh-HH-YdB" id="OkS-bI-S2v"/>
-                        <outlet property="pokemonNumberLabel" destination="EhZ-Gl-G3x" id="loM-l8-m9V"/>
+                        <outlet property="pokemonNumberAndGenusLabel" destination="EhZ-Gl-G3x" id="loM-l8-m9V"/>
                         <outlet property="pokemonType1" destination="Gyk-pZ-ujZ" id="1eC-M9-ROM"/>
                         <outlet property="pokemonType2" destination="GJh-9N-qMj" id="PKf-6t-xdw"/>
                         <outlet property="statAttackLabel" destination="Vtq-hk-jaO" id="iDF-cp-OBG"/>
