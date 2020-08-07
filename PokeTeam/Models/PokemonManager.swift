@@ -16,8 +16,32 @@ enum PokemonDataType: String {
     case move = "move/"
 }
 
+enum PokemonType: String {
+    case normal, fire, water, electric, grass, ice, fighting, poison, ground, flying, psychic, bug, rock, ghost, dragon, dark, steel, fairy
+}
+
 class PokemonManager {
     static let shared = PokemonManager()
+    let colorDictionary: [PokemonType: UIColor] = [
+        .normal : #colorLiteral(red: 0.6604253054, green: 0.6575222611, blue: 0.4722985029, alpha: 1),
+        .fire: #colorLiteral(red: 0.9430522323, green: 0.500674963, blue: 0.18630445, alpha: 1),
+        .water: #colorLiteral(red: 0.4103244543, green: 0.5630832911, blue: 0.9429332614, alpha: 1),
+        .electric: #colorLiteral(red: 0.9735011458, green: 0.8164314032, blue: 0.1857287586, alpha: 1),
+        .grass: #colorLiteral(red: 0.4723884463, green: 0.7830661535, blue: 0.3122061789, alpha: 1),
+        .ice: #colorLiteral(red: 0.5975236893, green: 0.8461193442, blue: 0.84528476, alpha: 1),
+        .fighting: #colorLiteral(red: 0.7551248074, green: 0.1901937127, blue: 0.1567256749, alpha: 1),
+        .poison: #colorLiteral(red: 0.6268454194, green: 0.2496165633, blue: 0.626177609, alpha: 1),
+        .ground: #colorLiteral(red: 0.8783461452, green: 0.7512584329, blue: 0.4078472555, alpha: 1),
+        .flying: #colorLiteral(red: 0.6595369577, green: 0.5635969043, blue: 0.94169873, alpha: 1),
+        .psychic: #colorLiteral(red: 0.9737138152, green: 0.343855083, blue: 0.5335571766, alpha: 1),
+        .bug: #colorLiteral(red: 0.6570427418, green: 0.7231122851, blue: 0.1252906322, alpha: 1),
+        .rock: #colorLiteral(red: 0.7233955264, green: 0.6271670461, blue: 0.2228657305, alpha: 1),
+        .ghost: #colorLiteral(red: 0.4378493428, green: 0.3458217978, blue: 0.5958074331, alpha: 1),
+        .dragon: #colorLiteral(red: 0.4412069917, green: 0.2183938026, blue: 0.9708285928, alpha: 1),
+        .dark: #colorLiteral(red: 0.4411335588, green: 0.3436093628, blue: 0.2820082605, alpha: 1),
+        .steel: #colorLiteral(red: 0.7238504291, green: 0.7228143215, blue: 0.8153695464, alpha: 1),
+        .fairy: #colorLiteral(red: 0.9356001616, green: 0.5982843041, blue: 0.6742190719, alpha: 1)
+    ]
     
     func fetchFromAPI<T>(name: String? = nil, index: Int? = nil, urlString: String? = nil, dataType: PokemonDataType, decodeTo type: T.Type, completion: @escaping (T) -> Void) where T: Decodable {
         guard let url = createURL(from: name, index: index, urlString: urlString, dataType: dataType) else {
@@ -67,141 +91,4 @@ class PokemonManager {
         }
         return nil
     }
-    
-//    func fetchPokemon(number: Int, from pokedex: Pokedex, completion: @escaping (Pokemon) -> Void) {
-//        
-//        guard let urlSpecies = URL(string: pokedex.pokemonEntries[number].url) else { return }
-//        
-//        let dispatchGroup = DispatchGroup()
-//        
-//        var pokemonData: PokemonData?
-//        var speciesData: SpeciesData?
-//        
-//        // Fetch Pokemon Data
-//        URLSession.shared.dataTask(with: urlPokemon) { (data, response, error) in
-//            dispatchGroup.enter()
-//            if error != nil {
-//                print("Failed to fetch data with error: ", error!.localizedDescription)
-//                return
-//            }
-//            
-//            guard let data = data else { return }
-//            
-//            let decoder = JSONDecoder()
-//            
-//            do {
-//                pokemonData = try decoder.decode(PokemonData.self, from: data)
-//                dispatchGroup.leave()
-//            } catch {
-//                print(error)
-//            }
-//        }.resume()
-//        
-//        // Fetch Species Data
-//        URLSession.shared.dataTask(with: urlSpecies) { (data, response, error) in
-//            dispatchGroup.enter()
-//            if error != nil {
-//                print("Failed to fetch data with error: ", error!.localizedDescription)
-//                return
-//            }
-//            
-//            guard let data = data else { return }
-//            
-//            let decoder = JSONDecoder()
-//            
-//            do {
-//                speciesData = try decoder.decode(SpeciesData.self, from: data)
-//                dispatchGroup.leave()
-//            } catch {
-//                print(error)
-//            }
-//        }.resume()
-//        
-//        dispatchGroup.notify(queue: .main) {
-//            guard let pokemonData = pokemonData else { return }
-//            guard let speciesData = speciesData else { return }
-//            
-//            let pokemon = self.parsePokemonData(pokemonData: pokemonData, speciesData: speciesData)
-//            
-//            completion(pokemon)
-//        }
-//    }
-    
-//    func fetchData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> Void) {
-//        URLSession.shared.dataTask(with: url) { (data, response, error) in
-//            completion(data, response, error)
-//        }.resume()
-//    }
-    
-//    private func parsePokemonData(pokemonData: PokemonData, speciesData: SpeciesData) -> Pokemon {
-//        let id = pokemonData.id
-//        let name = pokemonData.name
-//
-//        var types = [String]()
-//        for type in pokemonData.types {
-//            types.insert(type.type.name, at: type.slot)
-//        }
-//
-//        var stats = [String: Int]()
-//        for stat in pokemonData.stats {
-//            stats[stat.stat.name] = stat.baseStat
-//        }
-//
-//        let generation = generations[speciesData.generation.name] ?? "Unknown"
-//
-//        let pokemon = Pokemon(id: id, name: name, type: types, region: generation, stats: stats, abilities: [])
-//
-//        return pokemon
-//    }
-//
-//    func parseMoveData(pokemonData: PokemonData) -> [PokemonMove] {
-//        var moves = [PokemonMove]()
-//        for move in pokemonData.moves {
-//            let moveName = move.move.name
-//
-//            let levelLearnedAt = move.versionGroupDetails.last?.levelLearnedAt
-//            let moveLearnMethod = move.versionGroupDetails.last?.moveLearnMethod.name
-//
-//            let moveToAdd = PokemonMove(name: moveName, levelLearnedAt: levelLearnedAt, moveLearnMethod: moveLearnMethod!)
-//
-//            moves.append(moveToAdd)
-//        }
-//        return moves
-//    }
-    
-//    func parseAbilityData(pokemonData: PokemonData) -> [PokemonAbility]? {
-//        var abilities = [PokemonAbility]()
-//        for ability in pokemonData.abilities {
-//            var abilityData: AbilityData
-//            let abilityName = ability.ability.name
-//            var abilityDescription: String?
-//            
-//            guard let abilityURL = URL(string: ability.ability.url) else { return nil }
-//            
-//            let dispatchGroup = DispatchGroup()
-//            
-////            fetchData(from: abilityURL) { (data, response, error) in
-////                dispatchGroup.enter()
-////                if error != nil {
-////                    print(error!.localizedDescription)
-////                }
-////                
-////                guard let data = data else { return }
-////                
-////                let decoder = JSONDecoder()
-////                
-////                do {
-////                    abilityData = try decoder.decode(AbilityData.self, from: data)
-////                    dispatchGroup.leave()
-////                } catch {
-////                    print(error)
-////                }
-////            }
-//            dispatchGroup.notify(queue: .main) {
-//                abilityDescription = abilityData.flavorTextEntries.first?.flavorText
-//                    
-//                
-//            }
-//        }
-//    }
 }
