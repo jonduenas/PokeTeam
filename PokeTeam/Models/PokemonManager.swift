@@ -17,7 +17,7 @@ enum PokemonDataType: String {
 }
 
 enum PokemonType: String {
-    case normal, fire, water, electric, grass, ice, fighting, poison, ground, flying, psychic, bug, rock, ghost, dragon, dark, steel, fairy
+    case normal, fire, water, electric, grass, ice, fighting, poison, ground, flying, psychic, bug, rock, ghost, dragon, dark, steel, fairy, unknown
 }
 
 class PokemonManager {
@@ -40,7 +40,8 @@ class PokemonManager {
         .dragon: #colorLiteral(red: 0.4412069917, green: 0.2183938026, blue: 0.9708285928, alpha: 1),
         .dark: #colorLiteral(red: 0.4411335588, green: 0.3436093628, blue: 0.2820082605, alpha: 1),
         .steel: #colorLiteral(red: 0.7238504291, green: 0.7228143215, blue: 0.8153695464, alpha: 1),
-        .fairy: #colorLiteral(red: 0.9356001616, green: 0.5982843041, blue: 0.6742190719, alpha: 1)
+        .fairy: #colorLiteral(red: 0.9356001616, green: 0.5982843041, blue: 0.6742190719, alpha: 1),
+        .unknown: UIColor.black
     ]
     
     func fetchFromAPI<T>(name: String? = nil, index: Int? = nil, urlString: String? = nil, dataType: PokemonDataType, decodeTo type: T.Type, completion: @escaping (T) -> Void) where T: Decodable {

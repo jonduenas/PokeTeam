@@ -12,8 +12,11 @@ class PokemonDetailVC: UIViewController {
 
     let largeTitleSize: CGFloat = 34
     let subTitleSize: CGFloat = 25
-    let pokemon: Pokemon
+    let pokemon: PokemonEntry
     
+    var indicatorView = UIActivityIndicatorView()
+    
+    @IBOutlet var detailView: UIView!
     @IBOutlet var pokemonImageView: UIImageView!
     
     @IBOutlet var pokemonNameLabel: UILabel!
@@ -39,7 +42,7 @@ class PokemonDetailVC: UIViewController {
     
     @IBOutlet var abilitiesHeaderLabel: UILabel!
     
-    init?(coder: NSCoder, pokemon: Pokemon) {
+    init?(coder: NSCoder, pokemon: PokemonEntry) {
         self.pokemon = pokemon
 
         super.init(coder: coder)
@@ -52,6 +55,9 @@ class PokemonDetailVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        indicatorView = self.activityIndicator(style: .large, center: self.view.center)
+        view.addSubview(indicatorView)
+        
         loadPokemonInfo()
         setCustomFonts()
         layoutAbilities()
@@ -60,10 +66,12 @@ class PokemonDetailVC: UIViewController {
     private func loadPokemonInfo() {
         let pokemonIndex = pokemon.entryNumber
 
+        setState(loading: true)
         PokemonManager.shared.fetchFromAPI(index: pokemonIndex, dataType: .pokemon, decodeTo: PokemonData.self) { (pokemon) in
             PokemonManager.shared.fetchFromAPI(index: pokemonIndex, dataType: .species, decodeTo: SpeciesData.self) { (species) in
                 DispatchQueue.main.async {
                     self.updatePokemonUI(with: pokemon, species: species)
+                    self.setState(loading: false)
                 }
             }
         }
@@ -73,20 +81,22 @@ class PokemonDetailVC: UIViewController {
         // Update Pokemon Name
         pokemonNameLabel.text = pokemon.name.capitalized
         
+        //Update Image
+        pokemonImageView.image = UIImage(named: String(pokemon.id))
+        
         // Update Pokemon types
         if pokemon.types.count > 1 {
             let type1 = pokemon.types[0].name
             let type2 = pokemon.types[1].name
             
             pokemonType1.text = type1.capitalized
-            pokemonType1.backgroundColor = PokemonManager.shared.colorDictionary[PokemonType(rawValue: type1)!]
-            print(PokemonType(rawValue: type1)!)
+            pokemonType1.backgroundColor = PokemonManager.shared.colorDictionary[PokemonType(rawValue: type1) ?? PokemonType.unknown]
             pokemonType2.text = type2.capitalized
-            pokemonType2.backgroundColor = PokemonManager.shared.colorDictionary[PokemonType(rawValue: type2)!]
+            pokemonType2.backgroundColor = PokemonManager.shared.colorDictionary[PokemonType(rawValue: type2) ?? PokemonType.unknown]
         } else {
             let type1 = pokemon.types[0].name
             pokemonType1.text = type1.capitalized
-            pokemonType1.backgroundColor = PokemonManager.shared.colorDictionary[PokemonType(rawValue: type1)!]
+            pokemonType1.backgroundColor = PokemonManager.shared.colorDictionary[PokemonType(rawValue: type1) ?? PokemonType.unknown]
             pokemonType2.isHidden = true
         }
         
@@ -134,6 +144,30 @@ class PokemonDetailVC: UIViewController {
     
     private func layoutAbilities() {
         
+    }
+    
+    private func setState(loading: Bool) {
+        if loading {
+            detailView.isHidden = true
+            indicatorView.startAnimating()
+        } else {
+            detailView.isHidden = false
+            indicatorView.stopAnimating()
+        }
+    }
+    
+    private func activityIndicator(style: UIActivityIndicatorView.Style = .medium, frame: CGRect? = nil, center: CGPoint? = nil) -> UIActivityIndicatorView {
+        let activityViewIndicator = UIActivityIndicatorView(style: style)
+        
+        if let frame = frame {
+            activityViewIndicator.frame = frame
+        }
+        
+        if let center = center {
+            activityViewIndicator.center = center
+        }
+        
+        return activityViewIndicator
     }
 
     /*

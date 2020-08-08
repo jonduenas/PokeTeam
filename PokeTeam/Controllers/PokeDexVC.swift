@@ -15,7 +15,6 @@ class PokeDexVC: UITableViewController {
     let cellFont = FontKit.roundedFont(ofSize: 17, weight: .regular)
     
     var pokedex: Pokedex?
-    var pokemon: Pokemon?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,8 +69,19 @@ class PokeDexVC: UITableViewController {
     
     @IBSegueAction
     func makePokemonDetailViewController(coder: NSCoder) -> UIViewController? {
-        guard let pokemon = pokemon else { return nil }
+        let indexPath = tableView.indexPathForSelectedRow!
+        let selectedRow = indexPath.row
+        let pokemon = pokedex!.pokemonEntries[selectedRow]
         return PokemonDetailVC(coder: coder, pokemon: pokemon)
     }
+
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if let indexPath = tableView.indexPathForSelectedRow {
+//            let selectedRow = indexPath.row
+//            let detailVC = segue.destination as! PokemonDetailVC
+//            detailVC.pokemon = pokedex?.pokemonEntries[selectedRow]
+//        }
+//    }
+
 }
 
