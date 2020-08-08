@@ -12,7 +12,7 @@ class PokemonDetailVC: UIViewController {
 
     let largeTitleSize: CGFloat = 34
     let subTitleSize: CGFloat = 25
-    let pokemon: PokemonEntry
+    let pokemonEntry: PokemonEntry
     
     var indicatorView = UIActivityIndicatorView()
     
@@ -20,10 +20,11 @@ class PokemonDetailVC: UIViewController {
     @IBOutlet var pokemonImageView: UIImageView!
     
     @IBOutlet var pokemonNameLabel: UILabel!
-    @IBOutlet var pokemonType1: UILabel!
-    @IBOutlet var pokemonType2: UILabel!
+    @IBOutlet var pokemonType1: PokemonTypeLabel!
+    @IBOutlet var pokemonType2: PokemonTypeLabel!
     @IBOutlet var pokemonNumberAndGenusLabel: UILabel!
     @IBOutlet var pokemonDescriptionLabel: UILabel!
+    @IBOutlet var pokemonRegionLabel: UILabel!
     
     @IBOutlet var baseStatsHeaderLabel: UILabel!
     @IBOutlet var statTotalLabel: UILabel!
@@ -43,7 +44,7 @@ class PokemonDetailVC: UIViewController {
     @IBOutlet var abilitiesHeaderLabel: UILabel!
     
     init?(coder: NSCoder, pokemon: PokemonEntry) {
-        self.pokemon = pokemon
+        self.pokemonEntry = pokemon
 
         super.init(coder: coder)
     }
@@ -64,16 +65,34 @@ class PokemonDetailVC: UIViewController {
     }
     
     private func loadPokemonInfo() {
-        let pokemonIndex = pokemon.entryNumber
+        let pokemonIndex = pokemonEntry.entryNumber
+        
+        var pokemonData: PokemonData?
+        var speciesData: SpeciesData?
 
         setState(loading: true)
+        
+        let group = DispatchGroup()
+        
+        group.enter()
         PokemonManager.shared.fetchFromAPI(index: pokemonIndex, dataType: .pokemon, decodeTo: PokemonData.self) { (pokemon) in
-            PokemonManager.shared.fetchFromAPI(index: pokemonIndex, dataType: .species, decodeTo: SpeciesData.self) { (species) in
-                DispatchQueue.main.async {
-                    self.updatePokemonUI(with: pokemon, species: species)
-                    self.setState(loading: false)
+            pokemonData = pokemon
+            group.leave()
+        }
+        
+        group.enter()
+        PokemonManager.shared.fetchFromAPI(index: pokemonIndex, dataType: .species, decodeTo: SpeciesData.self) { (species) in
+            speciesData = species
+            group.leave()
+        }
+        
+        group.notify(queue: .main) {
+            if let pokemonData = pokemonData {
+                if let speciesData = speciesData {
+                    self.updatePokemonUI(with: pokemonData, species: speciesData)
                 }
             }
+            self.setState(loading: false)
         }
     }
     
@@ -90,13 +109,13 @@ class PokemonDetailVC: UIViewController {
             let type2 = pokemon.types[1].name
             
             pokemonType1.text = type1.capitalized
-            pokemonType1.backgroundColor = PokemonManager.shared.colorDictionary[PokemonType(rawValue: type1) ?? PokemonType.unknown]
+            pokemonType1.backgroundColor = PokemonTypeLabel.colorDictionary[PokemonType(rawValue: type1) ?? PokemonType.unknown]
             pokemonType2.text = type2.capitalized
-            pokemonType2.backgroundColor = PokemonManager.shared.colorDictionary[PokemonType(rawValue: type2) ?? PokemonType.unknown]
+            pokemonType2.backgroundColor = PokemonTypeLabel.colorDictionary[PokemonType(rawValue: type2) ?? PokemonType.unknown]
         } else {
             let type1 = pokemon.types[0].name
             pokemonType1.text = type1.capitalized
-            pokemonType1.backgroundColor = PokemonManager.shared.colorDictionary[PokemonType(rawValue: type1) ?? PokemonType.unknown]
+            pokemonType1.backgroundColor = PokemonTypeLabel.colorDictionary[PokemonType(rawValue: type1) ?? PokemonType.unknown]
             pokemonType2.isHidden = true
         }
         
@@ -127,6 +146,8 @@ class PokemonDetailVC: UIViewController {
         let formattedText = englishFlavorText.replacingOccurrences(of: "\n", with: " ")
         
         pokemonDescriptionLabel.text = formattedText
+        
+        // Update Region from Generation
     }
     
     private func setCustomFonts() {

@@ -80,29 +80,39 @@
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="dNt-42-tAd">
-                                                                <rect key="frame" x="76.5" y="56" width="147" height="27"/>
+                                                                <rect key="frame" x="67.5" y="56" width="165" height="27"/>
                                                                 <subviews>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Grass" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gyk-pZ-ujZ">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="71" height="27"/>
+                                                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Grass" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gyk-pZ-ujZ" customClass="PokemonTypeLabel" customModule="PokeTeam" customModuleProvider="target">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="80" height="27"/>
                                                                         <color key="backgroundColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="width" constant="71" id="fbW-Xg-RWK"/>
+                                                                            <constraint firstAttribute="width" constant="80" id="fbW-Xg-RWK"/>
                                                                             <constraint firstAttribute="height" constant="27" id="zM8-RP-SrU"/>
                                                                         </constraints>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <nil key="highlightedColor"/>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                <real key="value" value="5"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
                                                                     </label>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Poison" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GJh-9N-qMj">
-                                                                        <rect key="frame" x="76" y="0.0" width="71" height="27"/>
+                                                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Poison" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GJh-9N-qMj" customClass="PokemonTypeLabel" customModule="PokeTeam" customModuleProvider="target">
+                                                                        <rect key="frame" x="85" y="0.0" width="80" height="27"/>
                                                                         <color key="backgroundColor" systemColor="systemPurpleColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="27" id="0C7-6B-PsV"/>
-                                                                            <constraint firstAttribute="width" constant="71" id="tnZ-88-yVw"/>
+                                                                            <constraint firstAttribute="width" constant="80" id="tnZ-88-yVw"/>
                                                                         </constraints>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <nil key="highlightedColor"/>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                <real key="value" value="5"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
                                                                     </label>
                                                                 </subviews>
                                                             </stackView>
@@ -369,6 +379,7 @@
                         <outlet property="pokemonImageView" destination="9KX-Et-yFh" id="N4l-Wh-jJc"/>
                         <outlet property="pokemonNameLabel" destination="OSh-HH-YdB" id="OkS-bI-S2v"/>
                         <outlet property="pokemonNumberAndGenusLabel" destination="EhZ-Gl-G3x" id="loM-l8-m9V"/>
+                        <outlet property="pokemonRegionLabel" destination="QLs-bW-hTx" id="Jie-x8-0OO"/>
                         <outlet property="pokemonType1" destination="Gyk-pZ-ujZ" id="1eC-M9-ROM"/>
                         <outlet property="pokemonType2" destination="GJh-9N-qMj" id="PKf-6t-xdw"/>
                         <outlet property="statAttackLabel" destination="Vtq-hk-jaO" id="iDF-cp-OBG"/>
