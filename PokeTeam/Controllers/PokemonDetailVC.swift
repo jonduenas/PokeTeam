@@ -13,6 +13,9 @@ class PokemonDetailVC: UIViewController {
     let largeTitleSize: CGFloat = 34
     let subTitleSize: CGFloat = 25
     let pokemonEntry: PokemonEntry
+
+    var pokemonData: PokemonData?
+    var speciesData: SpeciesData?
     
     var indicatorView = UIActivityIndicatorView()
     
@@ -67,8 +70,6 @@ class PokemonDetailVC: UIViewController {
     private func loadPokemonInfo() {
         let pokemonIndex = pokemonEntry.entryNumber
         
-        var pokemonData: PokemonData?
-        var speciesData: SpeciesData?
 
         setState(loading: true)
         
@@ -76,27 +77,31 @@ class PokemonDetailVC: UIViewController {
         
         group.enter()
         PokemonManager.shared.fetchFromAPI(index: pokemonIndex, dataType: .pokemon, decodeTo: PokemonData.self) { (pokemon) in
-            pokemonData = pokemon
+            self.pokemonData = pokemon
             group.leave()
         }
         
         group.enter()
         PokemonManager.shared.fetchFromAPI(index: pokemonIndex, dataType: .species, decodeTo: SpeciesData.self) { (species) in
-            speciesData = species
+            self.speciesData = species
             group.leave()
         }
         
         group.notify(queue: .main) {
-            if let pokemonData = pokemonData {
-                if let speciesData = speciesData {
-                    self.updatePokemonUI(with: pokemonData, species: speciesData)
+            if let _ = self.pokemonData {
+                if let _ = self.speciesData {
+                    self.updatePokemonUI()
+                    self.updateStats()
                 }
             }
             self.setState(loading: false)
         }
     }
     
-    private func updatePokemonUI(with pokemon: PokemonData, species: SpeciesData) {
+    private func updatePokemonUI() {
+        guard let pokemon = pokemonData else { return }
+        guard let species = speciesData else { return }
+        
         // Update Pokemon Name
         pokemonNameLabel.text = pokemon.name.capitalized
         
@@ -148,6 +153,7 @@ class PokemonDetailVC: UIViewController {
         pokemonDescriptionLabel.text = formattedText
         
         // Update Region from Generation
+        print(species.generation.name)
     }
     
     private func setCustomFonts() {
@@ -159,8 +165,63 @@ class PokemonDetailVC: UIViewController {
         abilitiesHeaderLabel.font = subTitleFont
     }
     
-    private func setStats() {
+    private func updateStats() {
+        guard let pokemon = pokemonData else { return }
+        let maxStat: Float = 255
         
+        // Parse individual stats from stats array
+        var hpStat = 0
+        var attackStat = 0
+        var defenseStat = 0
+        var specialAttackStat = 0
+        var specialDefenseStat = 0
+        var speedStat = 0
+        
+        for stat in pokemon.stats {
+            if stat.statName == "hp" {
+                hpStat = stat.baseStat
+            } else if stat.statName == "attack" {
+                attackStat = stat.baseStat
+            } else if stat.statName == "defense" {
+                defenseStat = stat.baseStat
+            } else if stat.statName == "special-attack" {
+                specialAttackStat = stat.baseStat
+            } else if stat.statName == "special-defense" {
+                specialDefenseStat = stat.baseStat
+            } else if stat.statName == "speed" {
+                speedStat = stat.baseStat
+            }
+        }
+        
+        // Update UI
+        
+        // HP
+        statHPLabel.text = "\(hpStat)"
+        statHPProgress.progress = Float(hpStat) / maxStat
+        
+        // Attack
+        statAttackLabel.text = "\(attackStat)"
+        statAttackProgress.progress = Float(attackStat) / maxStat
+        
+        // Defense
+        statDefenseLabel.text = "\(defenseStat)"
+        statDefenseProgress.progress = Float(defenseStat) / maxStat
+        
+        // Special Attack
+        statSpAttackLabel.text = "\(specialAttackStat)"
+        statSpAttackProgress.progress = Float(specialAttackStat) / maxStat
+        
+        // Special Defense
+        statSpDefenseLabel.text = "\(specialDefenseStat)"
+        statSpDefenseProgress.progress = Float(specialDefenseStat) / maxStat
+        
+        // Speed
+        statSpeedLabel.text = "\(speedStat)"
+        statSpeedProgress.progress = Float(speedStat) / maxStat
+        
+        // Total Stats
+        let totalStats: Int = Int(hpStat + attackStat + defenseStat + specialAttackStat + specialDefenseStat + speedStat)
+        statTotalLabel.text = "TOTAL \(totalStats)"
     }
     
     private func layoutAbilities() {
