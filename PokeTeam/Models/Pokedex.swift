@@ -8,12 +8,12 @@
 
 import Foundation
 
-struct Pokedex: Decodable {
+struct Pokedex: Codable {
     let name: String
     let pokemonEntries: [PokemonEntry]
 }
 
-struct PokemonEntry: Decodable {
+struct PokemonEntry: Codable {
     let entryNumber: Int
     let name: String
     let url: String

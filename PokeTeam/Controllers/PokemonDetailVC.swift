@@ -16,6 +16,7 @@ class PokemonDetailVC: UIViewController {
 
     var pokemonData: PokemonData?
     var speciesData: SpeciesData?
+    var generationData: GenerationData?
     
     var indicatorView = UIActivityIndicatorView()
     
@@ -84,7 +85,13 @@ class PokemonDetailVC: UIViewController {
         group.enter()
         PokemonManager.shared.fetchFromAPI(index: pokemonIndex, dataType: .species, decodeTo: SpeciesData.self) { (species) in
             self.speciesData = species
-            group.leave()
+            
+            let generationURL = species.generation.url
+            
+            PokemonManager.shared.fetchFromAPI(urlString: generationURL, decodeTo: GenerationData.self) { (generation) in
+                self.generationData = generation
+                group.leave()
+            }
         }
         
         group.notify(queue: .main) {
@@ -101,6 +108,7 @@ class PokemonDetailVC: UIViewController {
     private func updatePokemonUI() {
         guard let pokemon = pokemonData else { return }
         guard let species = speciesData else { return }
+        guard let generation = generationData else { return }
         
         // Update Pokemon Name
         pokemonNameLabel.text = pokemon.name.capitalized
@@ -153,7 +161,8 @@ class PokemonDetailVC: UIViewController {
         pokemonDescriptionLabel.text = formattedText
         
         // Update Region from Generation
-        print(species.generation.name)
+        let regionName = generation.mainRegion.uppercased()
+        pokemonRegionLabel.text = "REGION: \(regionName)"
     }
     
     private func setCustomFonts() {

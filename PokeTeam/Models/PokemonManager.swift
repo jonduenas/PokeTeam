@@ -23,7 +23,7 @@ enum PokemonType: String {
 class PokemonManager {
     static let shared = PokemonManager()
     
-    func fetchFromAPI<T>(name: String? = nil, index: Int? = nil, urlString: String? = nil, dataType: PokemonDataType, decodeTo type: T.Type, completion: @escaping (T) -> Void) where T: Decodable {
+    func fetchFromAPI<T>(name: String? = nil, index: Int? = nil, urlString: String? = nil, dataType: PokemonDataType? = nil, decodeTo type: T.Type, completion: @escaping (T) -> Void) where T: Decodable {
         guard let url = createURL(from: name, index: index, urlString: urlString, dataType: dataType) else {
             fatalError("Failed to create valid URL")
         }
@@ -52,17 +52,21 @@ class PokemonManager {
         task.resume()
     }
     
-    func createURL(from name: String? = nil, index: Int? = nil, urlString: String? = nil, dataType: PokemonDataType) -> URL? {
+    func createURL(from name: String? = nil, index: Int? = nil, urlString: String? = nil, dataType: PokemonDataType? = nil) -> URL? {
         let baseStringURL = "https://pokeapi.co/api/v2/"
         
         if let name = name {
-            let url = URL(string: baseStringURL + dataType.rawValue + name)
-            return url
+            if let dataType = dataType {
+                let url = URL(string: baseStringURL + dataType.rawValue + name)
+                return url
+            }
         }
         
         if let index = index {
-            let url = URL(string: baseStringURL + dataType.rawValue + "\(index)")
-            return url
+            if let dataType = dataType {
+                let url = URL(string: baseStringURL + dataType.rawValue + "\(index)")
+                return url
+            }
         }
         
         if let urlString = urlString {
