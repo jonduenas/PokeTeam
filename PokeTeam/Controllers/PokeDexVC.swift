@@ -23,14 +23,13 @@ class PokeDexVC: UITableViewController {
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: navBarFont]
         
         loadPokedex()
-        
-//        pokemon = Pokemon(id: 1, name: "", type: [""], region: "", spriteStringURL: "", statHP: 1, statAttack: 1, statDefense: 1, statSpAttack: 1, statSpDefense: 1, statSpeed: 1, abilities: ["":""])
     }
     
     private func loadPokedex() {
         PokemonManager.shared.fetchFromAPI(index: 1, dataType: .pokedex, decodeTo: Pokedex.self) { (pokedex) in
             DispatchQueue.main.async {
                 self.pokedex = pokedex
+                self.navigationItem.title = "Pokédex: \(pokedex.name.capitalized)"
                 
                 self.tableView.reloadData()
             }
