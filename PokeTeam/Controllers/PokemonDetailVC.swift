@@ -46,6 +46,7 @@ class PokemonDetailVC: UIViewController {
     @IBOutlet var statSpeedProgress: UIProgressView!
     
     @IBOutlet var abilitiesHeaderLabel: UILabel!
+    @IBOutlet weak var abilitiesStackView: UIStackView!
     
     init?(coder: NSCoder, pokemon: PokemonEntry) {
         self.pokemonEntry = pokemon
@@ -67,7 +68,7 @@ class PokemonDetailVC: UIViewController {
         
         loadPokemonInfo()
         setCustomFonts()
-        layoutAbilities()
+        
     }
     
     private func loadPokemonInfo() {
@@ -99,6 +100,7 @@ class PokemonDetailVC: UIViewController {
             if let _ = self.pokemonData {
                 if let _ = self.speciesData {
                     self.updatePokemonUI()
+                    self.layoutAbilities()
                     self.updateStats()
                 }
             }
@@ -235,7 +237,36 @@ class PokemonDetailVC: UIViewController {
     }
     
     private func layoutAbilities() {
+        guard let pokemonData = pokemonData else { return }
         
+        for (index, ability) in pokemonData.abilities.enumerated() {
+            let abilityButton = UIButton()
+            
+            if ability.isHidden {
+                abilityButton.setTitle("\(ability.name.capitalized) *", for: .normal)
+            } else {
+                abilityButton.setTitle(ability.name.capitalized, for: .normal)
+            }
+            
+            abilityButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+            abilityButton.widthAnchor.constraint(equalToConstant: 150).isActive = true
+            abilityButton.backgroundColor = UIColor(named: "poke-blue")
+            abilityButton.titleLabel?.textColor = UIColor.white
+            abilityButton.layer.cornerRadius = 20
+            abilityButton.tag = index
+            abilityButton.addTarget(self, action: #selector(abilityButtonTapped), for: .touchUpInside)
+            abilitiesStackView.addArrangedSubview(abilityButton)
+            abilitiesStackView.translatesAutoresizingMaskIntoConstraints = false
+        }
+        
+        let hiddenLabel = UILabel()
+        hiddenLabel.text = "* Hidden Ability"
+        hiddenLabel.font = UIFont.systemFont(ofSize: 12)
+        abilitiesStackView.addArrangedSubview(hiddenLabel)
+    }
+    
+    @objc private func abilityButtonTapped(sender: UIButton!) {
+        print(sender.tag)
     }
     
     private func setState(loading: Bool) {

@@ -53,10 +53,10 @@
                                 <rect key="frame" x="0.0" y="88" width="414" height="725"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L4e-QI-bFf">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="968.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="1042"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="37" translatesAutoresizingMaskIntoConstraints="NO" id="j14-dF-NLD">
-                                                <rect key="frame" x="0.0" y="25" width="414" height="943.5"/>
+                                                <rect key="frame" x="0.0" y="25" width="414" height="1017"/>
                                                 <subviews>
                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="poke_ball" translatesAutoresizingMaskIntoConstraints="NO" id="9KX-Et-yFh">
                                                         <rect key="frame" x="107" y="0.0" width="200" height="200"/>
@@ -344,7 +344,7 @@
                                                         </constraints>
                                                     </view>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="CJr-op-7tc">
-                                                        <rect key="frame" x="25" y="825.5" width="364" height="118"/>
+                                                        <rect key="frame" x="25" y="825.5" width="364" height="191.5"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Abilities" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SAb-p6-0hC">
                                                                 <rect key="frame" x="141.5" y="0.0" width="81" height="26.5"/>
@@ -352,22 +352,11 @@
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
-                                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="1zo-Fr-I9D">
-                                                                <rect key="frame" x="0.0" y="41.5" width="364" height="76.5"/>
-                                                                <subviews>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Overgrow" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ct9-no-cr3">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="84.5" height="24"/>
-                                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
-                                                                        <nil key="textColor"/>
-                                                                        <nil key="highlightedColor"/>
-                                                                    </label>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Strengthens Grass moves to inflict 1.5x damage at 1/3 max Hp or less." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="njo-gY-8wS">
-                                                                        <rect key="frame" x="0.0" y="34" width="364" height="42.5"/>
-                                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                                        <nil key="textColor"/>
-                                                                        <nil key="highlightedColor"/>
-                                                                    </label>
-                                                                </subviews>
+                                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="1zo-Fr-I9D">
+                                                                <rect key="frame" x="107" y="41.5" width="150" height="150"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" priority="250" constant="150" id="wYt-QN-JgS"/>
+                                                                </constraints>
                                                             </stackView>
                                                         </subviews>
                                                     </stackView>
@@ -396,7 +385,7 @@
                                     <constraint firstItem="L4e-QI-bFf" firstAttribute="trailing" secondItem="3Is-sP-hE9" secondAttribute="trailing" id="DHv-1g-MNW"/>
                                     <constraint firstItem="L4e-QI-bFf" firstAttribute="width" secondItem="2FL-ec-N8p" secondAttribute="width" id="F5O-dX-XGc"/>
                                     <constraint firstItem="L4e-QI-bFf" firstAttribute="top" secondItem="3Is-sP-hE9" secondAttribute="top" id="HYp-Jo-wjB"/>
-                                    <constraint firstItem="L4e-QI-bFf" firstAttribute="bottom" secondItem="3Is-sP-hE9" secondAttribute="bottom" id="SgO-c7-JZd"/>
+                                    <constraint firstItem="L4e-QI-bFf" firstAttribute="bottom" secondItem="3Is-sP-hE9" secondAttribute="bottom" constant="-50" id="SgO-c7-JZd"/>
                                     <constraint firstItem="L4e-QI-bFf" firstAttribute="leading" secondItem="3Is-sP-hE9" secondAttribute="leading" id="VaV-oM-Rnd"/>
                                 </constraints>
                                 <viewLayoutGuide key="contentLayoutGuide" id="3Is-sP-hE9"/>
@@ -415,6 +404,7 @@
                     <navigationItem key="navigationItem" id="ic9-MM-obd"/>
                     <connections>
                         <outlet property="abilitiesHeaderLabel" destination="SAb-p6-0hC" id="lG0-LX-VbN"/>
+                        <outlet property="abilitiesStackView" destination="1zo-Fr-I9D" id="Nrr-OA-ZLO"/>
                         <outlet property="baseStatsHeaderLabel" destination="Wry-Fh-3QK" id="KjM-U7-hdy"/>
                         <outlet property="detailView" destination="L4e-QI-bFf" id="6hO-ow-OZk"/>
                         <outlet property="pokemonDescriptionLabel" destination="ss8-Uv-laT" id="onb-dv-Xdt"/>
