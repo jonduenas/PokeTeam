@@ -8,84 +8,94 @@
 
 import UIKit
 
-class PokeDexVC: UITableViewController, UISearchBarDelegate {
+class PokeDexVC: UITableViewController {
     
     let pokemonCellID = "pokemonCell"
     let navBarFont = FontKit.roundedFont(ofSize: 17, weight: .bold)
     let cellFont = FontKit.roundedFont(ofSize: 17, weight: .regular)
     
+    var searchController: UISearchController!
+    
     var pokedex: Pokedex?
     var filteredPokedex = [PokemonEntry]()
-
-    @IBOutlet weak var searchBar: UISearchBar!
+    
+    var isSearchBarEmpty: Bool {
+        return searchController.searchBar.text?.isEmpty ?? true
+    }
+    
+    var isFiltering: Bool {
+        return searchController.isActive && !isSearchBarEmpty
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         title = "Pokédex"
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: navBarFont]
         
         loadPokedex()
-        
-        searchBar.delegate = self
+        initializeSearchBar()
     }
     
     private func loadPokedex() {
         PokemonManager.shared.fetchFromAPI(index: 1, dataType: .pokedex, decodeTo: Pokedex.self) { (pokedex) in
             DispatchQueue.main.async {
                 self.pokedex = pokedex
-                self.filteredPokedex = pokedex.pokemonEntries
                 self.navigationItem.title = "Pokédex: \(pokedex.name.capitalized)"
-                
                 self.tableView.reloadData()
             }
         }
     }
     
-    @objc private func selectPokedex() {
+    private func initializeSearchBar() {
+        searchController = UISearchController(searchResultsController: nil)
         
+        navigationItem.searchController = searchController
+        
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search Pokémon"
+        definesPresentationContext = true
+        searchController.hidesNavigationBarDuringPresentation = true
+        navigationItem.hidesSearchBarWhenScrolling = true
+        
+        searchController.searchBar.barTintColor = UIColor.white
+        searchController.searchBar.tintColor = UIColor.white
+        searchController.searchBar.searchBarStyle = .minimal
+        navigationItem.searchController?.searchBar.searchTextField.backgroundColor = .systemBackground
     }
 
     // MARK: Tableview Methods
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        filteredPokedex.count
+        if isFiltering {
+            return filteredPokedex.count
+        }
+        
+        return pokedex?.pokemonEntries.count ?? 0
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: pokemonCellID, for: indexPath)
-        
-        let pokemonName = filteredPokedex[indexPath.row].name
-        cell.textLabel?.text = pokemonName.capitalized
-        
+        if let pokedex = pokedex {
+            let pokemon: PokemonEntry
+            if isFiltering {
+                pokemon = filteredPokedex[indexPath.row]
+            } else {
+                pokemon = pokedex.pokemonEntries[indexPath.row]
+            }
+
+            cell.textLabel?.text = pokemon.name.capitalized
+        }
         return cell
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        guard let pokedex = pokedex else { return }
-//        PokemonManager.shared.fetchPokemon(number: indexPath.row, from: pokedex) { (species) in
-//            print(species.name)
-//        }
     }
     
     // MARK: Search Bar Methods
     
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    func filterContentForSearchText(_ searchText: String) {
         guard let pokedex = pokedex else { return }
         filteredPokedex = searchText.isEmpty ? pokedex.pokemonEntries : pokedex.pokemonEntries.filter({ (pokemonEntry) -> Bool in
             return pokemonEntry.name.range(of: searchText, options: .caseInsensitive) != nil
         })
-        tableView.reloadData()
-    }
-    
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        searchBar.showsCancelButton = true
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.showsCancelButton = false
-        searchBar.text = ""
-        searchBar.resignFirstResponder()
         tableView.reloadData()
     }
     
@@ -95,16 +105,24 @@ class PokeDexVC: UITableViewController, UISearchBarDelegate {
     func makePokemonDetailViewController(coder: NSCoder) -> UIViewController? {
         let indexPath = tableView.indexPathForSelectedRow!
         let selectedRow = indexPath.row
-        let pokemon = filteredPokedex[selectedRow]
+        
+        guard let pokedex = pokedex else { return nil }
+        
+        let pokemon: PokemonEntry
+        
+        if isFiltering {
+            pokemon = filteredPokedex[selectedRow]
+        } else {
+            pokemon = pokedex.pokemonEntries[selectedRow]
+        }
+        
         return PokemonDetailVC(coder: coder, pokemon: pokemon)
     }
+}
 
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if let indexPath = tableView.indexPathForSelectedRow {
-//            let selectedRow = indexPath.row
-//            let detailVC = segue.destination as! PokemonDetailVC
-//            detailVC.pokemon = pokedex?.pokemonEntries[selectedRow]
-//        }
-//    }
-
+extension PokeDexVC: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        let searchBar = searchController.searchBar
+        filterContentForSearchText(searchBar.text!)
+    }
 }
