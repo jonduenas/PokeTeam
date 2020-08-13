@@ -59,6 +59,8 @@ class PokemonDetailVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationItem.title = "Pokémon Detail"
 
         indicatorView = self.activityIndicator(style: .large, center: self.view.center)
         view.addSubview(indicatorView)
@@ -71,7 +73,6 @@ class PokemonDetailVC: UIViewController {
     private func loadPokemonInfo() {
         let pokemonIndex = pokemonEntry.entryNumber
         
-
         setState(loading: true)
         
         let group = DispatchGroup()
