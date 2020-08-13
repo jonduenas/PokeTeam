@@ -41,6 +41,9 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Pokédex" id="atz-P5-lUj"/>
+                    <connections>
+                        <outlet property="searchBar" destination="My8-MP-8hP" id="yir-Cd-hUK"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="y1n-dp-piC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
