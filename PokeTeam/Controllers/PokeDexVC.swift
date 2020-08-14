@@ -75,7 +75,7 @@ class PokeDexVC: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: pokemonCellID, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: pokemonCellID, for: indexPath) as! PokemonCell
         if let pokedex = pokedex {
             let pokemon: PokemonEntry
             if isFiltering {
@@ -83,8 +83,9 @@ class PokeDexVC: UITableViewController {
             } else {
                 pokemon = pokedex.pokemonEntries[indexPath.row]
             }
-
-            cell.textLabel?.text = pokemon.name.capitalized
+            cell.pokemonNameLabel.text = pokemon.name.capitalized
+            cell.pokemonImageView.image = UIImage(named: pokemon.name)
+            
         }
         return cell
     }
