@@ -13,6 +13,8 @@ class PokemonDetailVC: UIViewController {
     let largeTitleSize: CGFloat = 34
     let subTitleSize: CGFloat = 25
     let pokemonEntry: PokemonEntry
+    
+    let abilityTransitioningDelegate = AbilityTransitioningDelegate()
 
     var pokemonData: PokemonData?
     var speciesData: SpeciesData?
@@ -63,7 +65,7 @@ class PokemonDetailVC: UIViewController {
         
         navigationItem.title = "Pokémon Detail"
 
-        indicatorView = self.activityIndicator(style: .large, center: self.view.center)
+        indicatorView = self.view.activityIndicator(style: .large, center: self.view.center)
         view.addSubview(indicatorView)
         
         loadPokemonInfo()
@@ -249,7 +251,7 @@ class PokemonDetailVC: UIViewController {
             }
             
             abilityButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-            abilityButton.widthAnchor.constraint(equalToConstant: 150).isActive = true
+            abilityButton.widthAnchor.constraint(equalToConstant: 175).isActive = true
             abilityButton.backgroundColor = UIColor(named: "poke-blue")
             abilityButton.titleLabel?.textColor = UIColor.white
             abilityButton.layer.cornerRadius = 20
@@ -266,7 +268,19 @@ class PokemonDetailVC: UIViewController {
     }
     
     @objc private func abilityButtonTapped(sender: UIButton!) {
-        print(sender.tag)
+        guard let pokemonData = pokemonData else { return }
+        
+        let abilityName = pokemonData.abilities[sender.tag].name
+        let abilityURL = pokemonData.abilities[sender.tag].url
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let abilityController = storyboard.instantiateViewController(withIdentifier: "AbilityVC") as! AbilityDetailVC
+        abilityController.abilityName = abilityName
+        abilityController.abilityURL = abilityURL
+        abilityController.transitioningDelegate = abilityTransitioningDelegate
+        abilityController.modalPresentationStyle = .custom
+        
+        self.present(abilityController, animated: true)
     }
     
     private func setState(loading: Bool) {
@@ -279,30 +293,26 @@ class PokemonDetailVC: UIViewController {
         }
     }
     
-    private func activityIndicator(style: UIActivityIndicatorView.Style = .medium, frame: CGRect? = nil, center: CGPoint? = nil) -> UIActivityIndicatorView {
-        let activityViewIndicator = UIActivityIndicatorView(style: style)
-        
-        if let frame = frame {
-            activityViewIndicator.frame = frame
-        }
-        
-        if let center = center {
-            activityViewIndicator.center = center
-        }
-        
-        return activityViewIndicator
-    }
+//    private func activityIndicator(style: UIActivityIndicatorView.Style = .medium, frame: CGRect? = nil, center: CGPoint? = nil) -> UIActivityIndicatorView {
+//        let activityViewIndicator = UIActivityIndicatorView(style: style)
+//
+//        if let frame = frame {
+//            activityViewIndicator.frame = frame
+//        }
+//
+//        if let center = center {
+//            activityViewIndicator.center = center
+//        }
+//
+//        return activityViewIndicator
+//    }
 
-    /*
+    
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        
     }
-    */
-
 }
 
 extension String {
