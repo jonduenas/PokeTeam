@@ -507,7 +507,7 @@
             <objects>
                 <viewController storyboardIdentifier="AbilityVC" id="6Zf-jt-lcP" customClass="AbilityDetailVC" customModule="PokeTeam" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Dqf-en-e7e">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5lU-zF-LTT">

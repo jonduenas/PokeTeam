@@ -15,6 +15,7 @@ class PokeDexVC: UITableViewController {
     let cellFont = FontKit.roundedFont(ofSize: 17, weight: .regular)
     
     var searchController: UISearchController!
+    var indicatorView: UIActivityIndicatorView!
     
     var pokedex: Pokedex?
     var filteredPokedex = [PokemonEntry]()
@@ -32,13 +33,18 @@ class PokeDexVC: UITableViewController {
         
         title = "Pokédex"
         
+        indicatorView = view.activityIndicator(style: .large, center: self.view.center)
+        tableView.backgroundView = indicatorView
+        
         loadPokedex()
         initializeSearchBar()
     }
     
     private func loadPokedex() {
+        setState(loading: true)
         PokemonManager.shared.fetchFromAPI(index: 1, dataType: .pokedex, decodeTo: Pokedex.self) { (pokedex) in
             DispatchQueue.main.async {
+                self.setState(loading: false)
                 self.pokedex = pokedex
                 self.navigationItem.title = "Pokédex: \(pokedex.name.capitalized)"
                 self.tableView.reloadData()
@@ -60,8 +66,9 @@ class PokeDexVC: UITableViewController {
         
         searchController.searchBar.barTintColor = UIColor.white
         searchController.searchBar.tintColor = UIColor.white
-        searchController.searchBar.searchBarStyle = .minimal
-        navigationItem.searchController?.searchBar.searchTextField.backgroundColor = .systemBackground
+        //searchController.searchBar.searchBarStyle = .prominent
+        //navigationItem.searchController?.searchBar.searchTextField.backgroundColor = .systemBackground
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
     }
 
     // MARK: Tableview Methods
@@ -116,8 +123,15 @@ class PokeDexVC: UITableViewController {
         } else {
             pokemon = pokedex.pokemonEntries[selectedRow]
         }
-        
         return PokemonDetailVC(coder: coder, pokemon: pokemon)
+    }
+    
+    private func setState(loading: Bool) {
+        if loading {
+            indicatorView.startAnimating()
+        } else {
+            indicatorView.stopAnimating()
+        }
     }
 }
 

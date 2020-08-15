@@ -20,7 +20,7 @@ class PokemonDetailVC: UIViewController {
     var speciesData: SpeciesData?
     var generationData: GenerationData?
     
-    var indicatorView = UIActivityIndicatorView()
+    var indicatorView: UIActivityIndicatorView!
     
     @IBOutlet var detailView: UIView!
     @IBOutlet var pokemonImageView: UIImageView!
@@ -300,27 +300,6 @@ class PokemonDetailVC: UIViewController {
             detailView.isHidden = false
             indicatorView.stopAnimating()
         }
-    }
-    
-//    private func activityIndicator(style: UIActivityIndicatorView.Style = .medium, frame: CGRect? = nil, center: CGPoint? = nil) -> UIActivityIndicatorView {
-//        let activityViewIndicator = UIActivityIndicatorView(style: style)
-//
-//        if let frame = frame {
-//            activityViewIndicator.frame = frame
-//        }
-//
-//        if let center = center {
-//            activityViewIndicator.center = center
-//        }
-//
-//        return activityViewIndicator
-//    }
-
-    
-    // MARK: - Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
     }
 }
 
