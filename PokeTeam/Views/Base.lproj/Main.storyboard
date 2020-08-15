@@ -60,9 +60,7 @@
                             <outlet property="delegate" destination="Zp9-45-eKE" id="apf-52-RGa"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Pokédex" id="atz-P5-lUj">
-                        <barButtonItem key="rightBarButtonItem" title="National" id="ftE-i4-ARz"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Pokédex" id="atz-P5-lUj"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="y1n-dp-piC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
