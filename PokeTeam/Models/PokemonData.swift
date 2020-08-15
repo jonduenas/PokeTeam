@@ -15,8 +15,8 @@ struct PokemonData: Codable {
     let name: String
     let stats: [Stat]
     let types: [Type]
-    let height: Int
-    let weight: Int
+    let height: Float
+    let weight: Float
 }
 
 // MARK: Abilities

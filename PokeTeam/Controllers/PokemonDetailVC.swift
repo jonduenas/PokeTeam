@@ -31,6 +31,8 @@ class PokemonDetailVC: UIViewController {
     @IBOutlet var pokemonNumberAndGenusLabel: UILabel!
     @IBOutlet var pokemonDescriptionLabel: UILabel!
     @IBOutlet var pokemonRegionLabel: UILabel!
+    @IBOutlet weak var heightLabel: UILabel!
+    @IBOutlet weak var weightLabel: UILabel!
     
     @IBOutlet var baseStatsHeaderLabel: UILabel!
     @IBOutlet var statTotalLabel: UILabel!
@@ -168,6 +170,13 @@ class PokemonDetailVC: UIViewController {
         // Update Region from Generation
         let regionName = generation.mainRegion.uppercased()
         pokemonRegionLabel.text = "REGION: \(regionName)"
+        
+        // Update height and weight
+        let height: Float = pokemon.height / 10
+        let weight: Float = pokemon.weight / 10
+        
+        heightLabel.text = "\(height) m"
+        weightLabel.text = "\(weight) kg"
     }
     
     private func setCustomFonts() {
