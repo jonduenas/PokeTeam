@@ -8,14 +8,34 @@
 
 import Foundation
 
+enum PokemonType: String {
+    case normal, fire, water, electric, grass, ice, fighting, poison, ground, flying, psychic, bug, rock, ghost, dragon, dark, steel, fairy, unknown
+}
+
+enum PokemonStatName: String {
+    case hp, attack, defense, speed
+    case specialAttack = "special-attack"
+    case specialDefense = "special-defense"
+}
+
 struct Pokemon {
     let id: Int
     let name: String
-    let type: [String]
-    let region: String
-    //let spriteStringURL: String
-    let stats: [String: Int]
-    let abilities: [PokemonAbility]
+    let height: Float
+    let weight: Float
+    let type: [PokemonType]
+    let genus: String
+    let region: String?
+    let generation: String
+    let description: String
+    let stats: [PokemonStatName: Float]
+    
+    var imageID: String {
+        return String(id)
+    }
+    
+    var abilities: [PokemonAbility]?
+    var moves: [PokemonMove]?
 }
 
 

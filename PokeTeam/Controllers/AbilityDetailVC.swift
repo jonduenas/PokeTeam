@@ -10,9 +10,7 @@ import UIKit
 
 class AbilityDetailVC: UIViewController {
     
-    var abilityName: String = ""
-    var abilityURL: String = ""
-    var abilityData: AbilityData?
+    var ability: PokemonAbility?
     var indicatorView = UIActivityIndicatorView()
 
     @IBOutlet weak var abilityHeaderLabel: UILabel!
@@ -31,38 +29,27 @@ class AbilityDetailVC: UIViewController {
     }
     
     private func loadAbility() {
+        guard let ability = ability else { return }
+        
         setState(loading: true)
-        PokemonManager.shared.fetchFromAPI(urlString: abilityURL, decodeTo: AbilityData.self) { (abilityData) in
+        
+        PokemonManager.shared.fetchFromAPI(urlString: ability.urlString, decodeTo: AbilityData.self) { (abilityData) in
+            self.ability = PokemonManager.shared.parseAbilityData(data: abilityData, ability: ability)
+            
             DispatchQueue.main.async {
                 self.setState(loading: false)
                 print("Ability Loaded")
-                self.abilityData = abilityData
+                
                 self.updateAbilityUI()
             }
         }
     }
     
-    private func getLatestFlavorText() -> String? {
-        guard let abilityData = abilityData else { return nil }
-        
-        var englishFlavorTextArray = [String]()
-        
-        for description in abilityData.flavorTextEntries {
-            if description.language == "en" {
-                englishFlavorTextArray.append(description.flavorText)
-            }
-        }
-        return englishFlavorTextArray.last
-    }
-    
     private func updateAbilityUI() {
-        guard let abilityData = abilityData else { return }
+        guard let ability = ability else { return }
         
-        abilityHeaderLabel.text = abilityData.name.capitalized
-        
-        if let latestFlavorText = getLatestFlavorText() {
-            abilityDescriptionLabel.text = latestFlavorText.replacingOccurrences(of: "\n", with: " ")
-        }
+        abilityHeaderLabel.text = ability.name.capitalized
+        abilityDescriptionLabel.text = ability.description
     }
     
     private func setState(loading: Bool) {

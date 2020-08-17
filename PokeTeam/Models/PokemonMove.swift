@@ -12,4 +12,6 @@ struct PokemonMove {
     let name: String
     let levelLearnedAt: Int?
     let moveLearnMethod: String
+    let urlString: String
+    let description: String?
 }

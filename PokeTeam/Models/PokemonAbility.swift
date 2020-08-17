@@ -10,7 +10,7 @@ import Foundation
 
 struct PokemonAbility {
     let name: String
-    let description: String
-    let index: Int
     let isHidden: Bool
+    let urlString: String
+    var description: String?
 }

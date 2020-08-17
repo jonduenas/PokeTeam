@@ -42,12 +42,14 @@ class PokeDexVC: UITableViewController {
     
     private func loadPokedex() {
         setState(loading: true)
-        PokemonManager.shared.fetchFromAPI(index: 1, dataType: .pokedex, decodeTo: Pokedex.self) { (pokedex) in
-            DispatchQueue.main.async {
-                self.setState(loading: false)
-                self.pokedex = pokedex
-                self.navigationItem.title = "Pokédex: \(pokedex.name.capitalized)"
-                self.tableView.reloadData()
+        PokemonManager.shared.fetchFromAPI(index: 1, dataType: .pokedex, decodeTo: Pokedex.self) { (pokedexData) in
+            if let parsedPokedex = PokemonManager.shared.parsePokedex(pokedexData: pokedexData) {
+                DispatchQueue.main.async {
+                    self.setState(loading: false)
+                    self.pokedex = parsedPokedex
+                    self.navigationItem.title = "Pokédex: \(parsedPokedex.name.capitalized)"
+                    self.tableView.reloadData()
+                }
             }
         }
     }
@@ -66,8 +68,6 @@ class PokeDexVC: UITableViewController {
         
         searchController.searchBar.barTintColor = UIColor.white
         searchController.searchBar.tintColor = UIColor.white
-        //searchController.searchBar.searchBarStyle = .prominent
-        //navigationItem.searchController?.searchBar.searchTextField.backgroundColor = .systemBackground
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
     }
 

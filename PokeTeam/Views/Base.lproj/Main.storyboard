@@ -475,12 +475,12 @@
                         <outlet property="detailView" destination="L4e-QI-bFf" id="6hO-ow-OZk"/>
                         <outlet property="heightLabel" destination="dij-Ji-qZW" id="IGl-FQ-1he"/>
                         <outlet property="pokemonDescriptionLabel" destination="ss8-Uv-laT" id="onb-dv-Xdt"/>
+                        <outlet property="pokemonGenerationLabel" destination="QLs-bW-hTx" id="Jie-x8-0OO"/>
                         <outlet property="pokemonImageView" destination="9KX-Et-yFh" id="N4l-Wh-jJc"/>
                         <outlet property="pokemonNameLabel" destination="OSh-HH-YdB" id="OkS-bI-S2v"/>
                         <outlet property="pokemonNumberAndGenusLabel" destination="EhZ-Gl-G3x" id="loM-l8-m9V"/>
-                        <outlet property="pokemonRegionLabel" destination="QLs-bW-hTx" id="Jie-x8-0OO"/>
-                        <outlet property="pokemonType1" destination="Gyk-pZ-ujZ" id="1eC-M9-ROM"/>
-                        <outlet property="pokemonType2" destination="GJh-9N-qMj" id="PKf-6t-xdw"/>
+                        <outlet property="pokemonType1Label" destination="Gyk-pZ-ujZ" id="1eC-M9-ROM"/>
+                        <outlet property="pokemonType2Label" destination="GJh-9N-qMj" id="PKf-6t-xdw"/>
                         <outlet property="statAttackLabel" destination="Kj5-S6-0eW" id="xCN-eA-Zdh"/>
                         <outlet property="statAttackProgress" destination="toA-dH-6nU" id="6Zy-RU-fcJ"/>
                         <outlet property="statDefenseLabel" destination="JzX-2c-lTc" id="Th3-SK-WVd"/>
@@ -507,7 +507,7 @@
             <objects>
                 <viewController storyboardIdentifier="AbilityVC" id="6Zf-jt-lcP" customClass="AbilityDetailVC" customModule="PokeTeam" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Dqf-en-e7e">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5lU-zF-LTT">
@@ -519,8 +519,12 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3qL-6a-64K">
-                                        <rect key="frame" x="369" y="13" width="25" height="25"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3qL-6a-64K">
+                                        <rect key="frame" x="369" y="12.5" width="25" height="25"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="25" id="Tb2-nG-gjA"/>
+                                            <constraint firstAttribute="width" constant="25" id="kHs-Rn-7LQ"/>
+                                        </constraints>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" image="x.circle.fill" catalog="system">
                                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
