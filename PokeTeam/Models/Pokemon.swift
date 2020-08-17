@@ -18,6 +18,15 @@ enum PokemonStatName: String {
     case specialDefense = "special-defense"
 }
 
+enum PokemonStatShortName: String {
+    case hp = "HP"
+    case attack = "ATK"
+    case defense = "DEF"
+    case specialAttack = "SPA"
+    case specialDefense = "SPD"
+    case speed = "SPE"
+}
+
 struct Pokemon {
     let id: Int
     let name: String

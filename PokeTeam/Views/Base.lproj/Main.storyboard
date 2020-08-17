@@ -226,174 +226,43 @@
                                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="tPy-tC-Tgo">
                                                                 <rect key="frame" x="0.0" y="62.5" width="364" height="140"/>
                                                                 <subviews>
-                                                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="8E4-vU-z3A">
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="acx-7F-zyq" customClass="StatView" customModule="PokeTeam" customModuleProvider="target">
                                                                         <rect key="frame" x="0.0" y="0.0" width="364" height="15"/>
-                                                                        <subviews>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="HP" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eU3-xH-9fr">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="35" height="15"/>
-                                                                                <constraints>
-                                                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="35" id="CZO-pn-IiO"/>
-                                                                                </constraints>
-                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                                <nil key="textColor"/>
-                                                                                <nil key="highlightedColor"/>
-                                                                            </label>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="45" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3cS-Bz-WI0">
-                                                                                <rect key="frame" x="40" y="0.0" width="35" height="15"/>
-                                                                                <constraints>
-                                                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="35" id="Nbw-P7-lBh"/>
-                                                                                </constraints>
-                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                                <nil key="textColor"/>
-                                                                                <nil key="highlightedColor"/>
-                                                                            </label>
-                                                                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="xd4-9c-gog">
-                                                                                <rect key="frame" x="80" y="7" width="284" height="2.5"/>
-                                                                                <color key="trackTintColor" systemColor="systemGray5Color" red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                            </progressView>
-                                                                        </subviews>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="height" constant="15" id="X65-oB-4d4"/>
+                                                                            <constraint firstAttribute="height" constant="15" id="pG1-kA-q2o"/>
                                                                         </constraints>
                                                                     </stackView>
-                                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Btd-Z6-ZNK">
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uxe-3d-L7V" customClass="StatView" customModule="PokeTeam" customModuleProvider="target">
                                                                         <rect key="frame" x="0.0" y="25" width="364" height="15"/>
-                                                                        <subviews>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ATK" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vtq-hk-jaO">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="35" height="15"/>
-                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                                <nil key="textColor"/>
-                                                                                <nil key="highlightedColor"/>
-                                                                            </label>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="49" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kj5-S6-0eW">
-                                                                                <rect key="frame" x="40" y="0.0" width="35" height="15"/>
-                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                                <nil key="textColor"/>
-                                                                                <nil key="highlightedColor"/>
-                                                                            </label>
-                                                                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="toA-dH-6nU">
-                                                                                <rect key="frame" x="80" y="7" width="284" height="2.5"/>
-                                                                                <color key="trackTintColor" systemColor="systemGray5Color" red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                            </progressView>
-                                                                        </subviews>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="height" constant="15" id="PEF-nd-6D6"/>
+                                                                            <constraint firstAttribute="height" constant="15" id="MCe-kC-j0D"/>
                                                                         </constraints>
                                                                     </stackView>
-                                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="mpL-mA-PfF">
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IiU-V3-kmQ" customClass="StatView" customModule="PokeTeam" customModuleProvider="target">
                                                                         <rect key="frame" x="0.0" y="50" width="364" height="15"/>
-                                                                        <subviews>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DEF" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vvo-re-eCj">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="35" height="15"/>
-                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                                <nil key="textColor"/>
-                                                                                <nil key="highlightedColor"/>
-                                                                            </label>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="49" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JzX-2c-lTc">
-                                                                                <rect key="frame" x="40" y="0.0" width="35" height="15"/>
-                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                                <nil key="textColor"/>
-                                                                                <nil key="highlightedColor"/>
-                                                                            </label>
-                                                                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="PAD-Nc-Z4I">
-                                                                                <rect key="frame" x="80" y="7" width="284" height="2.5"/>
-                                                                                <color key="trackTintColor" systemColor="systemGray5Color" red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                            </progressView>
-                                                                        </subviews>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="height" constant="15" id="97C-DK-LeW"/>
+                                                                            <constraint firstAttribute="height" constant="15" id="1ez-Ie-4oC"/>
                                                                         </constraints>
                                                                     </stackView>
-                                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="A99-gy-xa8">
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="21v-tu-KMI" customClass="StatView" customModule="PokeTeam" customModuleProvider="target">
                                                                         <rect key="frame" x="0.0" y="75" width="364" height="15"/>
-                                                                        <subviews>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SPA" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="viO-lq-0wx">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="35" height="15"/>
-                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                                <nil key="textColor"/>
-                                                                                <nil key="highlightedColor"/>
-                                                                            </label>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="65" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DKw-h7-tLi">
-                                                                                <rect key="frame" x="40" y="0.0" width="35" height="15"/>
-                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                                <nil key="textColor"/>
-                                                                                <nil key="highlightedColor"/>
-                                                                            </label>
-                                                                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="xzr-hz-m34">
-                                                                                <rect key="frame" x="80" y="7" width="284" height="2.5"/>
-                                                                                <color key="trackTintColor" systemColor="systemGray5Color" red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                            </progressView>
-                                                                        </subviews>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="height" constant="15" id="a0D-w3-zqA"/>
+                                                                            <constraint firstAttribute="height" constant="15" id="klj-qD-g12"/>
                                                                         </constraints>
                                                                     </stackView>
-                                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Vvq-d0-3dq">
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RJ7-de-jzL" customClass="StatView" customModule="PokeTeam" customModuleProvider="target">
                                                                         <rect key="frame" x="0.0" y="100" width="364" height="15"/>
-                                                                        <subviews>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SPD" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K3B-Sc-O1l">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="35" height="15"/>
-                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                                <nil key="textColor"/>
-                                                                                <nil key="highlightedColor"/>
-                                                                            </label>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="65" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fr9-8k-0K2">
-                                                                                <rect key="frame" x="40" y="0.0" width="35" height="15"/>
-                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                                <nil key="textColor"/>
-                                                                                <nil key="highlightedColor"/>
-                                                                            </label>
-                                                                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="f1E-4l-d1m">
-                                                                                <rect key="frame" x="80" y="7" width="284" height="2.5"/>
-                                                                                <color key="trackTintColor" systemColor="systemGray5Color" red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                            </progressView>
-                                                                        </subviews>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="height" constant="15" id="CSB-xR-123"/>
+                                                                            <constraint firstAttribute="height" constant="15" id="uYQ-ve-6ci"/>
                                                                         </constraints>
                                                                     </stackView>
-                                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="nbq-Iu-hfl">
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eA7-1a-cSF" customClass="StatView" customModule="PokeTeam" customModuleProvider="target">
                                                                         <rect key="frame" x="0.0" y="125" width="364" height="15"/>
-                                                                        <subviews>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SPE" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZhO-oP-UZR">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="35" height="15"/>
-                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                                <nil key="textColor"/>
-                                                                                <nil key="highlightedColor"/>
-                                                                            </label>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="45" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rBP-xK-jHN">
-                                                                                <rect key="frame" x="40" y="0.0" width="35" height="15"/>
-                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                                <nil key="textColor"/>
-                                                                                <nil key="highlightedColor"/>
-                                                                            </label>
-                                                                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="QFK-XD-xaE">
-                                                                                <rect key="frame" x="80" y="7" width="284" height="2.5"/>
-                                                                                <color key="trackTintColor" systemColor="systemGray5Color" red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                            </progressView>
-                                                                        </subviews>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="height" constant="15" id="1A4-hE-Pct"/>
+                                                                            <constraint firstAttribute="height" constant="15" id="Fh8-uq-cBX"/>
                                                                         </constraints>
                                                                     </stackView>
                                                                 </subviews>
-                                                                <constraints>
-                                                                    <constraint firstItem="xd4-9c-gog" firstAttribute="width" secondItem="PAD-Nc-Z4I" secondAttribute="width" id="7nU-hH-DbS"/>
-                                                                    <constraint firstItem="eU3-xH-9fr" firstAttribute="width" secondItem="ZhO-oP-UZR" secondAttribute="width" id="B0M-Uu-Hsw"/>
-                                                                    <constraint firstItem="xd4-9c-gog" firstAttribute="width" secondItem="xzr-hz-m34" secondAttribute="width" id="HFU-x7-UaB"/>
-                                                                    <constraint firstItem="eU3-xH-9fr" firstAttribute="width" secondItem="Vtq-hk-jaO" secondAttribute="width" id="J7n-Wi-W9o"/>
-                                                                    <constraint firstItem="3cS-Bz-WI0" firstAttribute="width" secondItem="Fr9-8k-0K2" secondAttribute="width" id="L64-BF-7cu"/>
-                                                                    <constraint firstItem="3cS-Bz-WI0" firstAttribute="width" secondItem="JzX-2c-lTc" secondAttribute="width" id="Ooi-Jn-vXp"/>
-                                                                    <constraint firstItem="eU3-xH-9fr" firstAttribute="width" secondItem="K3B-Sc-O1l" secondAttribute="width" id="UdW-JV-sfp"/>
-                                                                    <constraint firstItem="xd4-9c-gog" firstAttribute="width" secondItem="toA-dH-6nU" secondAttribute="width" id="Xvf-1e-1X0"/>
-                                                                    <constraint firstItem="3cS-Bz-WI0" firstAttribute="width" secondItem="rBP-xK-jHN" secondAttribute="width" id="XzN-MF-HmT"/>
-                                                                    <constraint firstItem="3cS-Bz-WI0" firstAttribute="width" secondItem="Kj5-S6-0eW" secondAttribute="width" id="daH-mI-jvo"/>
-                                                                    <constraint firstItem="eU3-xH-9fr" firstAttribute="width" secondItem="viO-lq-0wx" secondAttribute="width" id="eOr-oV-YWs"/>
-                                                                    <constraint firstItem="3cS-Bz-WI0" firstAttribute="width" secondItem="DKw-h7-tLi" secondAttribute="width" id="ghn-zw-uMo"/>
-                                                                    <constraint firstItem="eU3-xH-9fr" firstAttribute="width" secondItem="vvo-re-eCj" secondAttribute="width" id="kf8-je-bdU"/>
-                                                                    <constraint firstItem="xd4-9c-gog" firstAttribute="width" secondItem="f1E-4l-d1m" secondAttribute="width" id="mht-q0-a4R"/>
-                                                                    <constraint firstItem="xd4-9c-gog" firstAttribute="width" secondItem="QFK-XD-xaE" secondAttribute="width" id="xIl-S3-tGa"/>
-                                                                </constraints>
                                                             </stackView>
                                                         </subviews>
                                                         <constraints>
@@ -471,9 +340,12 @@
                     <connections>
                         <outlet property="abilitiesHeaderLabel" destination="SAb-p6-0hC" id="lG0-LX-VbN"/>
                         <outlet property="abilitiesStackView" destination="1zo-Fr-I9D" id="Nrr-OA-ZLO"/>
+                        <outlet property="attackStatView" destination="uxe-3d-L7V" id="b19-97-Yim"/>
                         <outlet property="baseStatsHeaderLabel" destination="Wry-Fh-3QK" id="KjM-U7-hdy"/>
+                        <outlet property="defenseStatView" destination="IiU-V3-kmQ" id="OfA-3Y-TBt"/>
                         <outlet property="detailView" destination="L4e-QI-bFf" id="6hO-ow-OZk"/>
                         <outlet property="heightLabel" destination="dij-Ji-qZW" id="IGl-FQ-1he"/>
+                        <outlet property="hpStatView" destination="acx-7F-zyq" id="RKI-9f-1Fe"/>
                         <outlet property="pokemonDescriptionLabel" destination="ss8-Uv-laT" id="onb-dv-Xdt"/>
                         <outlet property="pokemonGenerationLabel" destination="QLs-bW-hTx" id="Jie-x8-0OO"/>
                         <outlet property="pokemonImageView" destination="9KX-Et-yFh" id="N4l-Wh-jJc"/>
@@ -481,18 +353,9 @@
                         <outlet property="pokemonNumberAndGenusLabel" destination="EhZ-Gl-G3x" id="loM-l8-m9V"/>
                         <outlet property="pokemonType1Label" destination="Gyk-pZ-ujZ" id="1eC-M9-ROM"/>
                         <outlet property="pokemonType2Label" destination="GJh-9N-qMj" id="PKf-6t-xdw"/>
-                        <outlet property="statAttackLabel" destination="Kj5-S6-0eW" id="xCN-eA-Zdh"/>
-                        <outlet property="statAttackProgress" destination="toA-dH-6nU" id="6Zy-RU-fcJ"/>
-                        <outlet property="statDefenseLabel" destination="JzX-2c-lTc" id="Th3-SK-WVd"/>
-                        <outlet property="statDefenseProgress" destination="PAD-Nc-Z4I" id="Iqj-Fr-nhT"/>
-                        <outlet property="statHPLabel" destination="3cS-Bz-WI0" id="oG4-SP-usq"/>
-                        <outlet property="statHPProgress" destination="xd4-9c-gog" id="EEu-vR-PK3"/>
-                        <outlet property="statSpAttackLabel" destination="DKw-h7-tLi" id="aAZ-g3-dnj"/>
-                        <outlet property="statSpAttackProgress" destination="xzr-hz-m34" id="FPU-KO-sfU"/>
-                        <outlet property="statSpDefenseLabel" destination="Fr9-8k-0K2" id="o0j-W2-5nR"/>
-                        <outlet property="statSpDefenseProgress" destination="f1E-4l-d1m" id="qU9-Dk-6Qy"/>
-                        <outlet property="statSpeedLabel" destination="rBP-xK-jHN" id="o89-DD-E3Z"/>
-                        <outlet property="statSpeedProgress" destination="QFK-XD-xaE" id="Snc-gQ-Ydd"/>
+                        <outlet property="specialAttackStatView" destination="21v-tu-KMI" id="eUH-Xm-Lmr"/>
+                        <outlet property="specialDefenseStatView" destination="RJ7-de-jzL" id="BAg-of-VGK"/>
+                        <outlet property="speedStatView" destination="eA7-1a-cSF" id="c1S-iB-IHV"/>
                         <outlet property="statTotalLabel" destination="gnd-R4-p4e" id="2Sb-eq-je2"/>
                         <outlet property="weightLabel" destination="VzJ-ea-hLl" id="X7Y-db-DOn"/>
                         <segue destination="6Zf-jt-lcP" kind="presentation" identifier="AbilityDetail" id="vWs-Rh-BoA"/>

@@ -17,9 +17,6 @@ class PokemonDetailVC: UIViewController {
     let abilityTransitioningDelegate = AbilityTransitioningDelegate()
 
     var pokemon: Pokemon?
-//    var pokemonData: PokemonData?
-//    var speciesData: SpeciesData?
-//    var generationData: GenerationData?
     
     var indicatorView: UIActivityIndicatorView!
     
@@ -37,18 +34,12 @@ class PokemonDetailVC: UIViewController {
     
     @IBOutlet var baseStatsHeaderLabel: UILabel!
     @IBOutlet var statTotalLabel: UILabel!
-    @IBOutlet var statHPLabel: UILabel!
-    @IBOutlet var statHPProgress: UIProgressView!
-    @IBOutlet var statAttackLabel: UILabel!
-    @IBOutlet var statAttackProgress: UIProgressView!
-    @IBOutlet var statDefenseLabel: UILabel!
-    @IBOutlet var statDefenseProgress: UIProgressView!
-    @IBOutlet var statSpAttackLabel: UILabel!
-    @IBOutlet var statSpAttackProgress: UIProgressView!
-    @IBOutlet var statSpDefenseLabel: UILabel!
-    @IBOutlet var statSpDefenseProgress: UIProgressView!
-    @IBOutlet var statSpeedLabel: UILabel!
-    @IBOutlet var statSpeedProgress: UIProgressView!
+    @IBOutlet weak var hpStatView: StatView!
+    @IBOutlet weak var attackStatView: StatView!
+    @IBOutlet weak var defenseStatView: StatView!
+    @IBOutlet weak var specialAttackStatView: StatView!
+    @IBOutlet weak var specialDefenseStatView: StatView!
+    @IBOutlet weak var speedStatView: StatView!
     
     @IBOutlet var abilitiesHeaderLabel: UILabel!
     @IBOutlet weak var abilitiesStackView: UIStackView!
@@ -168,32 +159,18 @@ class PokemonDetailVC: UIViewController {
     private func updateStats() {
         guard let pokemon = pokemon else { return }
         
-        let maxStat: Float = 255
+        let mapping: [(shortName: PokemonStatShortName, fullName: PokemonStatName, statView: StatView)] = [
+            (PokemonStatShortName.hp, PokemonStatName.hp, hpStatView),
+            (PokemonStatShortName.attack, PokemonStatName.attack, attackStatView),
+            (PokemonStatShortName.defense, PokemonStatName.defense, defenseStatView),
+            (PokemonStatShortName.specialAttack, PokemonStatName.specialAttack, specialAttackStatView),
+            (PokemonStatShortName.specialDefense, PokemonStatName.specialDefense, specialDefenseStatView),
+            (PokemonStatShortName.speed, PokemonStatName.speed, speedStatView)
+        ]
         
-        // TODO: Fix the rest of the stats to match HP
-        // HP
-        statHPLabel.text = "\(Int(pokemon.stats[.hp]!))"
-        statHPProgress.progress = pokemon.stats[.hp]! / maxStat
-        
-        // Attack
-        statAttackLabel.text = "\(pokemon.stats[.attack] ?? 0)"
-        statAttackProgress.progress = pokemon.stats[.attack] ?? 0 / maxStat
-        
-        // Defense
-        statDefenseLabel.text = "\(pokemon.stats[.defense] ?? 0)"
-        statDefenseProgress.progress = pokemon.stats[.defense] ?? 0 / maxStat
-        
-        // Special Attack
-        statSpAttackLabel.text = "\(pokemon.stats[.specialAttack] ?? 0)"
-        statSpAttackProgress.progress = pokemon.stats[.specialAttack] ?? 0 / maxStat
-        
-        // Special Defense
-        statSpDefenseLabel.text = "\(pokemon.stats[.specialDefense] ?? 0)"
-        statSpDefenseProgress.progress = pokemon.stats[.specialDefense] ?? 0 / maxStat
-        
-        // Speed
-        statSpeedLabel.text = "\(pokemon.stats[.speed] ?? 0)"
-        statSpeedProgress.progress = pokemon.stats[.speed] ?? 0 / maxStat
+        for stat in mapping {
+            stat.statView.setUp(name: stat.shortName.rawValue, value: pokemon.stats[stat.fullName]!)
+        }
         
         // Total Stats
         var totalStats: Int = 0
