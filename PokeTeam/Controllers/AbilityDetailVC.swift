@@ -11,6 +11,8 @@ import UIKit
 class AbilityDetailVC: UIViewController {
     
     var ability: PokemonAbility?
+    var abilityData: AbilityData?
+    var abilityDescription: String?
     var indicatorView = UIActivityIndicatorView()
 
     @IBOutlet weak var abilityHeaderLabel: UILabel!
@@ -31,19 +33,44 @@ class AbilityDetailVC: UIViewController {
     private func loadAbility() {
         guard let ability = ability else { return }
         
+        guard let abilityURL = URL(string: ability.urlString) else {
+            print("Error creating ability URL")
+            return
+        }
+        
         setState(loading: true)
         
-        PokemonManager.shared.fetchFromAPI(urlString: ability.urlString, decodeTo: AbilityData.self) { (abilityData) in
-            self.ability = PokemonManager.shared.parseAbilityData(data: abilityData, ability: ability)
-            
-            DispatchQueue.main.async {
-                self.setState(loading: false)
-                print("Ability Loaded")
-                
-                self.updateAbilityUI()
+        PokemonManager.shared.fetchFromAPI(of: AbilityData.self, from: abilityURL) { (result) in
+            switch result {
+            case .failure(let error):
+                if error is DataError {
+                    print(error)
+                } else {
+                    print(error.localizedDescription)
+                }
+                print(error.localizedDescription)
+            case.success(let abilityData):
+                //self.abilityData = abilityData
+                self.ability = PokemonManager.shared.addAbilityDescription(to: ability, with: abilityData)
+                DispatchQueue.main.async {
+                    self.updateAbilityUI()
+                    self.setState(loading: false)
+                }
             }
         }
     }
+    
+//        PokemonManager.shared.fetchFromAPI(urlString: ability.urlString, decodeTo: AbilityData.self) { (abilityData) in
+//            self.ability = PokemonManager.shared.parseAbilityData(data: abilityData, ability: ability)
+//
+//            DispatchQueue.main.async {
+//                self.setState(loading: false)
+//                print("Ability Loaded")
+//
+//                self.updateAbilityUI()
+//            }
+//        }
+//    }
     
     private func updateAbilityUI() {
         guard let ability = ability else { return }

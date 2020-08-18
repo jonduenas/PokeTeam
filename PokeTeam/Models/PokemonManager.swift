@@ -8,6 +8,13 @@
 
 import UIKit
 
+enum DataError: Error {
+    case invalidResponse
+    case invalidData
+    case decodingError
+    case serverError
+}
+
 enum PokemonDataType: String {
     case pokedex = "pokedex/"
     case pokemon = "pokemon/"
@@ -19,35 +26,41 @@ enum PokemonDataType: String {
 class PokemonManager {
     static let shared = PokemonManager()
     
-    func fetchFromAPI<T>(name: String? = nil, index: Int? = nil, urlString: String? = nil, dataType: PokemonDataType? = nil, decodeTo type: T.Type, completion: @escaping (Data) -> Void) where T: Decodable {
-        guard let url = createURL(from: name, index: index, urlString: urlString, dataType: dataType) else {
-            fatalError("Failed to create valid URL")
-        }
+    typealias result<T> = (Result<T, Error>) -> Void
+    
+    func fetchFromAPI<T: Decodable>(of type: T.Type, from url: URL, completion: @escaping result<T>) {
         
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if let error = error {
-                fatalError("Failed to fetch data with error: \(error.localizedDescription)")
+                completion(.failure(error))
             }
-            guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-                fatalError("Error: invalid HTTP response code")
+            
+            guard let response = response as? HTTPURLResponse else {
+                completion(.failure(DataError.invalidResponse))
+                return
             }
-            guard let data = data else {
-                fatalError("Error: missing response data")
+            
+            if 200 ... 299 ~= response.statusCode {
+                if let data = data {
+                    let decoder = JSONDecoder()
+                    decoder.keyDecodingStrategy = .convertFromSnakeCase
+                    
+                    do {
+                        let decodedData: T = try decoder.decode(T.self, from: data)
+                        completion(.success(decodedData))
+                    } catch {
+                        completion(.failure(DataError.decodingError))
+                    }
+                } else {
+                    completion(.failure(DataError.serverError))
+                }
             }
-            completion(data)
         }
         task.resume()
     }
     
-    func createURL(from name: String? = nil, index: Int? = nil, urlString: String? = nil, dataType: PokemonDataType? = nil) -> URL? {
+    func createURL(for dataType: PokemonDataType? = nil, fromIndex index: Int? = nil, fromString urlString: String? = nil) -> URL? {
         let baseStringURL = "https://pokeapi.co/api/v2/"
-        
-        if let name = name {
-            if let dataType = dataType {
-                let url = URL(string: baseStringURL + dataType.rawValue + name)
-                return url
-            }
-        }
         
         if let index = index {
             if let dataType = dataType {
@@ -80,56 +93,36 @@ class PokemonManager {
 //        }
 //    }
     
-    func parsePokedex(pokedexData: Data) -> Pokedex? {
-        let pokedex: Pokedex
-        
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        
-        do {
-            pokedex = try decoder.decode(Pokedex.self, from: pokedexData)
-            return pokedex
-        } catch {
-            print("Error decoding Pokex: \(error)")
-            return nil
-        }
-    }
+//    func parsePokedex(pokedexData: Data) -> Pokedex? {
+//        let pokedex: Pokedex
+//
+//        let decoder = JSONDecoder()
+//        decoder.keyDecodingStrategy = .convertFromSnakeCase
+//
+//        do {
+//            pokedex = try decoder.decode(Pokedex.self, from: pokedexData)
+//            return pokedex
+//        } catch {
+//            print("Error decoding Pokex: \(error)")
+//            return nil
+//        }
+//    }
     
-    func parsePokemonData(pokemonData: Data, speciesData: Data) -> Pokemon {
-        var decodedPokemon: PokemonData!
-        var decodedSpecies: SpeciesData!
-        
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        
-        // PokemonData
-        do {
-            decodedPokemon = try decoder.decode(PokemonData.self, from: pokemonData)
-        } catch {
-            print("Error decoding PokemonData: \(error)")
-        }
-        
-        // SpeciesData
-        do {
-            decodedSpecies = try decoder.decode(SpeciesData.self, from: speciesData)
-        } catch {
-            print("Error decoding SpeciesData: \(error)")
-        }
-        
-        let id = decodedPokemon.id
-        let name = decodedPokemon.name
-        let height = decodedPokemon.height / 10
-        let weight = decodedPokemon.weight / 10
+    func parsePokemonData(pokemonData: PokemonData, speciesData: SpeciesData) -> Pokemon {
+        let id = pokemonData.id
+        let name = pokemonData.name
+        let height = pokemonData.height / 10
+        let weight = pokemonData.weight / 10
 
         // Type
         var typeArray = [PokemonType]()
-        for type in decodedPokemon.types {
+        for type in pokemonData.types {
             typeArray.insert(PokemonType(rawValue: type.name) ?? .unknown, at: type.slot - 1)
         }
         
         // Genus
         var genus: String {
-            for genus in decodedSpecies.genera {
+            for genus in speciesData.genera {
                 if genus.language == "en" {
                     return genus.genus
                 }
@@ -138,13 +131,13 @@ class PokemonManager {
         }
         
         // Generation
-        let generation = decodedSpecies.generation.name
+        let generation = speciesData.generation.name
         
         // Description
         var description: String {
             var englishFlavorTextArray = [String]()
             
-            for entry in decodedSpecies.flavorTextEntries {
+            for entry in speciesData.flavorTextEntries {
                 if entry.language == "en" {
                     englishFlavorTextArray.append(entry.flavorText)
                 }
@@ -159,7 +152,7 @@ class PokemonManager {
         // Stats
         var stats = [PokemonStatName: Float]()
         
-        for stat in decodedPokemon.stats {
+        for stat in pokemonData.stats {
             if let statName = PokemonStatName(rawValue: stat.statName) {
                 stats[statName] = Float(stat.baseStat)
             }
@@ -168,36 +161,25 @@ class PokemonManager {
         // Abilities
         var abilitiesArray = [PokemonAbility]()
         
-        for ability in decodedPokemon.abilities {
+        for ability in pokemonData.abilities {
             abilitiesArray.append(PokemonAbility(name: ability.name, isHidden: ability.isHidden, urlString: ability.url, description: nil))
         }
         
         // Moves
         var movesArray = [PokemonMove]()
         
-        for move in decodedPokemon.moves {
+        for move in pokemonData.moves {
             movesArray.append(PokemonMove(name: move.name, levelLearnedAt: move.levelLearnedAt, moveLearnMethod: move.moveLearnMethod, urlString: move.url, description: nil))
         }
         
         return Pokemon(id: id, name: name, height: height, weight: weight, type: typeArray, genus: genus, region: nil, generation: generation, description: description, stats: stats, abilities: abilitiesArray, moves: movesArray)
     }
     
-    func parseAbilityData(data: Data, ability: PokemonAbility) -> PokemonAbility? {
-        var decodedAbility: AbilityData!
-        
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        
-        do {
-            decodedAbility = try decoder.decode(AbilityData.self, from: data)
-        } catch {
-            print("Error decoding PokemonAbility: \(error)")
-        }
-        
+    func addAbilityDescription(to ability: PokemonAbility, with abilityData: AbilityData) -> PokemonAbility {
         var englishFlavorTextArray = [String]()
         let description: String
         
-        for flavorText in decodedAbility.flavorTextEntries {
+        for flavorText in abilityData.flavorTextEntries {
             if flavorText.language == "en" {
                 englishFlavorTextArray.append(flavorText.flavorText)
             }

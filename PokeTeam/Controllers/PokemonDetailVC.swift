@@ -17,8 +17,8 @@ class PokemonDetailVC: UIViewController {
     let abilityTransitioningDelegate = AbilityTransitioningDelegate()
 
     var pokemon: Pokemon?
-//    var pokemonData: PokemonData?
-//    var speciesData: SpeciesData?
+    var pokemonData: PokemonData?
+    var speciesData: SpeciesData?
 //    var generationData: GenerationData?
     
     var indicatorView: UIActivityIndicatorView!
@@ -53,8 +53,8 @@ class PokemonDetailVC: UIViewController {
     @IBOutlet var abilitiesHeaderLabel: UILabel!
     @IBOutlet weak var abilitiesStackView: UIStackView!
     
-    init?(coder: NSCoder, pokemon: PokemonEntry) {
-        self.pokemonEntry = pokemon
+    init?(coder: NSCoder, pokemonEntry: PokemonEntry) {
+        self.pokemonEntry = pokemonEntry
 
         super.init(coder: coder)
     }
@@ -73,33 +73,74 @@ class PokemonDetailVC: UIViewController {
         
         loadPokemonInfo()
         setCustomFonts()
-        
     }
     
     private func loadPokemonInfo() {
-        let pokemonIndex = pokemonEntry.entryNumber
-        var pokemonData: Data?
-        var speciesData: Data?
+        guard let url = PokemonManager.shared.createURL(for: .species, fromString: pokemonEntry.url) else {
+            print("Error creating URL")
+            return
+        }
         
         setState(loading: true)
         
         let group = DispatchGroup()
         
         group.enter()
-        PokemonManager.shared.fetchFromAPI(index: pokemonIndex, dataType: .pokemon, decodeTo: PokemonData.self) { (data) in
-            pokemonData = data
-            group.leave()
+        PokemonManager.shared.fetchFromAPI(of: SpeciesData.self, from: url) { (result) in
+            switch result {
+            case .failure(let error):
+                if error is DataError {
+                    print(error)
+                    group.leave()
+                } else {
+                    print(error.localizedDescription)
+                    group.leave()
+                }
+                print(error.localizedDescription)
+                group.leave()
+            case.success(let speciesData):
+                self.speciesData = speciesData
+                group.leave()
+            }
+        }
+        
+//        PokemonManager.shared.fetchFromAPI(index: pokemonIndex, dataType: .pokemon, decodeTo: PokemonData.self) { (data) in
+//            pokemonData = data
+//            group.leave()
+//        }
+        // TODO: Replace this URL from speciesData fetched above
+        guard let pokemonURL = PokemonManager.shared.createURL(for: .pokemon, fromIndex: pokemonEntry.entryNumber) else {
+            print("Error creating pokemon URL")
+            return
         }
         
         group.enter()
-        PokemonManager.shared.fetchFromAPI(index: pokemonIndex, dataType: .species, decodeTo: SpeciesData.self) { (data) in
-            speciesData = data
-            group.leave()
+        PokemonManager.shared.fetchFromAPI(of: PokemonData.self, from: pokemonURL) { (result) in
+            switch result {
+            case .failure(let error):
+                if error is DataError {
+                    print(error)
+                    group.leave()
+                } else {
+                    print(error.localizedDescription)
+                    group.leave()
+                }
+                print(error.localizedDescription)
+                group.leave()
+            case.success(let pokemonData):
+                self.pokemonData = pokemonData
+                group.leave()
+            }
         }
         
+//        PokemonManager.shared.fetchFromAPI(index: pokemonIndex, dataType: .species, decodeTo: SpeciesData.self) { (data) in
+//            speciesData = data
+//            group.leave()
+//        }
+        
         group.notify(queue: .global(qos: .background)) {
-            guard let safePokemon = pokemonData else { return }
-            guard let safeSpecies = speciesData else { return }
+            guard let safePokemon = self.pokemonData else { return }
+            guard let safeSpecies = self.speciesData else { return }
             
             self.pokemon = PokemonManager.shared.parsePokemonData(pokemonData: safePokemon, speciesData: safeSpecies)
             
