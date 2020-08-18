@@ -57,7 +57,6 @@ class PokeDexVC: UITableViewController {
                 } else {
                     print(error.localizedDescription)
                 }
-                print(error.localizedDescription)
             case.success(let pokedex):
                 self.pokedex = pokedex
                 DispatchQueue.main.async {
@@ -67,16 +66,6 @@ class PokeDexVC: UITableViewController {
                 }
             }
         }
-//        PokemonManager.shared.fetchFromAPI(index: 1, dataType: .pokedex, decodeTo: Pokedex.self) { (pokedexData) in
-//            if let parsedPokedex = PokemonManager.shared.parsePokedex(pokedexData: pokedexData) {
-//                DispatchQueue.main.async {
-//                    self.setState(loading: false)
-//                    self.pokedex = parsedPokedex
-//                    self.navigationItem.title = "Pokédex: \(parsedPokedex.name.capitalized)"
-//                    self.tableView.reloadData()
-//                }
-//            }
-//        }
     }
     
     private func initializeSearchBar() {
@@ -117,7 +106,6 @@ class PokeDexVC: UITableViewController {
             }
             cell.pokemonNameLabel.text = pokemon.name.capitalized
             cell.pokemonImageView.image = UIImage(named: pokemon.name)
-            
         }
         return cell
     }
