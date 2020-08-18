@@ -10,9 +10,9 @@ import UIKit
 
 class AbilityDetailVC: UIViewController {
     
-    var abilityName: String = ""
-    var abilityURL: String = ""
+    var ability: PokemonAbility?
     var abilityData: AbilityData?
+    var abilityDescription: String?
     var indicatorView = UIActivityIndicatorView()
 
     @IBOutlet weak var abilityHeaderLabel: UILabel!
@@ -31,38 +31,52 @@ class AbilityDetailVC: UIViewController {
     }
     
     private func loadAbility() {
+        guard let ability = ability else { return }
+        
+        guard let abilityURL = URL(string: ability.urlString) else {
+            print("Error creating ability URL")
+            return
+        }
+        
         setState(loading: true)
-        PokemonManager.shared.fetchFromAPI(urlString: abilityURL, decodeTo: AbilityData.self) { (abilityData) in
-            DispatchQueue.main.async {
-                self.setState(loading: false)
-                print("Ability Loaded")
-                self.abilityData = abilityData
-                self.updateAbilityUI()
+        
+        PokemonManager.shared.fetchFromAPI(of: AbilityData.self, from: abilityURL) { (result) in
+            switch result {
+            case .failure(let error):
+                if error is DataError {
+                    print(error)
+                } else {
+                    print(error.localizedDescription)
+                }
+                print(error.localizedDescription)
+            case.success(let abilityData):
+                //self.abilityData = abilityData
+                self.ability = PokemonManager.shared.addAbilityDescription(to: ability, with: abilityData)
+                DispatchQueue.main.async {
+                    self.updateAbilityUI()
+                    self.setState(loading: false)
+                }
             }
         }
     }
     
-    private func getLatestFlavorText() -> String? {
-        guard let abilityData = abilityData else { return nil }
-        
-        var englishFlavorTextArray = [String]()
-        
-        for description in abilityData.flavorTextEntries {
-            if description.language == "en" {
-                englishFlavorTextArray.append(description.flavorText)
-            }
-        }
-        return englishFlavorTextArray.last
-    }
+//        PokemonManager.shared.fetchFromAPI(urlString: ability.urlString, decodeTo: AbilityData.self) { (abilityData) in
+//            self.ability = PokemonManager.shared.parseAbilityData(data: abilityData, ability: ability)
+//
+//            DispatchQueue.main.async {
+//                self.setState(loading: false)
+//                print("Ability Loaded")
+//
+//                self.updateAbilityUI()
+//            }
+//        }
+//    }
     
     private func updateAbilityUI() {
-        guard let abilityData = abilityData else { return }
+        guard let ability = ability else { return }
         
-        abilityHeaderLabel.text = abilityData.name.capitalized
-        
-        if let latestFlavorText = getLatestFlavorText() {
-            abilityDescriptionLabel.text = latestFlavorText.replacingOccurrences(of: "\n", with: " ")
-        }
+        abilityHeaderLabel.text = ability.name.capitalized
+        abilityDescriptionLabel.text = ability.description
     }
     
     private func setState(loading: Bool) {

@@ -16,9 +16,10 @@ class PokemonDetailVC: UIViewController {
     
     let abilityTransitioningDelegate = AbilityTransitioningDelegate()
 
+    var pokemon: Pokemon?
     var pokemonData: PokemonData?
     var speciesData: SpeciesData?
-    var generationData: GenerationData?
+//    var generationData: GenerationData?
     
     var indicatorView: UIActivityIndicatorView!
     
@@ -26,11 +27,11 @@ class PokemonDetailVC: UIViewController {
     @IBOutlet var pokemonImageView: UIImageView!
     
     @IBOutlet var pokemonNameLabel: UILabel!
-    @IBOutlet var pokemonType1: PokemonTypeLabel!
-    @IBOutlet var pokemonType2: PokemonTypeLabel!
+    @IBOutlet var pokemonType1Label: PokemonTypeLabel!
+    @IBOutlet var pokemonType2Label: PokemonTypeLabel!
     @IBOutlet var pokemonNumberAndGenusLabel: UILabel!
     @IBOutlet var pokemonDescriptionLabel: UILabel!
-    @IBOutlet var pokemonRegionLabel: UILabel!
+    @IBOutlet var pokemonGenerationLabel: UILabel!
     @IBOutlet weak var heightLabel: UILabel!
     @IBOutlet weak var weightLabel: UILabel!
     
@@ -52,8 +53,8 @@ class PokemonDetailVC: UIViewController {
     @IBOutlet var abilitiesHeaderLabel: UILabel!
     @IBOutlet weak var abilitiesStackView: UIStackView!
     
-    init?(coder: NSCoder, pokemon: PokemonEntry) {
-        self.pokemonEntry = pokemon
+    init?(coder: NSCoder, pokemonEntry: PokemonEntry) {
+        self.pokemonEntry = pokemonEntry
 
         super.init(coder: coder)
     }
@@ -72,111 +73,119 @@ class PokemonDetailVC: UIViewController {
         
         loadPokemonInfo()
         setCustomFonts()
-        
     }
     
     private func loadPokemonInfo() {
-        let pokemonIndex = pokemonEntry.entryNumber
+        guard let url = URL(string: pokemonEntry.url) else {
+            print("Error creating URL")
+            return
+        }
         
         setState(loading: true)
         
         let group = DispatchGroup()
         
         group.enter()
-        PokemonManager.shared.fetchFromAPI(index: pokemonIndex, dataType: .pokemon, decodeTo: PokemonData.self) { (pokemon) in
-            self.pokemonData = pokemon
-            group.leave()
-        }
-        
-        group.enter()
-        PokemonManager.shared.fetchFromAPI(index: pokemonIndex, dataType: .species, decodeTo: SpeciesData.self) { (species) in
-            self.speciesData = species
-            
-            let generationURL = species.generation.url
-            
-            PokemonManager.shared.fetchFromAPI(urlString: generationURL, decodeTo: GenerationData.self) { (generation) in
-                self.generationData = generation
+        PokemonManager.shared.fetchFromAPI(of: SpeciesData.self, from: url) { (result) in
+            switch result {
+            case .failure(let error):
+                if error is DataError {
+                    print(error)
+                    group.leave()
+                } else {
+                    print(error.localizedDescription)
+                    group.leave()
+                }
+                print(error.localizedDescription)
+                group.leave()
+            case.success(let speciesData):
+                self.speciesData = speciesData
                 group.leave()
             }
         }
         
-        group.notify(queue: .main) {
-            if let _ = self.pokemonData {
-                if let _ = self.speciesData {
-                    self.updatePokemonUI()
-                    self.layoutAbilities()
-                    self.updateStats()
+        // TODO: Replace this URL from speciesData fetched above
+        guard let pokemonURL = PokemonManager.shared.createURL(for: .pokemon, fromIndex: pokemonEntry.entryNumber) else {
+            print("Error creating pokemon URL")
+            return
+        }
+        
+        group.enter()
+        PokemonManager.shared.fetchFromAPI(of: PokemonData.self, from: pokemonURL) { (result) in
+            switch result {
+            case .failure(let error):
+                if error is DataError {
+                    print(error)
+                    group.leave()
+                } else {
+                    print(error.localizedDescription)
+                    group.leave()
                 }
+                print(error.localizedDescription)
+                group.leave()
+            case.success(let pokemonData):
+                self.pokemonData = pokemonData
+                group.leave()
             }
-            self.setState(loading: false)
+        }
+        
+        group.notify(queue: .global(qos: .background)) {
+            guard let safePokemon = self.pokemonData else { return }
+            guard let safeSpecies = self.speciesData else { return }
+            
+            self.pokemon = PokemonManager.shared.parsePokemonData(pokemonData: safePokemon, speciesData: safeSpecies)
+            
+            DispatchQueue.main.async {
+                self.updatePokemonUI()
+                self.layoutAbilities()
+                self.updateStats()
+                self.setState(loading: false)
+            }
         }
     }
     
     private func updatePokemonUI() {
-        guard let pokemon = pokemonData else { return }
-        guard let species = speciesData else { return }
-        guard let generation = generationData else { return }
+        guard let pokemon = pokemon else { return }
         
         // Update Pokemon Name
         pokemonNameLabel.text = pokemon.name.capitalized
         
         //Update Image
-        pokemonImageView.image = UIImage(named: String(pokemon.id))
+        pokemonImageView.image = UIImage(named: pokemon.imageID)
         
         // Update Pokemon types
-        if pokemon.types.count > 1 {
-            let type1 = pokemon.types[0].name
-            let type2 = pokemon.types[1].name
+        if pokemon.type.count > 1 {
+            let type1 = pokemon.type[0]
+            let type2 = pokemon.type[1]
             
-            pokemonType1.text = type1.capitalized
-            pokemonType1.backgroundColor = PokemonTypeLabel.colorDictionary[PokemonType(rawValue: type1) ?? PokemonType.unknown]
-            pokemonType2.text = type2.capitalized
-            pokemonType2.backgroundColor = PokemonTypeLabel.colorDictionary[PokemonType(rawValue: type2) ?? PokemonType.unknown]
+            pokemonType1Label.text = type1.rawValue.capitalized
+            pokemonType1Label.backgroundColor = PokemonTypeLabel.colorDictionary[type1]
+            
+            pokemonType2Label.text = type2.rawValue.capitalized
+            pokemonType2Label.backgroundColor = PokemonTypeLabel.colorDictionary[type2]
         } else {
-            let type1 = pokemon.types[0].name
-            pokemonType1.text = type1.capitalized
-            pokemonType1.backgroundColor = PokemonTypeLabel.colorDictionary[PokemonType(rawValue: type1) ?? PokemonType.unknown]
-            pokemonType2.isHidden = true
+            let type1 = pokemon.type[0]
+            
+            pokemonType1Label.text = type1.rawValue.capitalized
+            pokemonType1Label.backgroundColor = PokemonTypeLabel.colorDictionary[type1]
+            
+            pokemonType2Label.isHidden = true
         }
         
         // Update Pokemon ID# and Genus text
         let pokemonIDString = String(withInt: pokemon.id, leadingZeros: 3)
         
-        var genusText = ""
-        for genus in species.genera {
-            if genus.language == "en" {
-                genusText = genus.genus
-            }
-        }
-        
-        pokemonNumberAndGenusLabel.text = "#\(pokemonIDString) –– \(genusText)"
+        pokemonNumberAndGenusLabel.text = "#\(pokemonIDString) –– \(pokemon.genus)"
         
         // Update Pokemon Description
-        var englishFlavorTextArray = [String]()
-        var englishFlavorText = ""
+        pokemonDescriptionLabel.text = pokemon.description
         
-        for entry in species.flavorTextEntries {
-            if entry.language == "en" {
-                englishFlavorTextArray.append(entry.flavorText)
-                if let latestEntry = englishFlavorTextArray.last {
-                   englishFlavorText = latestEntry
-                }
-            }
-        }
-        let formattedText = englishFlavorText.replacingOccurrences(of: "\n", with: " ")
-        
-        pokemonDescriptionLabel.text = formattedText
-        
-        // Update Region from Generation
-        let regionName = generation.mainRegion.uppercased()
-        pokemonRegionLabel.text = "REGION: \(regionName)"
+        // Update Generation
+        pokemonGenerationLabel.text = pokemon.generation.uppercased()
         
         // Update height and weight
-        let height: Float = pokemon.height / 10
-        let weight: Float = pokemon.weight / 10
-        
-        heightLabel.text = "\(height) m"
-        weightLabel.text = "\(weight) kg"
+        heightLabel.text = "\(pokemon.height) m"
+        weightLabel.text = "\(pokemon.weight) kg"
     }
     
     private func setCustomFonts() {
@@ -189,76 +198,56 @@ class PokemonDetailVC: UIViewController {
     }
     
     private func updateStats() {
-        guard let pokemon = pokemonData else { return }
+        guard let pokemon = pokemon else { return }
+        
         let maxStat: Float = 255
         
-        // Parse individual stats from stats array
-        var hpStat = 0
-        var attackStat = 0
-        var defenseStat = 0
-        var specialAttackStat = 0
-        var specialDefenseStat = 0
-        var speedStat = 0
-        
-        for stat in pokemon.stats {
-            if stat.statName == "hp" {
-                hpStat = stat.baseStat
-            } else if stat.statName == "attack" {
-                attackStat = stat.baseStat
-            } else if stat.statName == "defense" {
-                defenseStat = stat.baseStat
-            } else if stat.statName == "special-attack" {
-                specialAttackStat = stat.baseStat
-            } else if stat.statName == "special-defense" {
-                specialDefenseStat = stat.baseStat
-            } else if stat.statName == "speed" {
-                speedStat = stat.baseStat
-            }
-        }
-        
-        // Update UI
-        
+        // TODO: Fix the rest of the stats to match HP
         // HP
-        statHPLabel.text = "\(hpStat)"
-        statHPProgress.progress = Float(hpStat) / maxStat
+        statHPLabel.text = "\(Int(pokemon.stats[.hp]!))"
+        statHPProgress.progress = pokemon.stats[.hp]! / maxStat
         
         // Attack
-        statAttackLabel.text = "\(attackStat)"
-        statAttackProgress.progress = Float(attackStat) / maxStat
+        statAttackLabel.text = "\(pokemon.stats[.attack] ?? 0)"
+        statAttackProgress.progress = pokemon.stats[.attack] ?? 0 / maxStat
         
         // Defense
-        statDefenseLabel.text = "\(defenseStat)"
-        statDefenseProgress.progress = Float(defenseStat) / maxStat
+        statDefenseLabel.text = "\(pokemon.stats[.defense] ?? 0)"
+        statDefenseProgress.progress = pokemon.stats[.defense] ?? 0 / maxStat
         
         // Special Attack
-        statSpAttackLabel.text = "\(specialAttackStat)"
-        statSpAttackProgress.progress = Float(specialAttackStat) / maxStat
+        statSpAttackLabel.text = "\(pokemon.stats[.specialAttack] ?? 0)"
+        statSpAttackProgress.progress = pokemon.stats[.specialAttack] ?? 0 / maxStat
         
         // Special Defense
-        statSpDefenseLabel.text = "\(specialDefenseStat)"
-        statSpDefenseProgress.progress = Float(specialDefenseStat) / maxStat
+        statSpDefenseLabel.text = "\(pokemon.stats[.specialDefense] ?? 0)"
+        statSpDefenseProgress.progress = pokemon.stats[.specialDefense] ?? 0 / maxStat
         
         // Speed
-        statSpeedLabel.text = "\(speedStat)"
-        statSpeedProgress.progress = Float(speedStat) / maxStat
+        statSpeedLabel.text = "\(pokemon.stats[.speed] ?? 0)"
+        statSpeedProgress.progress = pokemon.stats[.speed] ?? 0 / maxStat
         
         // Total Stats
-        let totalStats: Int = Int(hpStat + attackStat + defenseStat + specialAttackStat + specialDefenseStat + speedStat)
+        var totalStats: Int = 0
+        for stat in pokemon.stats {
+            totalStats += Int(stat.value)
+        }
+        
         statTotalLabel.text = "TOTAL \(totalStats)"
     }
     
     private func layoutAbilities() {
-        guard let pokemonData = pokemonData else { return }
+        guard let abilities = pokemon?.abilities else { return }
         
-        for (index, ability) in pokemonData.abilities.enumerated() {
+        for (index, ability) in abilities.enumerated() {
             let abilityButton = UIButton()
-            
+
             if ability.isHidden {
                 abilityButton.setTitle("\(ability.name.capitalized) *", for: .normal)
             } else {
                 abilityButton.setTitle(ability.name.capitalized, for: .normal)
             }
-            
+
             abilityButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
             abilityButton.widthAnchor.constraint(equalToConstant: 175).isActive = true
             abilityButton.backgroundColor = UIColor(named: "poke-blue")
@@ -269,7 +258,7 @@ class PokemonDetailVC: UIViewController {
             abilitiesStackView.addArrangedSubview(abilityButton)
             abilitiesStackView.translatesAutoresizingMaskIntoConstraints = false
         }
-        
+
         let hiddenLabel = UILabel()
         hiddenLabel.text = "* Hidden Ability"
         hiddenLabel.font = UIFont.systemFont(ofSize: 12)
@@ -277,18 +266,15 @@ class PokemonDetailVC: UIViewController {
     }
     
     @objc private func abilityButtonTapped(sender: UIButton!) {
-        guard let pokemonData = pokemonData else { return }
-        
-        let abilityName = pokemonData.abilities[sender.tag].name
-        let abilityURL = pokemonData.abilities[sender.tag].url
-        
+        guard let abilities = pokemon?.abilities else { return }
+
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let abilityController = storyboard.instantiateViewController(withIdentifier: "AbilityVC") as! AbilityDetailVC
-        abilityController.abilityName = abilityName
-        abilityController.abilityURL = abilityURL
+        abilityController.ability = abilities[sender.tag]
+        
         abilityController.transitioningDelegate = abilityTransitioningDelegate
         abilityController.modalPresentationStyle = .custom
-        
+
         self.present(abilityController, animated: true)
     }
     

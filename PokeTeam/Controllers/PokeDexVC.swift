@@ -10,6 +10,7 @@ import UIKit
 
 class PokeDexVC: UITableViewController {
     
+    let nationalPokedexID = 1
     let pokemonCellID = "pokemonCell"
     let navBarFont = FontKit.roundedFont(ofSize: 17, weight: .bold)
     let cellFont = FontKit.roundedFont(ofSize: 17, weight: .regular)
@@ -41,15 +42,41 @@ class PokeDexVC: UITableViewController {
     }
     
     private func loadPokedex() {
+        guard let url = PokemonManager.shared.createURL(for: .pokedex, fromIndex: nationalPokedexID) else {
+            print("Error creating URL")
+            return
+        }
+        
         setState(loading: true)
-        PokemonManager.shared.fetchFromAPI(index: 1, dataType: .pokedex, decodeTo: Pokedex.self) { (pokedex) in
-            DispatchQueue.main.async {
-                self.setState(loading: false)
+        
+        PokemonManager.shared.fetchFromAPI(of: Pokedex.self, from: url) { (result) in
+            switch result {
+            case .failure(let error):
+                if error is DataError {
+                    print(error)
+                } else {
+                    print(error.localizedDescription)
+                }
+                print(error.localizedDescription)
+            case.success(let pokedex):
                 self.pokedex = pokedex
-                self.navigationItem.title = "Pokédex: \(pokedex.name.capitalized)"
-                self.tableView.reloadData()
+                DispatchQueue.main.async {
+                    self.setState(loading: false)
+                    self.navigationItem.title = "Pokédex: \(pokedex.name.capitalized)"
+                    self.tableView.reloadData()
+                }
             }
         }
+//        PokemonManager.shared.fetchFromAPI(index: 1, dataType: .pokedex, decodeTo: Pokedex.self) { (pokedexData) in
+//            if let parsedPokedex = PokemonManager.shared.parsePokedex(pokedexData: pokedexData) {
+//                DispatchQueue.main.async {
+//                    self.setState(loading: false)
+//                    self.pokedex = parsedPokedex
+//                    self.navigationItem.title = "Pokédex: \(parsedPokedex.name.capitalized)"
+//                    self.tableView.reloadData()
+//                }
+//            }
+//        }
     }
     
     private func initializeSearchBar() {
@@ -66,8 +93,6 @@ class PokeDexVC: UITableViewController {
         
         searchController.searchBar.barTintColor = UIColor.white
         searchController.searchBar.tintColor = UIColor.white
-        //searchController.searchBar.searchBarStyle = .prominent
-        //navigationItem.searchController?.searchBar.searchTextField.backgroundColor = .systemBackground
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
     }
 
@@ -116,14 +141,14 @@ class PokeDexVC: UITableViewController {
         
         guard let pokedex = pokedex else { return nil }
         
-        let pokemon: PokemonEntry
+        let pokemonEntry: PokemonEntry
         
         if isFiltering {
-            pokemon = filteredPokedex[selectedRow]
+            pokemonEntry = filteredPokedex[selectedRow]
         } else {
-            pokemon = pokedex.pokemonEntries[selectedRow]
+            pokemonEntry = pokedex.pokemonEntries[selectedRow]
         }
-        return PokemonDetailVC(coder: coder, pokemon: pokemon)
+        return PokemonDetailVC(coder: coder, pokemonEntry: pokemonEntry)
     }
     
     private func setState(loading: Bool) {
