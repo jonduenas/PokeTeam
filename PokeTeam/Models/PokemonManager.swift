@@ -59,21 +59,10 @@ class PokemonManager {
         task.resume()
     }
     
-    func createURL(for dataType: PokemonDataType? = nil, fromIndex index: Int? = nil, fromString urlString: String? = nil) -> URL? {
+    func createURL(for dataType: PokemonDataType, fromIndex index: Int) -> URL? {
         let baseStringURL = "https://pokeapi.co/api/v2/"
         
-        if let index = index {
-            if let dataType = dataType {
-                let url = URL(string: baseStringURL + dataType.rawValue + "\(index)")
-                return url
-            }
-        }
-        
-        if let urlString = urlString {
-            let url = URL(string: urlString)
-            return url
-        }
-        return nil
+        return URL(string: baseStringURL + dataType.rawValue + "\(index)")
     }
     
 //    func parseJSON<T: Decodable, U>(data: Data, to type: T.Type) -> U {

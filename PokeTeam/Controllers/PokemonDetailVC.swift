@@ -76,7 +76,7 @@ class PokemonDetailVC: UIViewController {
     }
     
     private func loadPokemonInfo() {
-        guard let url = PokemonManager.shared.createURL(for: .species, fromString: pokemonEntry.url) else {
+        guard let url = URL(string: pokemonEntry.url) else {
             print("Error creating URL")
             return
         }
@@ -104,10 +104,6 @@ class PokemonDetailVC: UIViewController {
             }
         }
         
-//        PokemonManager.shared.fetchFromAPI(index: pokemonIndex, dataType: .pokemon, decodeTo: PokemonData.self) { (data) in
-//            pokemonData = data
-//            group.leave()
-//        }
         // TODO: Replace this URL from speciesData fetched above
         guard let pokemonURL = PokemonManager.shared.createURL(for: .pokemon, fromIndex: pokemonEntry.entryNumber) else {
             print("Error creating pokemon URL")
@@ -132,11 +128,6 @@ class PokemonDetailVC: UIViewController {
                 group.leave()
             }
         }
-        
-//        PokemonManager.shared.fetchFromAPI(index: pokemonIndex, dataType: .species, decodeTo: SpeciesData.self) { (data) in
-//            speciesData = data
-//            group.leave()
-//        }
         
         group.notify(queue: .global(qos: .background)) {
             guard let safePokemon = self.pokemonData else { return }
