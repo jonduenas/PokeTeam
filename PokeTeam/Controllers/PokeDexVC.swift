@@ -12,8 +12,6 @@ class PokeDexVC: UITableViewController {
     
     let nationalPokedexID = 1
     let pokemonCellID = "pokemonCell"
-    let navBarFont = FontKit.roundedFont(ofSize: 17, weight: .bold)
-    let cellFont = FontKit.roundedFont(ofSize: 17, weight: .regular)
     
     var searchController: UISearchController!
     var indicatorView: UIActivityIndicatorView!

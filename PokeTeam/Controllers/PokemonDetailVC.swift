@@ -19,7 +19,6 @@ class PokemonDetailVC: UIViewController {
     var pokemon: Pokemon?
     var pokemonData: PokemonData?
     var speciesData: SpeciesData?
-//    var generationData: GenerationData?
     
     var indicatorView: UIActivityIndicatorView!
     
@@ -66,7 +65,6 @@ class PokemonDetailVC: UIViewController {
         view.addSubview(indicatorView)
         
         loadPokemonInfo()
-        setCustomFonts()
     }
     
     private func loadPokemonInfo() {
@@ -88,8 +86,10 @@ class PokemonDetailVC: UIViewController {
                 case .failure(let error):
                     if error is DataError {
                         print(error)
+                        operationQueue.cancelAllOperations()
                     } else {
                         print(error.localizedDescription)
+                        operationQueue.cancelAllOperations()
                     }
                 case.success(let speciesData):
                     self.speciesData = speciesData
@@ -183,20 +183,11 @@ class PokemonDetailVC: UIViewController {
         pokemonDescriptionLabel.text = pokemon.description
         
         // Update Generation
-        pokemonGenerationLabel.text = pokemon.generation.uppercased()
+        pokemonGenerationLabel.text = pokemon.generation
         
         // Update height and weight
         heightLabel.text = "\(pokemon.height) m"
         weightLabel.text = "\(pokemon.weight) kg"
-    }
-    
-    private func setCustomFonts() {
-        let largeTitleFont = FontKit.roundedFont(ofSize: largeTitleSize, weight: .bold)
-        let subTitleFont = FontKit.roundedFont(ofSize: subTitleSize, weight: .semibold)
-        
-        pokemonNameLabel.font = largeTitleFont
-        baseStatsHeaderLabel.font = subTitleFont
-        abilitiesHeaderLabel.font = subTitleFont
     }
     
     private func updateStats() {

@@ -65,38 +65,6 @@ class PokemonManager {
         return URL(string: baseStringURL + dataType.rawValue + "\(index)")
     }
     
-//    func parseJSON<T: Decodable, U>(data: Data, to type: T.Type) -> U {
-//        let decoder = JSONDecoder()
-//        decoder.keyDecodingStrategy = .convertFromSnakeCase
-//
-//        do {
-//            let decodedData = try decoder.decode(type.self, from: data)
-//
-//            switch type {
-//            case type == PokemonData:
-//                guard let dataToParse = decodedData as? PokemonData else { fatalError("Unable to parse PokemonData")}
-//
-//            }
-//        } catch {
-//            print("Error: \(error)")
-//        }
-//    }
-    
-//    func parsePokedex(pokedexData: Data) -> Pokedex? {
-//        let pokedex: Pokedex
-//
-//        let decoder = JSONDecoder()
-//        decoder.keyDecodingStrategy = .convertFromSnakeCase
-//
-//        do {
-//            pokedex = try decoder.decode(Pokedex.self, from: pokedexData)
-//            return pokedex
-//        } catch {
-//            print("Error decoding Pokex: \(error)")
-//            return nil
-//        }
-//    }
-    
     func parsePokemonData(pokemonData: PokemonData, speciesData: SpeciesData) -> Pokemon {
         let id = pokemonData.id
         let name = pokemonData.name
@@ -120,7 +88,7 @@ class PokemonManager {
         }
         
         // Generation
-        let generation = speciesData.generation.name
+        let generation = speciesData.generation.name.uppercased().replacingOccurrences(of: "-", with: ": ")
         
         // Description
         var description: String {
