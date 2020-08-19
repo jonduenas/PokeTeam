@@ -31,7 +31,6 @@ class PokemonDetailVC: UIViewController {
     @IBOutlet var pokemonType2Label: PokemonTypeLabel!
     @IBOutlet var pokemonNumberAndGenusLabel: UILabel!
     @IBOutlet var pokemonDescriptionLabel: UILabel!
-    @IBOutlet var pokemonGenerationLabel: UILabel!
     @IBOutlet weak var heightLabel: UILabel!
     @IBOutlet weak var weightLabel: UILabel!
     
@@ -179,7 +178,6 @@ class PokemonDetailVC: UIViewController {
         pokemonNumberAndGenusLabel.text = "#\(pokemonIDString) –– \(pokemon.genus)"
         
         pokemonDescriptionLabel.text = pokemon.description
-        pokemonGenerationLabel.text = pokemon.generation
         heightLabel.text = "\(pokemon.height) m"
         weightLabel.text = "\(pokemon.weight) kg"
     }

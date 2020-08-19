@@ -88,7 +88,7 @@ class PokemonManager {
         }
         
         // Generation
-        let generation = speciesData.generation.name.uppercased().replacingOccurrences(of: "-", with: ": ")
+        let generation = speciesData.generation.name
         
         // Description
         var description: String {
