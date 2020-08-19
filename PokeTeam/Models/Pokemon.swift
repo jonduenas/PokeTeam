@@ -43,7 +43,7 @@ struct Pokemon {
         return String(id)
     }
     
-    var abilities: [PokemonAbility]?
+    var abilities: [PokemonAbility]
     var moves: [PokemonMove]?
 }
 

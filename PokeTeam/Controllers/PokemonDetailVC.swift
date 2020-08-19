@@ -16,9 +16,10 @@ class PokemonDetailVC: UIViewController {
     
     let abilityTransitioningDelegate = AbilityTransitioningDelegate()
 
-    var pokemon: Pokemon?
+    //var pokemon: Pokemon?
     var pokemonData: PokemonData?
     var speciesData: SpeciesData?
+    var abilities: [PokemonAbility]?
     
     var indicatorView: UIActivityIndicatorView!
     
@@ -114,8 +115,10 @@ class PokemonDetailVC: UIViewController {
                 case .failure(let error):
                     if error is DataError {
                         print(error)
+                        operationQueue.cancelAllOperations()
                     } else {
                         print(error.localizedDescription)
+                        operationQueue.cancelAllOperations()
                     }
                 case.success(let pokemonData):
                     self.pokemonData = pokemonData
@@ -127,8 +130,10 @@ class PokemonDetailVC: UIViewController {
         fetchPokemonData.addDependency(fetchSpeciesData)
         operationQueue.addOperation(fetchPokemonData)
         
+        var pokemon: Pokemon?
+        
         let parseData = BlockOperation {
-            self.pokemon = PokemonManager.shared.parsePokemonData(pokemonData: self.pokemonData!, speciesData: self.speciesData!)
+            pokemon = PokemonManager.shared.parsePokemonData(pokemonData: self.pokemonData!, speciesData: self.speciesData!)
         }
         parseData.addDependency(fetchSpeciesData)
         parseData.addDependency(fetchPokemonData)
@@ -136,9 +141,10 @@ class PokemonDetailVC: UIViewController {
         
         let finishUpdating = BlockOperation {
             DispatchQueue.main.async {
-                self.updatePokemonUI()
-                self.layoutAbilities()
-                self.updateStats()
+                guard let pokemon = pokemon else { fatalError("pokemon is nil") }
+                self.updatePokemonUI(for: pokemon)
+                self.layoutAbilities(for: pokemon)
+                self.updateStats(for: pokemon)
                 self.setState(loading: false)
             }
         }
@@ -146,13 +152,8 @@ class PokemonDetailVC: UIViewController {
         operationQueue.addOperation(finishUpdating)
     }
     
-    private func updatePokemonUI() {
-        guard let pokemon = pokemon else { return }
-        
-        // Update Pokemon Name
+    private func updatePokemonUI(for pokemon: Pokemon) {
         pokemonNameLabel.text = pokemon.name.capitalized
-        
-        //Update Image
         pokemonImageView.image = UIImage(named: pokemon.imageID)
         
         // Update Pokemon types
@@ -174,25 +175,16 @@ class PokemonDetailVC: UIViewController {
             pokemonType2Label.isHidden = true
         }
         
-        // Update Pokemon ID# and Genus text
         let pokemonIDString = String(withInt: pokemon.id, leadingZeros: 3)
-        
         pokemonNumberAndGenusLabel.text = "#\(pokemonIDString) –– \(pokemon.genus)"
         
-        // Update Pokemon Description
         pokemonDescriptionLabel.text = pokemon.description
-        
-        // Update Generation
         pokemonGenerationLabel.text = pokemon.generation
-        
-        // Update height and weight
         heightLabel.text = "\(pokemon.height) m"
         weightLabel.text = "\(pokemon.weight) kg"
     }
     
-    private func updateStats() {
-        guard let pokemon = pokemon else { return }
-        
+    private func updateStats(for pokemon: Pokemon) {
         let mapping: [(shortName: PokemonStatShortName, fullName: PokemonStatName, statView: StatView)] = [
             (PokemonStatShortName.hp, PokemonStatName.hp, hpStatView),
             (PokemonStatShortName.attack, PokemonStatName.attack, attackStatView),
@@ -215,10 +207,10 @@ class PokemonDetailVC: UIViewController {
         statTotalLabel.text = "TOTAL \(totalStats)"
     }
     
-    private func layoutAbilities() {
-        guard let abilities = pokemon?.abilities else { return }
+    private func layoutAbilities(for pokemon: Pokemon) {
+        abilities = pokemon.abilities
         
-        for (index, ability) in abilities.enumerated() {
+        for (index, ability) in pokemon.abilities.enumerated() {
             let abilityButton = UIButton()
 
             if ability.isHidden {
@@ -245,7 +237,7 @@ class PokemonDetailVC: UIViewController {
     }
     
     @objc private func abilityButtonTapped(sender: UIButton!) {
-        guard let abilities = pokemon?.abilities else { return }
+        guard let abilities = abilities else { return }
 
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let abilityController = storyboard.instantiateViewController(withIdentifier: "AbilityVC") as! AbilityDetailVC
