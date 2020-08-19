@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Combine
 
 enum DataError: Error {
     case invalidResponse
@@ -26,25 +27,44 @@ enum PokemonDataType: String {
 class PokemonManager {
     static let shared = PokemonManager()
     
+    struct Response<T> {
+        let value: T
+        let response: URLResponse
+    }
+    
     typealias result<T> = (Result<T, Error>) -> Void
     
+    private var cancellable: AnyCancellable?
+    
+//    func fetchFromAPI<T: Decodable>(of type: T.Type, from url: URL) -> AnyPublisher<Response<T>, Error> {
+//        return URLSession.shared.dataTaskPublisher(for: url)
+//            .tryMap { result -> Response<T> in
+//                let decoder = JSONDecoder()
+//                decoder.keyDecodingStrategy = .convertFromSnakeCase
+//                let value = try decoder.decode(T.self, from: result.data)
+//                return Response(value: value, response: result.response)
+//        }
+//        .receive(on: DispatchQueue.main)
+//        .eraseToAnyPublisher()
+//    }
+    
     func fetchFromAPI<T: Decodable>(of type: T.Type, from url: URL, completion: @escaping result<T>) {
-        
+
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if let error = error {
                 completion(.failure(error))
             }
-            
+
             guard let response = response as? HTTPURLResponse else {
                 completion(.failure(DataError.invalidResponse))
                 return
             }
-            
+
             if 200 ... 299 ~= response.statusCode {
                 if let data = data {
                     let decoder = JSONDecoder()
                     decoder.keyDecodingStrategy = .convertFromSnakeCase
-                    
+
                     do {
                         let decodedData: T = try decoder.decode(T.self, from: data)
                         completion(.success(decodedData))

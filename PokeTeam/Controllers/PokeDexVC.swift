@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Combine
 
 class PokeDexVC: UITableViewController {
     
@@ -16,7 +17,13 @@ class PokeDexVC: UITableViewController {
     var searchController: UISearchController!
     var indicatorView: UIActivityIndicatorView!
     
-    var pokedex: Pokedex?
+    var pokedex: Pokedex? {
+        didSet {
+            pokedexPokemon = pokedex!.pokemonEntries
+            print(pokedexPokemon[0].name)
+        }
+    }
+    var pokedexPokemon = [PokemonEntry]()
     var filteredPokedex = [PokemonEntry]()
     
     var isSearchBarEmpty: Bool {
@@ -45,25 +52,40 @@ class PokeDexVC: UITableViewController {
             return
         }
         
-        setState(loading: true)
+//        setState(loading: true)
         
-        PokemonManager.shared.fetchFromAPI(of: Pokedex.self, from: url) { (result) in
-            switch result {
-            case .failure(let error):
-                if error is DataError {
-                    print(error)
-                } else {
-                    print(error.localizedDescription)
-                }
-            case.success(let pokedex):
-                self.pokedex = pokedex
-                DispatchQueue.main.async {
-                    self.setState(loading: false)
-                    self.navigationItem.title = "Pokédex: \(pokedex.name.capitalized)"
-                    self.tableView.reloadData()
-                }
+        let pokedexDataPublisher = Future<Pokedex, Error> { promise in
+            PokemonManager.shared.fetchFromAPI(of: Pokedex.self, from: url) { (result: Result<Pokedex, Error>) in
+                promise(result)
             }
         }
+        
+        pokedexDataPublisher.sink(receiveCompletion: { _ in
+            print("finished")
+        }) { pokedex in
+            print(pokedex.name)
+        }
+        
+    
+        
+        
+//        PokemonManager.shared.fetchFromAPI(of: Pokedex.self, from: url) { (result) in
+//            switch result {
+//            case .failure(let error):
+//                if error is DataError {
+//                    print(error)
+//                } else {
+//                    print(error.localizedDescription)
+//                }
+//            case.success(let pokedex):
+//                self.pokedex = pokedex
+//                DispatchQueue.main.async {
+//                    self.setState(loading: false)
+//                    self.navigationItem.title = "Pokédex: \(pokedex.name.capitalized)"
+//                    self.tableView.reloadData()
+//                }
+//            }
+//        }
     }
     
     private func initializeSearchBar() {
