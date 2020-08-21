@@ -48,20 +48,32 @@ class PokeDexVC: UITableViewController {
         
         setState(loading: true)
         
-        let pokedexPublisher = Future<Pokedex, Error> { promise in
-            PokemonManager.shared.fetchFromAPI(of: Pokedex.self, from: url) { (result: Result<Pokedex, Error>) in
-                promise(result)
-            }
-        }
+//        let pokedexPublisher = Future<Pokedex, Error> { promise in
+//            PokemonManager.shared.fetchFromAPI(of: Pokedex.self, from: url) { (result: Result<Pokedex, Error>) in
+//                promise(result)
+//            }
+        //        }
         
-        cancellable = pokedexPublisher
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { print("completion:", $0)
-            }) { value in
-                self.pokedex = value
-                self.setState(loading: false)
-                self.tableView.reloadData()
-        }
+        cancellable = PokemonManager.shared.combineFetchFromAPI(of: Pokedex.self, from: url)
+            .map(\.value)
+            .sink(receiveCompletion: { _ in },
+                  receiveValue: { (pokedex) in
+                    self.pokedex = pokedex
+                    self.navigationItem.title = "Pokédex: \(pokedex.name.capitalized)"
+                    self.tableView.reloadData()
+                    self.setState(loading: false)
+            })
+            
+            
+        
+//        cancellable = pokedexPublisher
+//            .receive(on: DispatchQueue.main)
+//            .sink(receiveCompletion: { print("completion:", $0)
+//            }) { value in
+//                self.pokedex = value
+//                self.setState(loading: false)
+//                self.tableView.reloadData()
+//        }
         
 //        PokemonManager.shared.fetchFromAPI(of: Pokedex.self, from: url) { (result) in
 //            switch result {

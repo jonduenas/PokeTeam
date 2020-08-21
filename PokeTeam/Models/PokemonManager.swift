@@ -27,24 +27,24 @@ enum PokemonDataType: String {
 class PokemonManager {
     static let shared = PokemonManager()
     
+    typealias result<T> = (Result<T, Error>) -> Void
+    
     struct Response<T> {
         let value: T
         let response: URLResponse
     }
     
-    typealias result<T> = (Result<T, Error>) -> Void
-    
-//    func combineFetchFromAPI<T: Decodable>(of type: T.Type, from url: URL) -> AnyPublisher<Response<T>, Error> {
-//        return URLSession.shared.dataTaskPublisher(for: url)
-//            .tryMap { result -> Response<T> in
-//                let decoder = JSONDecoder()
-//                decoder.keyDecodingStrategy = .convertFromSnakeCase
-//                let value = try decoder.decode(T.self, from: result.data)
-//                return Response(value: value, response: result.response)
-//        }
-//        .receive(on: DispatchQueue.main)
-//        .eraseToAnyPublisher()
-//    }
+    func combineFetchFromAPI<T: Decodable>(of type: T.Type, from url: URL) -> AnyPublisher<Response<T>, Error> {
+        return URLSession.shared.dataTaskPublisher(for: url)
+            .tryMap { result -> Response<T> in
+                let decoder = JSONDecoder()
+                decoder.keyDecodingStrategy = .convertFromSnakeCase
+                let value = try decoder.decode(T.self, from: result.data)
+                return Response(value: value, response: result.response)
+        }
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
+    }
     
     func fetchFromAPI<T: Decodable>(of type: T.Type, from url: URL, completion: @escaping result<T>) {
 
