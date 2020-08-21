@@ -34,9 +34,7 @@ class PokemonManager {
     
     typealias result<T> = (Result<T, Error>) -> Void
     
-    private var cancellable: AnyCancellable?
-    
-//    func fetchFromAPI<T: Decodable>(of type: T.Type, from url: URL) -> AnyPublisher<Response<T>, Error> {
+//    func combineFetchFromAPI<T: Decodable>(of type: T.Type, from url: URL) -> AnyPublisher<Response<T>, Error> {
 //        return URLSession.shared.dataTaskPublisher(for: url)
 //            .tryMap { result -> Response<T> in
 //                let decoder = JSONDecoder()
@@ -73,6 +71,7 @@ class PokemonManager {
                     }
                 } else {
                     completion(.failure(DataError.serverError))
+                    print("fetch finished")
                 }
             }
         }

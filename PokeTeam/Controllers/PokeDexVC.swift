@@ -17,15 +17,9 @@ class PokeDexVC: UITableViewController {
     var searchController: UISearchController!
     var indicatorView: UIActivityIndicatorView!
     
-    var pokedex: Pokedex? {
-        didSet {
-            pokedexPokemon = pokedex!.pokemonEntries
-            print(pokedexPokemon[0].name)
-        }
-    }
-    var pokedexPokemon = [PokemonEntry]()
+    var pokedex: Pokedex?
     var filteredPokedex = [PokemonEntry]()
-    
+    var cancellable: AnyCancellable?
     var isSearchBarEmpty: Bool {
         return searchController.searchBar.text?.isEmpty ?? true
     }
@@ -52,22 +46,22 @@ class PokeDexVC: UITableViewController {
             return
         }
         
-//        setState(loading: true)
+        setState(loading: true)
         
-        let pokedexDataPublisher = Future<Pokedex, Error> { promise in
+        let pokedexPublisher = Future<Pokedex, Error> { promise in
             PokemonManager.shared.fetchFromAPI(of: Pokedex.self, from: url) { (result: Result<Pokedex, Error>) in
                 promise(result)
             }
         }
         
-        pokedexDataPublisher.sink(receiveCompletion: { _ in
-            print("finished")
-        }) { pokedex in
-            print(pokedex.name)
+        cancellable = pokedexPublisher
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { print("completion:", $0)
+            }) { value in
+                self.pokedex = value
+                self.setState(loading: false)
+                self.tableView.reloadData()
         }
-        
-    
-        
         
 //        PokemonManager.shared.fetchFromAPI(of: Pokedex.self, from: url) { (result) in
 //            switch result {
