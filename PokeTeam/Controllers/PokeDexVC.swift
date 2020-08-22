@@ -31,7 +31,8 @@ class PokeDexVC: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Pokédex"
+        navigationItem.title = "POKEDEX"
+        navigationItem.largeTitleDisplayMode = .always
         
         indicatorView = view.activityIndicator(style: .large, center: self.view.center)
         tableView.backgroundView = indicatorView
@@ -53,7 +54,7 @@ class PokeDexVC: UITableViewController {
             .sink(receiveCompletion: { _ in },
                   receiveValue: { (pokedex) in
                     self.pokedex = pokedex
-                    self.navigationItem.title = "Pokédex: \(pokedex.name.capitalized)"
+                    self.navigationItem.title = "POKEDEX: \(pokedex.name.capitalized)"
                     self.tableView.reloadData()
                     self.setState(loading: false)
             })
@@ -71,9 +72,8 @@ class PokeDexVC: UITableViewController {
         searchController.hidesNavigationBarDuringPresentation = true
         navigationItem.hidesSearchBarWhenScrolling = true
         
-        searchController.searchBar.barTintColor = UIColor.white
-        searchController.searchBar.tintColor = UIColor.white
-        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        searchController.searchBar.barTintColor = UIColor.label
+        searchController.searchBar.tintColor = UIColor.label
     }
 
     // MARK: Tableview Methods

@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		651E246724F19874000052ED /* validateHTTPStatus+Publisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651E246624F19874000052ED /* validateHTTPStatus+Publisher.swift */; };
+		651E246A24F1DD5F000052ED /* Pokedex.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 651E246824F1DD5F000052ED /* Pokedex.storyboard */; };
+		651E246C24F1DDD8000052ED /* TeamBuilder.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 651E246B24F1DDD8000052ED /* TeamBuilder.storyboard */; };
+		651E246F24F1DE10000052ED /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 651E246D24F1DE10000052ED /* Settings.storyboard */; };
 		6528C08D24E6245000199DA7 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6528C08C24E6245000199DA7 /* ActivityIndicator.swift */; };
 		6528C09124E70CAE00199DA7 /* PokemonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6528C09024E70CAE00199DA7 /* PokemonCell.swift */; };
 		6528C47824E72B1C00199DA7 /* parasect.png in Resources */ = {isa = PBXBuildFile; fileRef = 6528C09424E72B1700199DA7 /* parasect.png */; };
@@ -873,6 +876,9 @@
 
 /* Begin PBXFileReference section */
 		651E246624F19874000052ED /* validateHTTPStatus+Publisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "validateHTTPStatus+Publisher.swift"; sourceTree = "<group>"; };
+		651E246924F1DD5F000052ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Pokedex.storyboard; sourceTree = "<group>"; };
+		651E246B24F1DDD8000052ED /* TeamBuilder.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = TeamBuilder.storyboard; sourceTree = SOURCE_ROOT; };
+		651E246E24F1DE10000052ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Settings.storyboard; sourceTree = "<group>"; };
 		6528C08C24E6245000199DA7 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ActivityIndicator.swift; path = PokeTeam/Views/ActivityIndicator.swift; sourceTree = SOURCE_ROOT; };
 		6528C09024E70CAE00199DA7 /* PokemonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonCell.swift; sourceTree = "<group>"; };
 		6528C09424E72B1700199DA7 /* parasect.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = parasect.png; sourceTree = "<group>"; };
@@ -2630,6 +2636,9 @@
 		6554E7EB24D4E11C00081EA9 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				651E246D24F1DE10000052ED /* Settings.storyboard */,
+				651E246B24F1DDD8000052ED /* TeamBuilder.storyboard */,
+				651E246824F1DD5F000052ED /* Pokedex.storyboard */,
 				6554E7C624D4E09E00081EA9 /* LaunchScreen.storyboard */,
 				6554E7C124D4E09B00081EA9 /* Main.storyboard */,
 				65AD68FF24E76B20000570DD /* CustomNavigationController.swift */,
@@ -3045,6 +3054,7 @@
 				6528C5EB24E72B1C00199DA7 /* necrozma.png in Resources */,
 				6528C4D724E72B1C00199DA7 /* reshiram.png in Resources */,
 				6528C72C24E72B1D00199DA7 /* tapu-lele.png in Resources */,
+				651E246A24F1DD5F000052ED /* Pokedex.storyboard in Resources */,
 				6528C79824E72B1D00199DA7 /* leavanny.png in Resources */,
 				6528C84824E72B1D00199DA7 /* sudowoodo.png in Resources */,
 				6528C55124E72B1C00199DA7 /* ninjask.png in Resources */,
@@ -3081,6 +3091,7 @@
 				6528C64C24E72B1C00199DA7 /* spoink.png in Resources */,
 				6528C7E124E72B1D00199DA7 /* terrakion.png in Resources */,
 				6528C62024E72B1C00199DA7 /* blastoise.png in Resources */,
+				651E246C24F1DDD8000052ED /* TeamBuilder.storyboard in Resources */,
 				6528C66124E72B1C00199DA7 /* zangoose.png in Resources */,
 				6528C54E24E72B1C00199DA7 /* machamp.png in Resources */,
 				6528C68C24E72B1C00199DA7 /* registeel.png in Resources */,
@@ -3213,6 +3224,7 @@
 				6528C7A224E72B1D00199DA7 /* clefairy.png in Resources */,
 				6528C4B424E72B1C00199DA7 /* avalugg.png in Resources */,
 				6528C66224E72B1C00199DA7 /* gogoat.png in Resources */,
+				651E246F24F1DE10000052ED /* Settings.storyboard in Resources */,
 				6528C4E024E72B1C00199DA7 /* fletchinder.png in Resources */,
 				6528C5E424E72B1C00199DA7 /* carnivine.png in Resources */,
 				6528C67524E72B1C00199DA7 /* delphox.png in Resources */,
@@ -3694,6 +3706,22 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		651E246824F1DD5F000052ED /* Pokedex.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				651E246924F1DD5F000052ED /* Base */,
+			);
+			name = Pokedex.storyboard;
+			sourceTree = "<group>";
+		};
+		651E246D24F1DE10000052ED /* Settings.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				651E246E24F1DE10000052ED /* Base */,
+			);
+			name = Settings.storyboard;
+			sourceTree = "<group>";
+		};
 		6554E7C124D4E09B00081EA9 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

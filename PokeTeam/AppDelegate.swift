@@ -17,14 +17,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let coloredAppearance = UINavigationBarAppearance()
         coloredAppearance.configureWithTransparentBackground()
         coloredAppearance.backgroundColor = UIColor(named: "poke-red")
-        coloredAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        coloredAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
         
         let button = UIBarButtonItemAppearance(style: .plain)
-        button.normal.titleTextAttributes = [.foregroundColor: UIColor.white]
+        button.normal.titleTextAttributes = [.foregroundColor: UIColor.black]
         coloredAppearance.buttonAppearance = button
         
         let done = UIBarButtonItemAppearance(style: .done)
-        done.normal.titleTextAttributes = [.foregroundColor: UIColor.white]
+        done.normal.titleTextAttributes = [.foregroundColor: UIColor.black]
         coloredAppearance.doneButtonAppearance = done
         
         UINavigationBar.appearance().standardAppearance = coloredAppearance
