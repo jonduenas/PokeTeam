@@ -877,7 +877,7 @@
 /* Begin PBXFileReference section */
 		651E246624F19874000052ED /* validateHTTPStatus+Publisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "validateHTTPStatus+Publisher.swift"; sourceTree = "<group>"; };
 		651E246924F1DD5F000052ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Pokedex.storyboard; sourceTree = "<group>"; };
-		651E246B24F1DDD8000052ED /* TeamBuilder.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = TeamBuilder.storyboard; sourceTree = SOURCE_ROOT; };
+		651E246B24F1DDD8000052ED /* TeamBuilder.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = TeamBuilder.storyboard; path = PokeTeam/Views/TeamBuilder.storyboard; sourceTree = SOURCE_ROOT; };
 		651E246E24F1DE10000052ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Settings.storyboard; sourceTree = "<group>"; };
 		6528C08C24E6245000199DA7 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ActivityIndicator.swift; path = PokeTeam/Views/ActivityIndicator.swift; sourceTree = SOURCE_ROOT; };
 		6528C09024E70CAE00199DA7 /* PokemonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonCell.swift; sourceTree = "<group>"; };
@@ -2636,11 +2636,11 @@
 		6554E7EB24D4E11C00081EA9 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				651E246D24F1DE10000052ED /* Settings.storyboard */,
-				651E246B24F1DDD8000052ED /* TeamBuilder.storyboard */,
-				651E246824F1DD5F000052ED /* Pokedex.storyboard */,
 				6554E7C624D4E09E00081EA9 /* LaunchScreen.storyboard */,
 				6554E7C124D4E09B00081EA9 /* Main.storyboard */,
+				651E246824F1DD5F000052ED /* Pokedex.storyboard */,
+				651E246B24F1DDD8000052ED /* TeamBuilder.storyboard */,
+				651E246D24F1DE10000052ED /* Settings.storyboard */,
 				65AD68FF24E76B20000570DD /* CustomNavigationController.swift */,
 				6528C09024E70CAE00199DA7 /* PokemonCell.swift */,
 				656DD47324DF48C900C9EC16 /* TypeLabel.swift */,

@@ -27,15 +27,15 @@
             </objects>
             <point key="canvasLocation" x="1054" y="511"/>
         </scene>
-        <!--UINavigationController-Xyl-Pz-qCL-->
+        <!--Pokedex-->
         <scene sceneID="eEo-Df-0Tt">
             <objects>
-                <viewControllerPlaceholder storyboardName="Pokedex" referencedIdentifier="UINavigationController-Xyl-Pz-qCL" id="Psu-3T-FJ1" sceneMemberID="viewController">
+                <viewControllerPlaceholder storyboardName="Pokedex" referencedIdentifier="Pokedex" id="Psu-3T-FJ1" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="Kfv-Go-EeI"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2Og-4l-jGt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1961" y="-352"/>
+            <point key="canvasLocation" x="1943" y="313"/>
         </scene>
         <!--TeamBuilder-->
         <scene sceneID="vl0-hd-gdh">
@@ -55,7 +55,7 @@
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6ce-qA-tua" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1961" y="1323"/>
+            <point key="canvasLocation" x="1943" y="714"/>
         </scene>
     </scenes>
     <color key="tintColor" name="poke-blue"/>
