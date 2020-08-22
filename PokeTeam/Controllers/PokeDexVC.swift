@@ -48,7 +48,7 @@ class PokeDexVC: UITableViewController {
         
         setState(loading: true)
         
-        cancellable = PokemonManager.shared.combineFetchFromAPI(of: Pokedex.self, from: url)
+        cancellable = PokemonManager.shared.fetchFromAPI(of: Pokedex.self, from: url)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { _ in },
                   receiveValue: { (pokedex) in

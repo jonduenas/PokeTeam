@@ -20,7 +20,7 @@ enum PokemonDataType: String {
 class PokemonManager {
     static let shared = PokemonManager()
     
-    func combineFetchFromAPI<T: Decodable>(of type: T.Type, from url: URL) -> AnyPublisher<T, Error> {
+    func fetchFromAPI<T: Decodable>(of type: T.Type, from url: URL) -> AnyPublisher<T, Error> {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         

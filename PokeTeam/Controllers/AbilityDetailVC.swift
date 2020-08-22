@@ -42,7 +42,7 @@ class AbilityDetailVC: UIViewController {
         
         setState(loading: true)
         
-        PokemonManager.shared.combineFetchFromAPI(of: AbilityData.self, from: abilityURL)
+        PokemonManager.shared.fetchFromAPI(of: AbilityData.self, from: abilityURL)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { _ in },
                   receiveValue: { (abilityData) in

@@ -74,7 +74,7 @@ class PokemonDetailVC: UIViewController {
         
         var speciesData: SpeciesData?
 
-        PokemonManager.shared.combineFetchFromAPI(of: SpeciesData.self, from: speciesURL)
+        PokemonManager.shared.fetchFromAPI(of: SpeciesData.self, from: speciesURL)
             .map({ (species) -> Int in
                 speciesData = species
                 return species.id
@@ -93,7 +93,7 @@ class PokemonDetailVC: UIViewController {
     private func loadPokemonData(for id: Int) -> AnyPublisher<PokemonData, Error> {
         let pokemonURL = PokemonManager.shared.createURL(for: .pokemon, fromIndex: id)!
         
-        return PokemonManager.shared.combineFetchFromAPI(of: PokemonData.self, from: pokemonURL)
+        return PokemonManager.shared.fetchFromAPI(of: PokemonData.self, from: pokemonURL)
     }
     
     private func finishLoadingPokemon(for pokemon: Pokemon) {
