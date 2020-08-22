@@ -20,6 +20,8 @@ enum PokemonDataType: String {
 class PokemonManager {
     static let shared = PokemonManager()
     
+    // MARK: Networking methods
+    
     func fetchFromAPI<T: Decodable>(of type: T.Type, from url: URL) -> AnyPublisher<T, Error> {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
@@ -36,6 +38,8 @@ class PokemonManager {
         return URL(string: baseStringURL + dataType.rawValue + "\(index)")
     }
     
+    // MARK: Data parsing methods
+    
     func parsePokemonData(pokemonData: PokemonData, speciesData: SpeciesData) -> Pokemon {
         let id = pokemonData.id
         let name = pokemonData.name
@@ -43,62 +47,25 @@ class PokemonManager {
         let weight = pokemonData.weight / 10
 
         // Type
-        var typeArray = [PokemonType]()
-        for type in pokemonData.types {
-            typeArray.insert(PokemonType(rawValue: type.name) ?? .unknown, at: type.slot - 1)
-        }
+        let typeArray = parseType(with: pokemonData)
         
         // Genus
-        var genus: String {
-            for genus in speciesData.genera {
-                if genus.language == "en" {
-                    return genus.genus
-                }
-            }
-            return "Unknown Genus"
-        }
+        let genus = parseGenus(with: speciesData)
         
         // Generation
         let generation = speciesData.generation.name
         
         // Description
-        var description: String {
-            var englishFlavorTextArray = [String]()
-            
-            for entry in speciesData.flavorTextEntries {
-                if entry.language == "en" {
-                    englishFlavorTextArray.append(entry.flavorText)
-                }
-            }
-            if let latestEntry = englishFlavorTextArray.last {
-                return latestEntry.replacingOccurrences(of: "\n", with: " ")
-            } else {
-                return "Error loading description"
-            }
-        }
+        let description = parseFlavorText(with: speciesData)
         
         // Stats
-        var stats = [PokemonStatName: Float]()
-        
-        for stat in pokemonData.stats {
-            if let statName = PokemonStatName(rawValue: stat.statName) {
-                stats[statName] = Float(stat.baseStat)
-            }
-        }
+        let stats = parseStats(with: pokemonData)
         
         // Abilities
-        var abilitiesArray = [PokemonAbility]()
-        
-        for ability in pokemonData.abilities {
-            abilitiesArray.append(PokemonAbility(name: ability.name, isHidden: ability.isHidden, urlString: ability.url, description: nil))
-        }
+        let abilitiesArray = parseAbilities(with: pokemonData)
         
         // Moves
-        var movesArray = [PokemonMove]()
-        
-        for move in pokemonData.moves {
-            movesArray.append(PokemonMove(name: move.name, levelLearnedAt: move.levelLearnedAt, moveLearnMethod: move.moveLearnMethod, urlString: move.url, description: nil))
-        }
+        let movesArray = parseMoves(with: pokemonData)
         
         return Pokemon(id: id, name: name, height: height, weight: weight, type: typeArray, genus: genus, region: nil, generation: generation, description: description, stats: stats, abilities: abilitiesArray, moves: movesArray)
     }
@@ -123,5 +90,72 @@ class PokemonManager {
         abilityToReturn.description = description
         
         return abilityToReturn
+    }
+    
+    // MARK: Private parsing methods
+    
+    private func parseType(with pokemonData: PokemonData) -> [PokemonType] {
+        var typeArray = [PokemonType]()
+        for type in pokemonData.types {
+            typeArray.insert(PokemonType(rawValue: type.name) ?? .unknown, at: type.slot - 1)
+        }
+        return typeArray
+    }
+    
+    private func parseGenus(with speciesData: SpeciesData) -> String {
+        for genus in speciesData.genera {
+            if genus.language == "en" {
+                return genus.genus
+            }
+        }
+        return "Unknown Genus"
+    }
+    
+    private func parseFlavorText(with speciesData: SpeciesData) -> String {
+        var englishFlavorTextArray = [String]()
+        
+        for entry in speciesData.flavorTextEntries {
+            if entry.language == "en" {
+                englishFlavorTextArray.append(entry.flavorText)
+            }
+        }
+        
+        if let latestEntry = englishFlavorTextArray.last {
+            return latestEntry.replacingOccurrences(of: "\n", with: " ")
+        } else {
+            return "Error loading description"
+        }
+    }
+    
+    private func parseStats(with pokemonData: PokemonData) -> [PokemonStatName: Float] {
+        var stats = [PokemonStatName: Float]()
+        
+        for stat in pokemonData.stats {
+            if let statName = PokemonStatName(rawValue: stat.statName) {
+                stats[statName] = Float(stat.baseStat)
+            }
+        }
+        
+        return stats
+    }
+    
+    private func parseAbilities(with pokemonData: PokemonData) -> [PokemonAbility] {
+        var abilitiesArray = [PokemonAbility]()
+        
+        for ability in pokemonData.abilities {
+            abilitiesArray.append(PokemonAbility(name: ability.name, isHidden: ability.isHidden, urlString: ability.url, description: nil))
+        }
+        
+        return abilitiesArray
+    }
+    
+    private func parseMoves(with pokemonData: PokemonData) -> [PokemonMove] {
+        var movesArray = [PokemonMove]()
+        
+        for move in pokemonData.moves {
+            movesArray.append(PokemonMove(name: move.name, levelLearnedAt: move.levelLearnedAt, moveLearnMethod: move.moveLearnMethod, urlString: move.url, description: nil))
+        }
+        
+        return movesArray
     }
 }
