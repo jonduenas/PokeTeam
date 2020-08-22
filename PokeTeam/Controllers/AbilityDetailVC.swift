@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Combine
 
 class AbilityDetailVC: UIViewController {
     
@@ -14,6 +15,7 @@ class AbilityDetailVC: UIViewController {
     var abilityData: AbilityData?
     var abilityDescription: String?
     var indicatorView = UIActivityIndicatorView()
+    var subscriptions: Set<AnyCancellable> = []
 
     @IBOutlet weak var abilityHeaderLabel: UILabel!
     @IBOutlet weak var abilityDescriptionLabel: UILabel!
@@ -40,37 +42,18 @@ class AbilityDetailVC: UIViewController {
         
         setState(loading: true)
         
-        PokemonManager.shared.fetchFromAPI(of: AbilityData.self, from: abilityURL) { (result) in
-            switch result {
-            case .failure(let error):
-                if error is DataError {
-                    print(error)
-                } else {
-                    print(error.localizedDescription)
-                }
-                print(error.localizedDescription)
-            case.success(let abilityData):
-                //self.abilityData = abilityData
-                self.ability = PokemonManager.shared.addAbilityDescription(to: ability, with: abilityData)
-                DispatchQueue.main.async {
-                    self.updateAbilityUI()
-                    self.setState(loading: false)
-                }
-            }
-        }
+        PokemonManager.shared.combineFetchFromAPI(of: AbilityData.self, from: abilityURL)
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { _ in },
+                  receiveValue: { (abilityData) in
+                    self.ability = PokemonManager.shared.addAbilityDescription(to: ability, with: abilityData)
+                    DispatchQueue.main.async {
+                        self.updateAbilityUI()
+                        self.setState(loading: false)
+                    }
+            })
+            .store(in: &subscriptions)
     }
-    
-//        PokemonManager.shared.fetchFromAPI(urlString: ability.urlString, decodeTo: AbilityData.self) { (abilityData) in
-//            self.ability = PokemonManager.shared.parseAbilityData(data: abilityData, ability: ability)
-//
-//            DispatchQueue.main.async {
-//                self.setState(loading: false)
-//                print("Ability Loaded")
-//
-//                self.updateAbilityUI()
-//            }
-//        }
-//    }
     
     private func updateAbilityUI() {
         guard let ability = ability else { return }

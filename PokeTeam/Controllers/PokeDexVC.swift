@@ -48,14 +48,8 @@ class PokeDexVC: UITableViewController {
         
         setState(loading: true)
         
-//        let pokedexPublisher = Future<Pokedex, Error> { promise in
-//            PokemonManager.shared.fetchFromAPI(of: Pokedex.self, from: url) { (result: Result<Pokedex, Error>) in
-//                promise(result)
-//            }
-        //        }
-        
         cancellable = PokemonManager.shared.combineFetchFromAPI(of: Pokedex.self, from: url)
-            .map(\.value)
+            .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { _ in },
                   receiveValue: { (pokedex) in
                     self.pokedex = pokedex
@@ -63,35 +57,6 @@ class PokeDexVC: UITableViewController {
                     self.tableView.reloadData()
                     self.setState(loading: false)
             })
-            
-            
-        
-//        cancellable = pokedexPublisher
-//            .receive(on: DispatchQueue.main)
-//            .sink(receiveCompletion: { print("completion:", $0)
-//            }) { value in
-//                self.pokedex = value
-//                self.setState(loading: false)
-//                self.tableView.reloadData()
-//        }
-        
-//        PokemonManager.shared.fetchFromAPI(of: Pokedex.self, from: url) { (result) in
-//            switch result {
-//            case .failure(let error):
-//                if error is DataError {
-//                    print(error)
-//                } else {
-//                    print(error.localizedDescription)
-//                }
-//            case.success(let pokedex):
-//                self.pokedex = pokedex
-//                DispatchQueue.main.async {
-//                    self.setState(loading: false)
-//                    self.navigationItem.title = "Pokédex: \(pokedex.name.capitalized)"
-//                    self.tableView.reloadData()
-//                }
-//            }
-//        }
     }
     
     private func initializeSearchBar() {

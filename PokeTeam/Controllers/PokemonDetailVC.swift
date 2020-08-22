@@ -7,20 +7,17 @@
 //
 
 import UIKit
+import Combine
 
 class PokemonDetailVC: UIViewController {
 
     let largeTitleSize: CGFloat = 34
     let subTitleSize: CGFloat = 25
     let pokemonEntry: PokemonEntry
-    
     let abilityTransitioningDelegate = AbilityTransitioningDelegate()
 
-    //var pokemon: Pokemon?
-    var pokemonData: PokemonData?
-    var speciesData: SpeciesData?
     var abilities: [PokemonAbility]?
-    
+    var subscriptions: Set<AnyCancellable> = []
     var indicatorView: UIActivityIndicatorView!
     
     @IBOutlet var detailView: UIView!
@@ -68,87 +65,44 @@ class PokemonDetailVC: UIViewController {
     }
     
     private func loadPokemonInfo() {
-        guard let url = URL(string: pokemonEntry.url) else {
+        guard let speciesURL = URL(string: pokemonEntry.url) else {
             print("Error creating URL")
             return
         }
-        
+
         setState(loading: true)
         
-        let operationQueue = OperationQueue()
+        var speciesData: SpeciesData?
+
+        PokemonManager.shared.combineFetchFromAPI(of: SpeciesData.self, from: speciesURL)
+            .map({ (species) -> Int in
+                speciesData = species
+                return species.id
+            })
+            .flatMap({ (id) in
+                return self.loadPokemonData(for: id)
+            })
+            .sink(receiveCompletion: { _ in },
+                  receiveValue: { (pokemonData) in
+                    let pokemon = PokemonManager.shared.parsePokemonData(pokemonData: pokemonData, speciesData: speciesData!)
+                    self.finishLoadingPokemon(for: pokemon)
+            })
+            .store(in: &subscriptions)
+    }
+    
+    private func loadPokemonData(for id: Int) -> AnyPublisher<PokemonData, Error> {
+        let pokemonURL = PokemonManager.shared.createURL(for: .pokemon, fromIndex: id)!
         
-        let fetchSpeciesData = BlockOperation {
-            let group = DispatchGroup()
-            
-            group.enter()
-            PokemonManager.shared.fetchFromAPI(of: SpeciesData.self, from: url) { (result) in
-                switch result {
-                case .failure(let error):
-                    if error is DataError {
-                        print(error)
-                        operationQueue.cancelAllOperations()
-                    } else {
-                        print(error.localizedDescription)
-                        operationQueue.cancelAllOperations()
-                    }
-                case.success(let speciesData):
-                    self.speciesData = speciesData
-                    group.leave()
-                }
-            }
-            group.wait()
+        return PokemonManager.shared.combineFetchFromAPI(of: PokemonData.self, from: pokemonURL)
+    }
+    
+    private func finishLoadingPokemon(for pokemon: Pokemon) {
+        DispatchQueue.main.async {
+            self.updatePokemonUI(for: pokemon)
+            self.layoutAbilities(for: pokemon)
+            self.updateStats(for: pokemon)
+            self.setState(loading: false)
         }
-        operationQueue.addOperation(fetchSpeciesData)
-        
-        let fetchPokemonData = BlockOperation {
-            let group = DispatchGroup()
-            
-            guard let pokemonURL = PokemonManager.shared.createURL(for: .pokemon, fromIndex: self.speciesData!.id) else {
-                print("Error creating URL from speciesData")
-                return
-            }
-            
-            group.enter()
-            PokemonManager.shared.fetchFromAPI(of: PokemonData.self, from: pokemonURL) { (result) in
-                switch result {
-                case .failure(let error):
-                    if error is DataError {
-                        print(error)
-                        operationQueue.cancelAllOperations()
-                    } else {
-                        print(error.localizedDescription)
-                        operationQueue.cancelAllOperations()
-                    }
-                case.success(let pokemonData):
-                    self.pokemonData = pokemonData
-                    group.leave()
-                }
-            }
-            group.wait()
-        }
-        fetchPokemonData.addDependency(fetchSpeciesData)
-        operationQueue.addOperation(fetchPokemonData)
-        
-        var pokemon: Pokemon?
-        
-        let parseData = BlockOperation {
-            pokemon = PokemonManager.shared.parsePokemonData(pokemonData: self.pokemonData!, speciesData: self.speciesData!)
-        }
-        parseData.addDependency(fetchSpeciesData)
-        parseData.addDependency(fetchPokemonData)
-        operationQueue.addOperation(parseData)
-        
-        let finishUpdating = BlockOperation {
-            DispatchQueue.main.async {
-                guard let pokemon = pokemon else { fatalError("pokemon is nil") }
-                self.updatePokemonUI(for: pokemon)
-                self.layoutAbilities(for: pokemon)
-                self.updateStats(for: pokemon)
-                self.setState(loading: false)
-            }
-        }
-        finishUpdating.addDependency(parseData)
-        operationQueue.addOperation(finishUpdating)
     }
     
     private func updatePokemonUI(for pokemon: Pokemon) {

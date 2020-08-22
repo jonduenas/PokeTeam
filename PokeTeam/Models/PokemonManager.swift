@@ -9,13 +9,6 @@
 import UIKit
 import Combine
 
-enum DataError: Error {
-    case invalidResponse
-    case invalidData
-    case decodingError
-    case serverError
-}
-
 enum PokemonDataType: String {
     case pokedex = "pokedex/"
     case pokemon = "pokemon/"
@@ -27,55 +20,14 @@ enum PokemonDataType: String {
 class PokemonManager {
     static let shared = PokemonManager()
     
-    typealias result<T> = (Result<T, Error>) -> Void
-    
-    struct Response<T> {
-        let value: T
-        let response: URLResponse
-    }
-    
-    func combineFetchFromAPI<T: Decodable>(of type: T.Type, from url: URL) -> AnyPublisher<Response<T>, Error> {
+    func combineFetchFromAPI<T: Decodable>(of type: T.Type, from url: URL) -> AnyPublisher<T, Error> {
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        
         return URLSession.shared.dataTaskPublisher(for: url)
-            .tryMap { result -> Response<T> in
-                let decoder = JSONDecoder()
-                decoder.keyDecodingStrategy = .convertFromSnakeCase
-                let value = try decoder.decode(T.self, from: result.data)
-                return Response(value: value, response: result.response)
-        }
-        .receive(on: DispatchQueue.main)
-        .eraseToAnyPublisher()
-    }
-    
-    func fetchFromAPI<T: Decodable>(of type: T.Type, from url: URL, completion: @escaping result<T>) {
-
-        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-            if let error = error {
-                completion(.failure(error))
-            }
-
-            guard let response = response as? HTTPURLResponse else {
-                completion(.failure(DataError.invalidResponse))
-                return
-            }
-
-            if 200 ... 299 ~= response.statusCode {
-                if let data = data {
-                    let decoder = JSONDecoder()
-                    decoder.keyDecodingStrategy = .convertFromSnakeCase
-
-                    do {
-                        let decodedData: T = try decoder.decode(T.self, from: data)
-                        completion(.success(decodedData))
-                    } catch {
-                        completion(.failure(DataError.decodingError))
-                    }
-                } else {
-                    completion(.failure(DataError.serverError))
-                    print("fetch finished")
-                }
-            }
-        }
-        task.resume()
+            .validateHTTPStatus(200)
+            .decode(type: type.self, decoder: decoder)
+            .eraseToAnyPublisher()
     }
     
     func createURL(for dataType: PokemonDataType, fromIndex index: Int) -> URL? {
