@@ -389,7 +389,7 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" name="poke-red"/>
+                                <color key="backgroundColor" name="navbar"/>
                                 <constraints>
                                     <constraint firstItem="he6-L5-P0z" firstAttribute="centerY" secondItem="5lU-zF-LTT" secondAttribute="centerY" id="O3j-hC-Uad"/>
                                     <constraint firstItem="he6-L5-P0z" firstAttribute="centerX" secondItem="5lU-zF-LTT" secondAttribute="centerX" id="Wtp-VS-jJu"/>
@@ -439,7 +439,7 @@
                         <rect key="frame" x="0.0" y="44" width="414" height="104.5"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
-                        <color key="barTintColor" name="poke-red"/>
+                        <color key="barTintColor" name="navbar"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -458,14 +458,14 @@
         <image name="heavy-weight" width="50" height="50"/>
         <image name="poke_ball" width="596" height="595"/>
         <image name="x.circle.fill" catalog="system" width="128" height="121"/>
+        <namedColor name="navbar">
+            <color red="0.85100001096725464" green="0.2199999988079071" blue="0.2669999897480011" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="poke-blue">
             <color red="0.23137254901960785" green="0.29803921568627451" blue="0.792156862745098" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="poke-red">
             <color red="0.85100001096725464" green="0.2199999988079071" blue="0.2669999897480011" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="poke-red">
-            <color red="0.84921450892539874" green="0.2193640159695335" blue="0.26737989649718308" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>
