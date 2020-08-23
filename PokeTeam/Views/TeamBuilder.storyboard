@@ -8,10 +8,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Collection View Controller-->
+        <!--Pokemon TeamVC-->
         <scene sceneID="CIR-kT-5oG">
             <objects>
-                <collectionViewController id="l7C-kp-FCr" sceneMemberID="viewController">
+                <collectionViewController id="l7C-kp-FCr" customClass="PokemonTeamVC" customModule="PokeTeam" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="OpU-fT-ygu">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -26,9 +26,46 @@
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Pokemon" id="FiC-2f-yGB">
                                 <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="J7G-3o-lLG">
+                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="J7G-3o-lLG" customClass="PokemonCollectionCell" customModule="PokeTeam" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3hR-GZ-IaZ">
+                                            <rect key="frame" x="0.0" y="100" width="128" height="28"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pokemon" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="Ycx-aZ-2bD">
+                                                    <rect key="frame" x="28.5" y="3.5" width="71.5" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                            <constraints>
+                                                <constraint firstItem="Ycx-aZ-2bD" firstAttribute="centerY" secondItem="3hR-GZ-IaZ" secondAttribute="centerY" id="PXH-ea-eHd"/>
+                                                <constraint firstItem="Ycx-aZ-2bD" firstAttribute="centerX" secondItem="3hR-GZ-IaZ" secondAttribute="centerX" id="i2x-se-6Bb"/>
+                                            </constraints>
+                                        </view>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="yrC-p1-VO6">
+                                            <rect key="frame" x="0.0" y="0.0" width="128" height="100"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="100" id="lUt-d3-xF1"/>
+                                            </constraints>
+                                        </imageView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="3hR-GZ-IaZ" secondAttribute="trailing" id="Fyr-d1-sJD"/>
+                                        <constraint firstItem="yrC-p1-VO6" firstAttribute="top" secondItem="J7G-3o-lLG" secondAttribute="top" id="I7c-yo-hvJ"/>
+                                        <constraint firstItem="3hR-GZ-IaZ" firstAttribute="top" secondItem="yrC-p1-VO6" secondAttribute="bottom" id="MWY-Ko-uqY"/>
+                                        <constraint firstItem="yrC-p1-VO6" firstAttribute="leading" secondItem="J7G-3o-lLG" secondAttribute="leading" id="Vkr-NP-XP0"/>
+                                        <constraint firstAttribute="bottom" secondItem="3hR-GZ-IaZ" secondAttribute="bottom" id="jr0-YX-I1D"/>
+                                        <constraint firstItem="3hR-GZ-IaZ" firstAttribute="leading" secondItem="J7G-3o-lLG" secondAttribute="leading" id="qo9-7g-FGn"/>
+                                        <constraint firstAttribute="trailing" secondItem="yrC-p1-VO6" secondAttribute="trailing" id="yUf-z3-KXP"/>
+                                    </constraints>
+                                    <connections>
+                                        <outlet property="pokemonImageView" destination="yrC-p1-VO6" id="cUF-cf-WBo"/>
+                                        <outlet property="pokemonNameLabel" destination="Ycx-aZ-2bD" id="zP4-W4-48b"/>
+                                    </connections>
                                 </collectionViewCellContentView>
                             </collectionViewCell>
                         </cells>
@@ -41,7 +78,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="shw-Da-XqG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2871" y="511"/>
+            <point key="canvasLocation" x="2869.5652173913045" y="510.9375"/>
         </scene>
         <!--Team Builder-->
         <scene sceneID="h4G-bg-X2b">
@@ -53,8 +90,8 @@
                         <color key="tintColor" name="poke-blue"/>
                         <color key="barTintColor" name="poke-red"/>
                     </simulatedNavigationBarMetrics>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="HZ1-kL-0gp">
-                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="HZ1-kL-0gp">
+                        <rect key="frame" x="0.0" y="44" width="414" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" name="poke-blue"/>
                         <color key="barTintColor" name="navbar"/>
