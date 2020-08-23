@@ -16,15 +16,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Customize Navigation Bar appearance
         let coloredAppearance = UINavigationBarAppearance()
         coloredAppearance.configureWithTransparentBackground()
-        coloredAppearance.backgroundColor = UIColor(named: "poke-red")
-        coloredAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
+        coloredAppearance.backgroundColor = UIColor(named: "navbar")
+        coloredAppearance.titleTextAttributes = [.foregroundColor: UIColor.label]
         
         let button = UIBarButtonItemAppearance(style: .plain)
-        button.normal.titleTextAttributes = [.foregroundColor: UIColor.black]
+        button.normal.titleTextAttributes = [.foregroundColor: UIColor.label]
         coloredAppearance.buttonAppearance = button
         
         let done = UIBarButtonItemAppearance(style: .done)
-        done.normal.titleTextAttributes = [.foregroundColor: UIColor.black]
+        done.normal.titleTextAttributes = [.foregroundColor: UIColor.label]
         coloredAppearance.doneButtonAppearance = done
         
         UINavigationBar.appearance().standardAppearance = coloredAppearance
