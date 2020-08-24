@@ -9,6 +9,10 @@
 import UIKit
 
 class PokemonCollectionCell: UICollectionViewCell {
+    
+    let cornerRadius: CGFloat = 47
+    //let shadowLayer = CAShapeLayer()
+    
     @IBOutlet weak var pokemonNameLabel: UILabel!
     @IBOutlet weak var pokemonImageView: UIImageView!
     @IBOutlet weak var pokemonType1Label: PokemonTypeLabel!
@@ -27,7 +31,8 @@ class PokemonCollectionCell: UICollectionViewCell {
     }
     
     private func commonInit() {
-        layer.cornerRadius = 47
+        layer.cornerRadius = cornerRadius
+        addShadow()
     }
     
     func setPokemonInfo(for pokemon: Pokemon) {
@@ -42,5 +47,13 @@ class PokemonCollectionCell: UICollectionViewCell {
             pokemonType1Label.setType(for: pokemon.type[0])
             pokemonType2Label.isHidden = true
         }
+    }
+    
+    private func addShadow() {
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOpacity = 0.4
+        layer.shadowOffset = CGSize(width: 0, height: 2.5)
+        layer.shadowRadius = 2
+        layer.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: cornerRadius).cgPath
     }
 }
