@@ -40,9 +40,36 @@ class PokemonManager {
     
     // MARK: Data parsing methods
     
+    func formatName(for pokemonName: String) -> String {
+        switch pokemonName {
+        case "nidoran-m":
+            return "Nidoran ♂"
+        case "nidoran-f":
+            return "Nidoran ♀"
+        case "farfetchd":
+            return "Farfetch'd"
+        case "mr-mime":
+            return "Mr. Mime"
+        case "mime-jr":
+            return "Mime Jr."
+        case "type-null":
+            return "Type: Null"
+        case "tapu-koko":
+            return "Tapu Koko"
+        case "tapu-lele":
+            return "Tapu Lele"
+        case "tapu-bulu":
+            return "Tapu Bulu"
+        case "tapu-fini":
+            return "Tapu Fini"
+        default:
+            return pokemonName.capitalized
+        }
+    }
+    
     func parsePokemonData(pokemonData: PokemonData, speciesData: SpeciesData) -> Pokemon {
         let id = pokemonData.id
-        let name = pokemonData.name
+        let name = formatName(for: pokemonData.name)
         let height = pokemonData.height / 10
         let weight = pokemonData.weight / 10
 

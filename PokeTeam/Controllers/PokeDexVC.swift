@@ -95,8 +95,7 @@ class PokeDexVC: UITableViewController {
             } else {
                 pokemon = pokedex.pokemonEntries[indexPath.row]
             }
-            cell.pokemonNameLabel.text = pokemon.name.capitalized
-            cell.pokemonImageView.image = UIImage(named: pokemon.name)
+            cell.setPokemonInfo(for: pokemon)
         }
         return cell
     }
