@@ -44,10 +44,9 @@ class TeamBuilderVC: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? PokemonCollectionCell else { fatalError("Unable to dequeue PokemonCollectionCell") }
         
-        let pokemonName = team[indexPath.row].name
+        let pokemon = team[indexPath.row]
         
-        cell.pokemonNameLabel.text = pokemonName.capitalized
-        cell.pokemonImageView.image = UIImage(named: pokemonName)
+        cell.setPokemonInfo(for: pokemon)
     
         return cell
     }

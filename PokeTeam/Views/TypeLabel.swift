@@ -10,7 +10,7 @@ import UIKit
 
 @IBDesignable
 class PokemonTypeLabel: UILabel {
-    static let colorDictionary: [PokemonType: UIColor] = [
+    let colorDictionary: [PokemonType: UIColor] = [
         .normal : #colorLiteral(red: 0.6604253054, green: 0.6575222611, blue: 0.4722985029, alpha: 1),
         .fire: #colorLiteral(red: 0.9430522323, green: 0.500674963, blue: 0.18630445, alpha: 1),
         .water: #colorLiteral(red: 0.4103244543, green: 0.5630832911, blue: 0.9429332614, alpha: 1),
@@ -58,5 +58,10 @@ class PokemonTypeLabel: UILabel {
     
     private func refreshCorners(value: CGFloat) {
         layer.cornerRadius = value
+    }
+    
+    func setType(for type: PokemonType) {
+        self.text = type.rawValue.capitalized
+        self.backgroundColor = colorDictionary[type]
     }
 }

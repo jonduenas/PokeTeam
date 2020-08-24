@@ -117,20 +117,10 @@ class PokemonDetailVC: UIViewController {
         
         // Update Pokemon types
         if pokemon.type.count > 1 {
-            let type1 = pokemon.type[0]
-            let type2 = pokemon.type[1]
-            
-            pokemonType1Label.text = type1.rawValue.capitalized
-            pokemonType1Label.backgroundColor = PokemonTypeLabel.colorDictionary[type1]
-            
-            pokemonType2Label.text = type2.rawValue.capitalized
-            pokemonType2Label.backgroundColor = PokemonTypeLabel.colorDictionary[type2]
+            pokemonType1Label.setType(for: pokemon.type[0])
+            pokemonType2Label.setType(for: pokemon.type[1])
         } else {
-            let type1 = pokemon.type[0]
-            
-            pokemonType1Label.text = type1.rawValue.capitalized
-            pokemonType1Label.backgroundColor = PokemonTypeLabel.colorDictionary[type1]
-            
+            pokemonType1Label.setType(for: pokemon.type[0])
             pokemonType2Label.isHidden = true
         }
         
