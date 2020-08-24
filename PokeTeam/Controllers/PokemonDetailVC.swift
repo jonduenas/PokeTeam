@@ -16,6 +16,8 @@ class PokemonDetailVC: UIViewController {
     let pokemonEntry: PokemonEntry
     let abilityTransitioningDelegate = AbilityTransitioningDelegate()
 
+    var pokemon: Pokemon?
+    lazy var pokemonTeam = PokemonTeam()
     var abilities: [PokemonAbility]?
     var subscriptions: Set<AnyCancellable> = []
     var indicatorView: UIActivityIndicatorView!
@@ -57,11 +59,14 @@ class PokemonDetailVC: UIViewController {
         super.viewDidLoad()
         
         navigationItem.title = "Pokémon Detail"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addToTeam))
 
         indicatorView = self.view.activityIndicator(style: .large, center: self.view.center)
         view.addSubview(indicatorView)
         
         loadPokemonInfo()
+        
+        // Load saved pokemon team
     }
     
     private func loadPokemonInfo() {
@@ -85,6 +90,7 @@ class PokemonDetailVC: UIViewController {
             .sink(receiveCompletion: { _ in },
                   receiveValue: { (pokemonData) in
                     let pokemon = PokemonManager.shared.parsePokemonData(pokemonData: pokemonData, speciesData: speciesData!)
+                    self.pokemon = pokemon
                     self.finishLoadingPokemon(for: pokemon)
             })
             .store(in: &subscriptions)
@@ -191,7 +197,7 @@ class PokemonDetailVC: UIViewController {
     @objc private func abilityButtonTapped(sender: UIButton!) {
         guard let abilities = abilities else { return }
 
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let storyboard = UIStoryboard(name: "Pokedex", bundle: nil)
         let abilityController = storyboard.instantiateViewController(withIdentifier: "AbilityVC") as! AbilityDetailVC
         abilityController.ability = abilities[sender.tag]
         
@@ -199,6 +205,18 @@ class PokemonDetailVC: UIViewController {
         abilityController.modalPresentationStyle = .custom
 
         self.present(abilityController, animated: true)
+    }
+    
+    @objc private func addToTeam() {
+        guard let pokemon = pokemon else { return }
+        
+        guard let teamBuilderNav = self.tabBarController?.viewControllers?[1] else { return }
+        let teamBuilderVC = teamBuilderNav.children.first as! TeamBuilderVC
+        
+        teamBuilderVC.team.append(pokemon)
+        
+        //let success = pokemonTeam.add(pokemon)
+        //print(success)
     }
     
     private func setState(loading: Bool) {
