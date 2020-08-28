@@ -8,18 +8,21 @@
 
 import UIKit
 import Combine
+import CoreData
 
 class PokeDexVC: UITableViewController {
     
     let nationalPokedexID = 1
     let pokemonCellID = "pokemonCell"
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     var searchController: UISearchController!
     var indicatorView: UIActivityIndicatorView!
     
     var pokedex: Pokedex?
-    var filteredPokedex = [PokemonEntry]()
-    var cancellable: AnyCancellable?
+    var pokemonArray = [PokemonMO]()
+    var filteredPokemon = [PokemonMO]()
+    var subscriptions: Set<AnyCancellable> = []
     var isSearchBarEmpty: Bool {
         return searchController.searchBar.text?.isEmpty ?? true
     }
@@ -31,33 +34,110 @@ class PokeDexVC: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
+        
         navigationItem.title = "POKEDEX"
         navigationItem.largeTitleDisplayMode = .always
         
         indicatorView = view.activityIndicator(style: .large, center: self.view.center)
         tableView.backgroundView = indicatorView
         
-        loadPokedex()
+        
+        
         initializeSearchBar()
+        
+        fetchPokedex()
+        //loadSavedData()
     }
     
-    private func loadPokedex() {
-        guard let url = PokemonManager.shared.createURL(for: .pokedex, fromIndex: nationalPokedexID) else {
-            print("Error creating URL")
-            return
-        }
+    private func fetchPokedex() {
+//        guard let url = PokemonManager.shared.createURL(for: .pokedex, fromIndex: nationalPokedexID) else {
+//            print("Error creating URL")
+//            return
+//        }
+        let url = URL(string: "https://pokeapi.co/api/v2/pokemon?limit=2000")!
         
         setState(loading: true)
         
-        cancellable = PokemonManager.shared.fetchFromAPI(of: Pokedex.self, from: url)
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { _ in },
-                  receiveValue: { (pokedex) in
-                    self.pokedex = pokedex
-                    self.navigationItem.title = "POKEDEX: \(pokedex.name.capitalized)"
-                    self.tableView.reloadData()
-                    self.setState(loading: false)
+        // Downloads ALL Pokemon Data
+        PokemonManager.shared.fetchFromAPI(of: NationalPokedex.self, from: url)
+            .map { (pokedex) -> [String] in
+                var urlArray = [String]()
+                for result in pokedex.results {
+                    urlArray.append(result.url)
+                }
+                return urlArray
+        }
+        .flatMap { (urlArray) -> AnyPublisher<[PokemonData], Error> in
+            let pokemonData = urlArray.map { self.fetchPokemon(with: $0) }
+            return Publishers.MergeMany(pokemonData)
+                .collect()
+                .eraseToAnyPublisher()
+        }
+        .map({ (pokemonDataArray) -> [PokemonMO] in
+            return pokemonDataArray.map { PokemonManager.shared.parsePokemonData(pokemonData: $0) }
+        })
+            .sink(receiveCompletion: { results in
+                switch results {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print(error)
+                }
+            }, receiveValue: { (pokemonArray) in
+                self.saveCoreData()
+                self.loadSavedData()
             })
+            .store(in: &subscriptions)
+        
+//        PokemonManager.shared.fetchFromAPI(of: NationalPokedex.self, from: url)
+//            .sink(receiveCompletion: { results in
+//                switch results {
+//                case .finished:
+//                    break
+//                case .failure(let error):
+//                    print(error)
+//                }
+//            },
+//                  receiveValue: { (pokedex) in
+//                    var urlArray = [String]()
+//                    for result in pokedex.results {
+//                        urlArray.append(result.url)
+//                    }
+//            })
+//        .store(in: &subscriptions)
+    }
+    
+    private func fetchPokemon(with url: String) -> AnyPublisher<PokemonData, Error> {
+        let pokemonURL = URL(string: url)!
+            
+        return PokemonManager.shared.fetchFromAPI(of: PokemonData.self, from: pokemonURL)
+    }
+    
+    private func loadSavedData() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            let request: NSFetchRequest<PokemonMO> = PokemonMO.fetchRequest()
+            let sort = NSSortDescriptor(key: "id", ascending: true)
+            request.sortDescriptors = [sort]
+            
+            do {
+                self.pokemonArray = try self.context.fetch(request)
+                print("Got \(self.pokemonArray.count) pokemon")
+                self.tableView.reloadData()
+                self.setState(loading: false)
+            } catch {
+                print("Fetch from Core Data failed: \(error)")
+            }
+        }
+    }
+    
+    func saveCoreData() {
+        do {
+            try context.save()
+        } catch {
+            print("Error saving: \(error)")
+        }
     }
     
     private func initializeSearchBar() {
@@ -80,33 +160,33 @@ class PokeDexVC: UITableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if isFiltering {
-            return filteredPokedex.count
+            return filteredPokemon.count
         }
         
-        return pokedex?.pokemonEntries.count ?? 0
+        return pokemonArray.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: pokemonCellID, for: indexPath) as! PokemonCell
-        if let pokedex = pokedex {
-            let pokemon: PokemonEntry
-            if isFiltering {
-                pokemon = filteredPokedex[indexPath.row]
-            } else {
-                pokemon = pokedex.pokemonEntries[indexPath.row]
-            }
-            cell.pokemonNameLabel.text = pokemon.name.capitalized
-            cell.pokemonImageView.image = UIImage(named: pokemon.name)
+        
+        let pokemon: PokemonMO
+        if isFiltering {
+            pokemon = filteredPokemon[indexPath.row]
+        } else {
+            pokemon = pokemonArray[indexPath.row]
         }
+        
+        cell.pokemonNameLabel.text = pokemon.name?.capitalized
+        cell.pokemonImageView.image = UIImage(named: pokemon.name ?? "1")
+        
         return cell
     }
     
     // MARK: Search Bar Methods
     
     func filterContentForSearchText(_ searchText: String) {
-        guard let pokedex = pokedex else { return }
-        filteredPokedex = searchText.isEmpty ? pokedex.pokemonEntries : pokedex.pokemonEntries.filter({ (pokemonEntry) -> Bool in
-            return pokemonEntry.name.range(of: searchText, options: .caseInsensitive) != nil
+        filteredPokemon = searchText.isEmpty ? pokemonArray : pokemonArray.filter({ (pokemon) -> Bool in
+            return pokemon.name?.range(of: searchText, options: .caseInsensitive) != nil
         })
         tableView.reloadData()
     }
@@ -118,16 +198,14 @@ class PokeDexVC: UITableViewController {
         let indexPath = tableView.indexPathForSelectedRow!
         let selectedRow = indexPath.row
         
-        guard let pokedex = pokedex else { return nil }
-        
-        let pokemonEntry: PokemonEntry
+        let pokemon: PokemonMO
         
         if isFiltering {
-            pokemonEntry = filteredPokedex[selectedRow]
+            pokemon = filteredPokemon[selectedRow]
         } else {
-            pokemonEntry = pokedex.pokemonEntries[selectedRow]
+            pokemon = pokemonArray[selectedRow]
         }
-        return PokemonDetailVC(coder: coder, pokemonEntry: pokemonEntry)
+        return PokemonDetailVC(coder: coder, pokemon: pokemon)
     }
     
     private func setState(loading: Bool) {

@@ -7,12 +7,15 @@
 //
 
 import UIKit
+import CoreData
 
 private let reuseIdentifier = "PokemonCollectionCell"
 
 class TeamBuilderVC: UICollectionViewController {
     
-    var pokemonTeam = PokemonTeam()
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    
+    //var teamsArray = [PokemonTeam]()
     var team = [Pokemon]()
     
     private var numberOfItemsInRow = 3
@@ -24,18 +27,41 @@ class TeamBuilderVC: UICollectionViewController {
 
         navigationItem.title = "TEAM BUILDER"
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Reload", style: .plain, target: self, action: #selector(reloadData))
+        
+        loadSavedTeam()
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        reloadData()
+        loadSavedTeam()
     }
     
     @objc func reloadData() {
-        collectionView.reloadData()
-        print("reload")
+        loadSavedTeam()
+    }
+    
+    private func loadSavedTeam() {
+        print("attempting load of team")
+//        let pokemonTeam = PokemonTeam(context: context)
+        //let request: NSFetchRequest<PokemonTeam> = PokemonTeam.fetchRequest()
+        
+//        do {
+//            let teams = try context.fetch(request)
+//            let firstTeam = teams[0]
+//            team = firstTeam.pokemon!
+//        } catch {
+//            print("Team fetch failed: \(error)")
+//        }
+        
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+            
+        }
     }
 
     // MARK: UICollectionViewDataSource
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1 //teamsArray.count
+    }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return team.count

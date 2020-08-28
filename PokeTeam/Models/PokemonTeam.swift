@@ -8,7 +8,7 @@
 
 import Foundation
 
-class PokemonTeam {
+class PokemonTeam2 {
     var team: [Pokemon]
     var isAddAllowed: Bool
     

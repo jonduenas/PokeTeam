@@ -6,11 +6,19 @@
 //  Copyright © 2020 Jon Duenas. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
-struct PokemonAbility {
+public class PokemonAbility: NSObject {
+    
     let name: String
     let isHidden: Bool
     let urlString: String
-    var description: String?
+    var abilityDescription: String?
+    
+    init(name: String, isHidden: Bool, urlString: String, abilityDescription: String?) {
+        self.name = name
+        self.isHidden = isHidden
+        self.urlString = urlString
+        self.abilityDescription = abilityDescription
+    }
 }

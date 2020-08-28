@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19G2021" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Ability" representedClassName="AbilityMO" syncable="YES" codeGenerationType="class">
+        <attribute name="abilityDescription" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="isHidden" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="name" attributeType="String"/>
+        <attribute name="urlString" attributeType="String"/>
+        <relationship name="pokemon" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Pokemon" inverseName="abilities" inverseEntity="Pokemon"/>
+    </entity>
+    <entity name="Move" representedClassName="MoveMO" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="levelLearnedAt" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="moveDescription" optional="YES" attributeType="String" defaultValueString=""/>
+        <attribute name="moveLearnMethod" attributeType="String" defaultValueString=""/>
+        <attribute name="name" attributeType="String" defaultValueString=""/>
+        <attribute name="urlString" attributeType="String" defaultValueString=""/>
+        <relationship name="pokemon" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Pokemon" inverseName="moves" inverseEntity="Pokemon"/>
+    </entity>
+    <entity name="Pokedex" representedClassName="PokedexMO" syncable="YES" codeGenerationType="class">
+        <attribute name="name" attributeType="String" defaultValueString=""/>
+        <attribute name="urlString" attributeType="String" defaultValueString=""/>
+        <relationship name="pokemon" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Pokemon" inverseName="pokedex" inverseEntity="Pokemon"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="urlString"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="Pokemon" representedClassName="PokemonMO" syncable="YES" codeGenerationType="class">
+        <attribute name="flavorText" optional="YES" attributeType="String" defaultValueString=""/>
+        <attribute name="generation" optional="YES" attributeType="String" defaultValueString=""/>
+        <attribute name="genus" optional="YES" attributeType="String" defaultValueString=""/>
+        <attribute name="height" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="imageID" optional="YES" attributeType="String" defaultValueString=""/>
+        <attribute name="name" attributeType="String" defaultValueString=""/>
+        <attribute name="pokemonURL" attributeType="String" defaultValueString=""/>
+        <attribute name="speciesURL" optional="YES" attributeType="String" defaultValueString=""/>
+        <attribute name="stats" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" customClassName="[String: Float]"/>
+        <attribute name="type" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" customClassName="[String]"/>
+        <attribute name="weight" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="abilities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Ability" inverseName="pokemon" inverseEntity="Ability"/>
+        <relationship name="moves" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Move" inverseName="pokemon" inverseEntity="Move"/>
+        <relationship name="pokedex" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Pokedex" inverseName="pokemon" inverseEntity="Pokedex"/>
+        <relationship name="team" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="members" inverseEntity="Team"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="Team" representedClassName="TeamMO" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="members" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Pokemon" inverseName="team" inverseEntity="Pokemon"/>
+    </entity>
+    <entity name="Type" representedClassName="TypeMO" syncable="YES" codeGenerationType="class">
+        <attribute name="name" attributeType="String" defaultValueString=""/>
+        <attribute name="stringURL" optional="YES" attributeType="String"/>
+        <relationship name="noEffect" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Type" inverseName="noEffect" inverseEntity="Type"/>
+        <relationship name="notVeryEffective" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Type" inverseName="notVeryEffective" inverseEntity="Type"/>
+        <relationship name="superEffective" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Type" inverseName="superEffective" inverseEntity="Type"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="stringURL"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <elements>
+        <element name="Ability" positionX="343.77734375" positionY="-326.91796875" width="128" height="133"/>
+        <element name="Move" positionX="347.1015625" positionY="-132.5859375" width="128" height="148"/>
+        <element name="Pokedex" positionX="162" positionY="-162" width="128" height="88"/>
+        <element name="Pokemon" positionX="140.90234375" positionY="-317.33203125" width="128" height="283"/>
+        <element name="Team" positionX="-60.03515625" positionY="-237.5625" width="128" height="73"/>
+        <element name="Type" positionX="171" positionY="-135" width="128" height="118"/>
+    </elements>
+</model>

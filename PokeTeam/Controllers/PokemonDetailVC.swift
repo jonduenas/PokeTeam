@@ -8,16 +8,18 @@
 
 import UIKit
 import Combine
+import CoreData
 
 class PokemonDetailVC: UIViewController {
 
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    
     let largeTitleSize: CGFloat = 34
     let subTitleSize: CGFloat = 25
-    let pokemonEntry: PokemonEntry
     let abilityTransitioningDelegate = AbilityTransitioningDelegate()
 
-    var pokemon: Pokemon?
-    lazy var pokemonTeam = PokemonTeam()
+    let pokemon: PokemonMO
+    //lazy var pokemonTeam = PokemonTeam()
     var abilities: [PokemonAbility]?
     var subscriptions: Set<AnyCancellable> = []
     var indicatorView: UIActivityIndicatorView!
@@ -45,8 +47,8 @@ class PokemonDetailVC: UIViewController {
     @IBOutlet var abilitiesHeaderLabel: UILabel!
     @IBOutlet weak var abilitiesStackView: UIStackView!
     
-    init?(coder: NSCoder, pokemonEntry: PokemonEntry) {
-        self.pokemonEntry = pokemonEntry
+    init?(coder: NSCoder, pokemon: PokemonMO) {
+        self.pokemon = pokemon
 
         super.init(coder: coder)
     }
@@ -70,30 +72,30 @@ class PokemonDetailVC: UIViewController {
     }
     
     private func loadPokemonInfo() {
-        guard let speciesURL = URL(string: pokemonEntry.url) else {
-            print("Error creating URL")
-            return
-        }
-
-        setState(loading: true)
-        
-        var speciesData: SpeciesData?
-
-        PokemonManager.shared.fetchFromAPI(of: SpeciesData.self, from: speciesURL)
-            .map({ (species) -> Int in
-                speciesData = species
-                return species.id
-            })
-            .flatMap({ (id) in
-                return self.loadPokemonData(for: id)
-            })
-            .sink(receiveCompletion: { _ in },
-                  receiveValue: { (pokemonData) in
-                    let pokemon = PokemonManager.shared.parsePokemonData(pokemonData: pokemonData, speciesData: speciesData!)
-                    self.pokemon = pokemon
-                    self.finishLoadingPokemon(for: pokemon)
-            })
-            .store(in: &subscriptions)
+//        guard let speciesURL = URL(string: pokemonEntry.url) else {
+//            print("Error creating URL")
+//            return
+//        }
+//
+//        setState(loading: true)
+//
+//        var speciesData: SpeciesData?
+//
+//        PokemonManager.shared.fetchFromAPI(of: SpeciesData.self, from: speciesURL)
+//            .map({ (species) -> Int in
+//                speciesData = species
+//                return species.id
+//            })
+//            .flatMap({ (id) in
+//                return self.loadPokemonData(for: id)
+//            })
+//            .sink(receiveCompletion: { _ in },
+//                  receiveValue: { (pokemonData) in
+//                    let pokemon = PokemonManager.shared.parsePokemonData(pokemonData: pokemonData, speciesData: speciesData!)
+//                    //self.pokemon = pokemon
+//                    //self.finishLoadingPokemon(for: pokemon)
+//            })
+//            .store(in: &subscriptions)
     }
     
     private func loadPokemonData(for id: Int) -> AnyPublisher<PokemonData, Error> {
@@ -127,7 +129,7 @@ class PokemonDetailVC: UIViewController {
         let pokemonIDString = String(withInt: pokemon.id, leadingZeros: 3)
         pokemonNumberAndGenusLabel.text = "#\(pokemonIDString) –– \(pokemon.genus)"
         
-        pokemonDescriptionLabel.text = pokemon.description
+        pokemonDescriptionLabel.text = pokemon.flavorText
         heightLabel.text = "\(pokemon.height) m"
         weightLabel.text = "\(pokemon.weight) kg"
     }
@@ -198,12 +200,38 @@ class PokemonDetailVC: UIViewController {
     }
     
     @objc private func addToTeam() {
-        guard let pokemon = pokemon else { return }
+        //guard let pokemon = pokemon else { return }
         
-        guard let teamBuilderNav = self.tabBarController?.viewControllers?[1] else { return }
-        let teamBuilderVC = teamBuilderNav.children.first as! TeamBuilderVC
+//        let pokemonTeam = PokemonTeam(context: context)
+//        pokemonTeam.name = "Test Team"
+//        
+//        let pokemonManaged = PokemonManaged(context: context)
+//        pokemonManaged.name = pokemon.name
+//        pokemonManaged.id = Int64(pokemon.id)
+//        pokemonManaged.height = pokemon.height
+//        pokemonManaged.weight = pokemon.weight
+//        pokemonManaged.genus = pokemon.genus
+//        pokemonManaged.flavorText = pokemon.flavorText
+//        pokemonManaged.imageID = String(pokemon.id)
+//        pokemonManaged.generation = pokemon.generation
+//        pokemonManaged.moves = pokemon.moves
+//        pokemonManaged.abilities = pokemon.abilities
+//        pokemonManaged.stats = [:]
+//        pokemonManaged.type = []
+//        
+//        pokemonManaged.addToTeam(pokemonTeam)
         
-        teamBuilderVC.team.append(pokemon)
+        
+        do {
+            try context.save()
+        } catch {
+            print("Error saving context: \(error)")
+        }
+        
+//        guard let teamBuilderNav = self.tabBarController?.viewControllers?[1] else { return }
+//        let teamBuilderVC = teamBuilderNav.children.first as! TeamBuilderVC
+//
+//        teamBuilderVC.team.append(pokemon)
         
         //let success = pokemonTeam.add(pokemon)
         //print(success)
