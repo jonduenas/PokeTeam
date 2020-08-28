@@ -60,37 +60,23 @@ class PokeDexVC: UITableViewController {
         setState(loading: true)
         
         // Downloads ALL Pokemon Data
-        PokemonManager.shared.fetchFromAPI(of: NationalPokedex.self, from: url)
-            .map { (pokedex) -> [String] in
-                var urlArray = [String]()
-                for result in pokedex.results {
-                    urlArray.append(result.url)
-                }
-                return urlArray
-        }
-        .flatMap { (urlArray) -> AnyPublisher<[PokemonData], Error> in
-            let pokemonData = urlArray.map { self.fetchPokemon(with: $0) }
-            return Publishers.MergeMany(pokemonData)
-                .collect()
-                .eraseToAnyPublisher()
-        }
-        .map({ (pokemonDataArray) -> [PokemonMO] in
-            return pokemonDataArray.map { PokemonManager.shared.parsePokemonData(pokemonData: $0) }
-        })
-            .sink(receiveCompletion: { results in
-                switch results {
-                case .finished:
-                    break
-                case .failure(let error):
-                    print(error)
-                }
-            }, receiveValue: { (pokemonArray) in
-                self.saveCoreData()
-                self.loadSavedData()
-            })
-            .store(in: &subscriptions)
-        
 //        PokemonManager.shared.fetchFromAPI(of: NationalPokedex.self, from: url)
+//            .map { (pokedex) -> [String] in
+//                var urlArray = [String]()
+//                for result in pokedex.results {
+//                    urlArray.append(result.url)
+//                }
+//                return urlArray
+//        }
+//        .flatMap { (urlArray) -> AnyPublisher<[PokemonData], Error> in
+//            let pokemonData = urlArray.map { self.fetchPokemon(with: $0) }
+//            return Publishers.MergeMany(pokemonData)
+//                .collect()
+//                .eraseToAnyPublisher()
+//        }
+//        .map({ (pokemonDataArray) -> [PokemonMO] in
+//            return pokemonDataArray.map { PokemonManager.shared.parsePokemonData(pokemonData: $0) }
+//        })
 //            .sink(receiveCompletion: { results in
 //                switch results {
 //                case .finished:
@@ -98,14 +84,30 @@ class PokeDexVC: UITableViewController {
 //                case .failure(let error):
 //                    print(error)
 //                }
-//            },
-//                  receiveValue: { (pokedex) in
-//                    var urlArray = [String]()
-//                    for result in pokedex.results {
-//                        urlArray.append(result.url)
-//                    }
+//            }, receiveValue: { (pokemonArray) in
+//                self.saveCoreData()
+//                self.loadSavedData()
 //            })
-//        .store(in: &subscriptions)
+//            .store(in: &subscriptions)
+        
+        // Downloads just the Pokemon list of names and URLs
+        PokemonManager.shared.fetchFromAPI(of: NationalPokedex.self, from: url)
+            .map({ (pokedex) -> [PokemonMO] in
+                return PokemonManager.shared.parseNationalPokedex(pokedex: pokedex)
+            })
+            .sink(receiveCompletion: { results in
+                switch results {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print(error)
+                }
+            },
+                  receiveValue: { (pokemonArray) in
+                    self.saveCoreData()
+                    self.loadSavedData()
+            })
+        .store(in: &subscriptions)
     }
     
     private func fetchPokemon(with url: String) -> AnyPublisher<PokemonData, Error> {
@@ -133,10 +135,12 @@ class PokeDexVC: UITableViewController {
     }
     
     func saveCoreData() {
-        do {
-            try context.save()
-        } catch {
-            print("Error saving: \(error)")
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                print("Error saving: \(error)")
+            }
         }
     }
     

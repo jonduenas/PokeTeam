@@ -43,22 +43,24 @@ class PokemonManager {
     
     // MARK: Core Data parsing methods
   
-    func parseNationalPokedex(pokedex: NationalPokedex, completion: ()->Void) {
-        // Check if there are any new Pokemon
-        // TODO: Replace 1048 with UserDefaults value set when new value is found
-        if pokedex.count == 1048 {
-            return
-        } else {
-             //Set UserDefaults to new count value
-        }
-        print(pokedex.results.count)
-        
+    func parseNationalPokedex(pokedex: NationalPokedex) -> [PokemonMO] {
+        var pokemonMOArray = [PokemonMO]()
         for pokemon in pokedex.results {
             let pokemonMO = PokemonMO(context: context)
             pokemonMO.name = pokemon.name
             pokemonMO.pokemonURL = pokemon.url
+            
+            // Pull ID out of URL string
+            pokemonMO.id = Int64(getID(from: pokemon.url) ?? 0)
+            
+            pokemonMOArray.append(pokemonMO)
         }        
-        completion()
+        return pokemonMOArray
+    }
+    
+    private func getID(from url: String) -> Int? {
+        let baseURL = "https://pokeapi.co/api/v2/pokemon/"
+        return Int(url.dropFirst(baseURL.count).dropLast())
     }
     
     func parsePokemonData(pokemonData: PokemonData) -> PokemonMO {
