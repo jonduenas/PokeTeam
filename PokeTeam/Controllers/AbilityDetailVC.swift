@@ -24,7 +24,12 @@ class AbilityDetailVC: UIViewController {
         super.viewDidLoad()
 
         initializeActivityIndicator()
-        loadAbility()
+        
+        if shouldUpdateDetails() {
+            fetchAbilityDetails()
+        } else {
+            showAbilityDetails()
+        }
     }
     
     private func initializeActivityIndicator() {
@@ -32,35 +37,47 @@ class AbilityDetailVC: UIViewController {
         view.addSubview(indicatorView)
     }
     
-    private func loadAbility() {
-//        guard let ability = ability else { return }
-//
-//        guard let abilityURL = URL(string: ability.urlString!) else {
-//            print("Error creating ability URL")
-//            return
-//        }
-//
-//        setState(loading: true)
-//
-//        PokemonManager.shared.fetchFromAPI(of: AbilityData.self, from: abilityURL)
-//            .receive(on: DispatchQueue.main)
-//            .sink(receiveCompletion: { _ in },
-//                  receiveValue: { (abilityData) in
-//                    self.ability = PokemonManager.shared.addAbilityDescription(to: ability, with: abilityData)
-//                    DispatchQueue.main.async {
-//                        self.updateAbilityUI()
-//                        self.setState(loading: false)
-//                    }
-//            })
-//            .store(in: &subscriptions)
+    private func shouldUpdateDetails() -> Bool {
+        return ability?.abilityDescription == nil || ability?.abilityDescription == ""
     }
     
-//    private func updateAbilityUI() {
-//        guard let ability = ability else { return }
-//
-//        abilityHeaderLabel.text = ability.name.capitalized
-//        abilityDescriptionLabel.text = ability.description
-//    }
+    private func fetchAbilityDetails() {
+        guard let ability = ability else { return }
+
+        guard let abilityURL = URL(string: ability.urlString!) else {
+            print("Error creating ability URL")
+            return
+        }
+
+        setState(loading: true)
+
+        PokemonManager.shared.fetchFromAPI(of: AbilityData.self, from: abilityURL)
+            .sink(receiveCompletion: { results in
+                switch results {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print(error)
+                }
+            },
+                  receiveValue: { (abilityData) in
+                    PokemonManager.shared.addAbilityDescription(to: ability, with: abilityData)
+                    PokemonManager.shared.save()
+                    
+                    DispatchQueue.main.async {
+                        self.showAbilityDetails()
+                        self.setState(loading: false)
+                    }
+            })
+            .store(in: &subscriptions)
+    }
+    
+    private func showAbilityDetails() {
+        guard let ability = ability else { return }
+
+        abilityHeaderLabel.text = ability.name?.formatAbilityName()
+        abilityDescriptionLabel.text = ability.abilityDescription
+    }
     
     private func setState(loading: Bool) {
         if loading {

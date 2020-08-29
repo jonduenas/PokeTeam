@@ -16,6 +16,7 @@ enum PokemonDataType: String {
     case species = "pokemon-species/"
     case ability = "ability/"
     case move = "move/"
+    case allPokemon = "pokemon?limit=5000"
 }
 
 class PokemonManager {
@@ -35,17 +36,37 @@ class PokemonManager {
             .eraseToAnyPublisher()
     }
     
-    func createURL(for dataType: PokemonDataType, fromIndex index: Int) -> URL? {
+    func createURL(for dataType: PokemonDataType, fromIndex index: Int? = nil) -> URL? {
         let baseStringURL = "https://pokeapi.co/api/v2/"
         
-        return URL(string: baseStringURL + dataType.rawValue + "\(index)")
+        switch dataType {
+        case .allPokemon:
+            return URL (string: baseStringURL + dataType.rawValue)
+        default:
+            guard let index = index else { return nil }
+            return URL(string: baseStringURL + dataType.rawValue + "\(index)")
+        }
     }
     
     // MARK: Core Data parsing methods
   
     func parseNationalPokedex(pokedex: NationalPokedex) -> [PokemonMO] {
         var pokemonMOArray = [PokemonMO]()
+        
         for pokemon in pokedex.results {
+            // Check if Pokemon already exists in Core Data
+            let pokemonRequest: NSFetchRequest<PokemonMO> = PokemonMO.fetchRequest()
+            pokemonRequest.predicate = NSPredicate(format: "name == %@", pokemon.name)
+            
+            if let pokemonFetched = try? context.fetch(pokemonRequest) {
+                if pokemonFetched.count > 0 {
+                    // Pokemon already exists in Core Data
+                    pokemonMOArray.append(pokemonFetched[0])
+                    continue
+                }
+            }
+            
+            // No Pokemon with that name is found - create a new one
             let pokemonMO = PokemonMO(context: context)
             pokemonMO.name = pokemon.name
             pokemonMO.pokemonURL = pokemon.url
@@ -152,15 +173,11 @@ class PokemonManager {
 
         // Abilities
         let abilities = parseAbilities(with: pokemonData)
-        for ability in abilities {
-            pokemon.addToAbilities(ability)
-        }
+        pokemon.abilities = NSSet(array: abilities)
 
         // Moves
         let moves = parseMoves(with: pokemonData)
-        for move in moves {
-            pokemon.addToMoves(move)
-        }
+        pokemon.moves = NSSet(array: moves)
     }
 //    func parsePokemonData(pokemonData: PokemonData, speciesData: SpeciesData) -> Pokemon {
 //        let id = pokemonData.id
@@ -192,9 +209,31 @@ class PokemonManager {
 //        return Pokemon(id: id, name: name, height: height, weight: weight, type: typeArray, genus: genus, generation: generation, flavorText: flavorText, stats: stats, abilities: abilitiesArray, moves: movesArray)
 //    }
     
-    func addAbilityDescription(to ability: PokemonAbility, with abilityData: AbilityData) -> PokemonAbility {
+//    func addAbilityDescription(to ability: PokemonAbility, with abilityData: AbilityData) -> PokemonAbility {
+//        var englishFlavorTextArray = [String]()
+//        let description: String
+//
+//        for flavorText in abilityData.flavorTextEntries {
+//            if flavorText.language == "en" {
+//                englishFlavorTextArray.append(flavorText.flavorText)
+//            }
+//        }
+//
+//        if let latestFlavorText = englishFlavorTextArray.last {
+//            description = latestFlavorText.replacingOccurrences(of: "\n", with: " ")
+//        } else {
+//            description = "Error loading ability description"
+//        }
+//
+//        let abilityToReturn = ability
+//        abilityToReturn.abilityDescription = description
+//
+//        return abilityToReturn
+//    }
+    
+    func addAbilityDescription(to ability: AbilityMO, with abilityData: AbilityData) {
         var englishFlavorTextArray = [String]()
-        let description: String
+        let flavorText: String
         
         for flavorText in abilityData.flavorTextEntries {
             if flavorText.language == "en" {
@@ -202,16 +241,14 @@ class PokemonManager {
             }
         }
         
-        if let latestFlavorText = englishFlavorTextArray.last {
-            description = latestFlavorText.replacingOccurrences(of: "\n", with: " ")
+        if let latestEntry = englishFlavorTextArray.last {
+            flavorText = latestEntry.replacingOccurrences(of: "\n", with: " ")
         } else {
-            description = "Error loading ability description"
+            flavorText = ""
         }
         
-        let abilityToReturn = ability
-        abilityToReturn.abilityDescription = description
-        
-        return abilityToReturn
+        ability.abilityDescription = flavorText
+        ability.id = Int64(abilityData.id)
     }
     
     // MARK: Private parsing methods
@@ -327,5 +364,56 @@ class PokemonManager {
         }
         
         return movesArray
+    }
+    
+    // MARK: - Core Data Methods
+    
+    func loadSavedPokemon() -> [PokemonMO] {
+        let request: NSFetchRequest<PokemonMO> = PokemonMO.fetchRequest()
+        let sort = NSSortDescriptor(key: "id", ascending: true)
+        request.sortDescriptors = [sort]
+        
+        var pokemonToReturn = [PokemonMO]()
+        
+        do {
+            pokemonToReturn = try self.context.fetch(request)
+            print("Successfully fetched \(pokemonToReturn.count) pokemon from Core Data")
+        } catch {
+            print("Fetch from Core Data failed: \(error)")
+        }
+        
+        return pokemonToReturn
+    }
+    
+    func save() {
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                print("Error saving context to Core Data: \(error)")
+            }
+        }
+    }
+}
+
+extension String {
+    init(withInt int: Int, leadingZeros: Int = 1) {
+        self.init(format: "%0\(leadingZeros)d", int)
+    }
+
+    func leadingZeros(_ zeros: Int) -> String {
+        if let int = Int(self) {
+            return String(withInt: int, leadingZeros: zeros)
+        }
+        print("Warning: \(self) is not an Int")
+        return ""
+    }
+    
+    func formatAbilityName() -> String {
+        if self == "soul-heart" {
+            return self.capitalized
+        } else {
+            return self.capitalized.replacingOccurrences(of: "-", with: " ")
+        }
     }
 }

@@ -8,7 +8,6 @@
 
 import UIKit
 import Combine
-import CoreData
 
 class PokemonDetailVC: UIViewController {
 
@@ -70,19 +69,15 @@ class PokemonDetailVC: UIViewController {
         if shouldFetchDetails() {
             fetchPokemon()
         } else {
-            updateDetails()
+            showDetails()
         }
     }
     
     private func shouldFetchDetails() -> Bool {
-        if pokemon.flavorText == "" || pokemon.flavorText == nil {
-            return true
-        } else {
-            return false
-        }
+        return pokemon.flavorText == "" || pokemon.flavorText == nil
     }
     
-    private func updateDetails() {
+    private func showDetails() {
         updatePokemonUI()
         updateStats()
         layoutAbilities()
@@ -116,10 +111,10 @@ class PokemonDetailVC: UIViewController {
             },
                   receiveValue: { (speciesData) in
                     PokemonManager.shared.updateDetails(for: self.pokemon, with: pokemonData!, and: speciesData)
-                    self.saveToCoreData()
+                    PokemonManager.shared.save()
                     
                     DispatchQueue.main.async { [weak self] in
-                        self?.updateDetails()
+                        self?.showDetails()
                         self?.setState(loading: false)
                     }
             })
@@ -129,16 +124,6 @@ class PokemonDetailVC: UIViewController {
     private func fetchSpeciesData(for url: String) -> AnyPublisher<SpeciesData, Error> {
         let speciesURL = URL(string: url)!
         return PokemonManager.shared.fetchFromAPI(of: SpeciesData.self, from: speciesURL)
-    }
-    
-    func saveToCoreData() {
-        if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                print("Error saving: \(error)")
-            }
-        }
     }
     
 //    func loadPokemon() {
@@ -233,9 +218,9 @@ class PokemonDetailVC: UIViewController {
 
             if let abilityName = ability.name {
                 if ability.isHidden {
-                    abilityButton.setTitle("\(abilityName.capitalized) *", for: .normal)
+                    abilityButton.setTitle("\(abilityName.formatAbilityName()) *", for: .normal)
                 } else {
-                    abilityButton.setTitle(abilityName.capitalized, for: .normal)
+                    abilityButton.setTitle(abilityName.formatAbilityName(), for: .normal)
                 }
             }
 
@@ -315,19 +300,5 @@ class PokemonDetailVC: UIViewController {
             detailView.isHidden = false
             indicatorView.stopAnimating()
         }
-    }
-}
-
-extension String {
-    init(withInt int: Int, leadingZeros: Int = 1) {
-        self.init(format: "%0\(leadingZeros)d", int)
-    }
-
-    func leadingZeros(_ zeros: Int) -> String {
-        if let int = Int(self) {
-            return String(withInt: int, leadingZeros: zeros)
-        }
-        print("Warning: \(self) is not an Int")
-        return ""
     }
 }

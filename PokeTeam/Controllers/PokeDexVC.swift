@@ -8,7 +8,6 @@
 
 import UIKit
 import Combine
-import CoreData
 
 class PokeDexVC: UITableViewController {
     
@@ -48,50 +47,19 @@ class PokeDexVC: UITableViewController {
     }
     
     private func fetchPokedex() {
-//        guard let url = PokemonManager.shared.createURL(for: .pokedex, fromIndex: nationalPokedexID) else {
-//            print("Error creating URL")
-//            return
-//        }
-        let url = URL(string: "https://pokeapi.co/api/v2/pokemon?limit=5000")!
+        guard let url = PokemonManager.shared.createURL(for: .allPokemon) else {
+            print("Error creating URL")
+            return
+        }
         
-        // Downloads ALL Pokemon Data
-//        PokemonManager.shared.fetchFromAPI(of: NationalPokedex.self, from: url)
-//            .map { (pokedex) -> [String] in
-//                var urlArray = [String]()
-//                for result in pokedex.results {
-//                    urlArray.append(result.url)
-//                }
-//                return urlArray
-//        }
-//        .flatMap { (urlArray) -> AnyPublisher<[PokemonData], Error> in
-//            let pokemonData = urlArray.map { self.fetchPokemon(with: $0) }
-//            return Publishers.MergeMany(pokemonData)
-//                .collect()
-//                .eraseToAnyPublisher()
-//        }
-//        .map({ (pokemonDataArray) -> [PokemonMO] in
-//            return pokemonDataArray.map { PokemonManager.shared.parsePokemonData(pokemonData: $0) }
-//        })
-//            .sink(receiveCompletion: { results in
-//                switch results {
-//                case .finished:
-//                    break
-//                case .failure(let error):
-//                    print(error)
-//                }
-//            }, receiveValue: { (pokemonArray) in
-//                self.saveCoreData()
-//                self.loadSavedData()
-//            })
-//            .store(in: &subscriptions)
-        
-        // Downloads just the Pokemon list of names and URLs
+        // Downloads list of all Pokemon names and URLs
         PokemonManager.shared.fetchFromAPI(of: NationalPokedex.self, from: url)
             .map({ (pokedex) -> [PokemonMO] in
-                // Check if Pokemon list from API is different from saved list of Pokemon
-                if pokedex.count == self.pokemonArray.count {
+                if pokedex.count == self.pokemonArray.count && pokedex.count != 0 {
+                    // Saved list of Pokemon is the same as the API
                     return self.pokemonArray
                 } else {
+                    // Creates new list or adds new entries to saved list
                     return PokemonManager.shared.parseNationalPokedex(pokedex: pokedex)
                 }
             })
@@ -105,48 +73,24 @@ class PokeDexVC: UITableViewController {
             },
                   receiveValue: { (pokemonArray) in
                     self.pokemonArray = pokemonArray
-                    self.saveCoreData()
+                    PokemonManager.shared.save()
                     self.updateUI()
             })
         .store(in: &subscriptions)
     }
     
-    private func fetchPokemon(with url: String) -> AnyPublisher<PokemonData, Error> {
-        let pokemonURL = URL(string: url)!
-            
-        return PokemonManager.shared.fetchFromAPI(of: PokemonData.self, from: pokemonURL)
-    }
-    
     private func loadSavedData() {
         setState(loading: true)
         
-        let request: NSFetchRequest<PokemonMO> = PokemonMO.fetchRequest()
-        let sort = NSSortDescriptor(key: "id", ascending: true)
-        request.sortDescriptors = [sort]
+        pokemonArray = PokemonManager.shared.loadSavedPokemon()
         
-        do {
-            self.pokemonArray = try self.context.fetch(request)
-            print("Loaded \(self.pokemonArray.count) pokemon from Core Data")
-            fetchPokedex()
-        } catch {
-            print("Fetch from Core Data failed: \(error)")
-        }
+        fetchPokedex()
     }
     
     private func updateUI() {
         DispatchQueue.main.async { [weak self] in
             self?.tableView.reloadData()
             self?.setState(loading: false)
-        }
-    }
-    
-    func saveCoreData() {
-        if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                print("Error saving: \(error)")
-            }
         }
     }
     
