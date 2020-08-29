@@ -60,8 +60,8 @@ class PokemonTypeLabel: UILabel {
         layer.cornerRadius = value
     }
     
-    func setType(for type: PokemonType) {
-        self.text = type.rawValue.capitalized
-        self.backgroundColor = colorDictionary[type]
+    func setType(for type: String) {
+        self.text = type.capitalized
+        self.backgroundColor = colorDictionary[PokemonType(rawValue: type) ?? .unknown]
     }
 }

@@ -42,12 +42,9 @@ class PokeDexVC: UITableViewController {
         indicatorView = view.activityIndicator(style: .large, center: self.view.center)
         tableView.backgroundView = indicatorView
         
-        
-        
         initializeSearchBar()
         
-        fetchPokedex()
-        //loadSavedData()
+        loadSavedData()
     }
     
     private func fetchPokedex() {
@@ -55,9 +52,7 @@ class PokeDexVC: UITableViewController {
 //            print("Error creating URL")
 //            return
 //        }
-        let url = URL(string: "https://pokeapi.co/api/v2/pokemon?limit=2000")!
-        
-        setState(loading: true)
+        let url = URL(string: "https://pokeapi.co/api/v2/pokemon?limit=5000")!
         
         // Downloads ALL Pokemon Data
 //        PokemonManager.shared.fetchFromAPI(of: NationalPokedex.self, from: url)
@@ -93,7 +88,12 @@ class PokeDexVC: UITableViewController {
         // Downloads just the Pokemon list of names and URLs
         PokemonManager.shared.fetchFromAPI(of: NationalPokedex.self, from: url)
             .map({ (pokedex) -> [PokemonMO] in
-                return PokemonManager.shared.parseNationalPokedex(pokedex: pokedex)
+                // Check if Pokemon list from API is different from saved list of Pokemon
+                if pokedex.count == self.pokemonArray.count {
+                    return self.pokemonArray
+                } else {
+                    return PokemonManager.shared.parseNationalPokedex(pokedex: pokedex)
+                }
             })
             .sink(receiveCompletion: { results in
                 switch results {
@@ -104,8 +104,9 @@ class PokeDexVC: UITableViewController {
                 }
             },
                   receiveValue: { (pokemonArray) in
+                    self.pokemonArray = pokemonArray
                     self.saveCoreData()
-                    self.loadSavedData()
+                    self.updateUI()
             })
         .store(in: &subscriptions)
     }
@@ -117,20 +118,25 @@ class PokeDexVC: UITableViewController {
     }
     
     private func loadSavedData() {
+        setState(loading: true)
+        
+        let request: NSFetchRequest<PokemonMO> = PokemonMO.fetchRequest()
+        let sort = NSSortDescriptor(key: "id", ascending: true)
+        request.sortDescriptors = [sort]
+        
+        do {
+            self.pokemonArray = try self.context.fetch(request)
+            print("Loaded \(self.pokemonArray.count) pokemon from Core Data")
+            fetchPokedex()
+        } catch {
+            print("Fetch from Core Data failed: \(error)")
+        }
+    }
+    
+    private func updateUI() {
         DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            let request: NSFetchRequest<PokemonMO> = PokemonMO.fetchRequest()
-            let sort = NSSortDescriptor(key: "id", ascending: true)
-            request.sortDescriptors = [sort]
-            
-            do {
-                self.pokemonArray = try self.context.fetch(request)
-                print("Got \(self.pokemonArray.count) pokemon")
-                self.tableView.reloadData()
-                self.setState(loading: false)
-            } catch {
-                print("Fetch from Core Data failed: \(error)")
-            }
+            self?.tableView.reloadData()
+            self?.setState(loading: false)
         }
     }
     

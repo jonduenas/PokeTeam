@@ -11,7 +11,7 @@ import Combine
 
 class AbilityDetailVC: UIViewController {
     
-    var ability: PokemonAbility?
+    var ability: AbilityMO?
     var abilityData: AbilityData?
     var abilityDescription: String?
     var indicatorView = UIActivityIndicatorView()
@@ -33,34 +33,34 @@ class AbilityDetailVC: UIViewController {
     }
     
     private func loadAbility() {
-        guard let ability = ability else { return }
-        
-        guard let abilityURL = URL(string: ability.urlString) else {
-            print("Error creating ability URL")
-            return
-        }
-        
-        setState(loading: true)
-        
-        PokemonManager.shared.fetchFromAPI(of: AbilityData.self, from: abilityURL)
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { _ in },
-                  receiveValue: { (abilityData) in
-                    self.ability = PokemonManager.shared.addAbilityDescription(to: ability, with: abilityData)
-                    DispatchQueue.main.async {
-                        self.updateAbilityUI()
-                        self.setState(loading: false)
-                    }
-            })
-            .store(in: &subscriptions)
+//        guard let ability = ability else { return }
+//
+//        guard let abilityURL = URL(string: ability.urlString!) else {
+//            print("Error creating ability URL")
+//            return
+//        }
+//
+//        setState(loading: true)
+//
+//        PokemonManager.shared.fetchFromAPI(of: AbilityData.self, from: abilityURL)
+//            .receive(on: DispatchQueue.main)
+//            .sink(receiveCompletion: { _ in },
+//                  receiveValue: { (abilityData) in
+//                    self.ability = PokemonManager.shared.addAbilityDescription(to: ability, with: abilityData)
+//                    DispatchQueue.main.async {
+//                        self.updateAbilityUI()
+//                        self.setState(loading: false)
+//                    }
+//            })
+//            .store(in: &subscriptions)
     }
     
-    private func updateAbilityUI() {
-        guard let ability = ability else { return }
-        
-        abilityHeaderLabel.text = ability.name.capitalized
-        abilityDescriptionLabel.text = ability.description
-    }
+//    private func updateAbilityUI() {
+//        guard let ability = ability else { return }
+//
+//        abilityHeaderLabel.text = ability.name.capitalized
+//        abilityDescriptionLabel.text = ability.description
+//    }
     
     private func setState(loading: Bool) {
         if loading {

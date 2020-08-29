@@ -63,72 +63,105 @@ class PokemonManager {
         return Int(url.dropFirst(baseURL.count).dropLast())
     }
     
-    func parsePokemonData(pokemonData: PokemonData) -> PokemonMO {
-        let pokemon = PokemonMO(context: context)
-        
-        pokemon.id = Int64(pokemonData.id)
-        pokemon.name = pokemonData.name
-        pokemon.height = pokemonData.height / 10
-        pokemon.weight = pokemonData.weight / 10
-
-        // Type
-        pokemon.type = parseType(with: pokemonData)
-        
-        // Stats
-        pokemon.stats = parseStats(with: pokemonData)
-        
-        // Abilities
-        let abilities = parseAbilities(with: pokemonData)
-        for ability in abilities {
-            pokemon.addToAbilities(ability)
-        }
-        
-        // Moves
-        let moves = parseMoves(with: pokemonData)
-        for move in moves {
-            pokemon.addToMoves(move)
-        }
-        
-        return pokemon
-    }
-    
-//    func parsePokemonData(pokemonData: PokemonData, speciesData: SpeciesData) -> PokemonMO {
-//        let pokemonToReturn = PokemonMO(context: context)
+//    func parsePokemonData(pokemonData: PokemonData) -> PokemonMO {
+//        let pokemon = PokemonMO(context: context)
 //
-//        pokemonToReturn.id = Int64(pokemonData.id)
-//        pokemonToReturn.name = pokemonData.name
-//        pokemonToReturn.height = pokemonData.height / 10
-//        pokemonToReturn.weight = pokemonData.weight / 10
+//        pokemon.id = Int64(pokemonData.id)
+//        pokemon.name = pokemonData.name
+//        pokemon.height = pokemonData.height / 10
+//        pokemon.weight = pokemonData.weight / 10
 //
 //        // Type
-//        pokemonToReturn.type = parseType(with: pokemonData)
-//
-//        // Genus
-//        pokemonToReturn.genus = parseGenus(with: speciesData)
-//
-//        // Generation
-//        pokemonToReturn.generation = speciesData.generation.name
-//
-//        // Description
-//        pokemonToReturn.flavorText = parseFlavorText(with: speciesData)
+//        pokemon.type = parseType(with: pokemonData)
 //
 //        // Stats
-//        pokemonToReturn.stats = parseStats(with: pokemonData)
+//        pokemon.stats = parseStats(with: pokemonData)
 //
 //        // Abilities
 //        let abilities = parseAbilities(with: pokemonData)
 //        for ability in abilities {
-//            pokemonToReturn.addToAbilities(ability)
+//            pokemon.addToAbilities(ability)
 //        }
 //
 //        // Moves
 //        let moves = parseMoves(with: pokemonData)
 //        for move in moves {
-//            pokemonToReturn.addToMoves(move)
+//            pokemon.addToMoves(move)
 //        }
 //
-//        return pokemonToReturn
+//        return pokemon
 //    }
+    
+    func parsePokemonData(pokemonData: PokemonData, speciesData: SpeciesData) -> PokemonMO {
+        let pokemonToReturn = PokemonMO(context: context)
+
+        pokemonToReturn.id = Int64(pokemonData.id)
+        pokemonToReturn.name = pokemonData.name
+        pokemonToReturn.height = pokemonData.height / 10
+        pokemonToReturn.weight = pokemonData.weight / 10
+
+        // Type
+        pokemonToReturn.type = parseType(with: pokemonData)
+
+        // Genus
+        pokemonToReturn.genus = parseGenus(with: speciesData)
+
+        // Generation
+        pokemonToReturn.generation = speciesData.generation.name
+
+        // Description
+        pokemonToReturn.flavorText = parseFlavorText(with: speciesData)
+
+        // Stats
+        pokemonToReturn.stats = parseStats(with: pokemonData)
+
+        // Abilities
+        let abilities = parseAbilities(with: pokemonData)
+        for ability in abilities {
+            pokemonToReturn.addToAbilities(ability)
+        }
+
+        // Moves
+        let moves = parseMoves(with: pokemonData)
+        for move in moves {
+            pokemonToReturn.addToMoves(move)
+        }
+
+        return pokemonToReturn
+    }
+    
+    func updateDetails(for pokemon: PokemonMO, with pokemonData: PokemonData, and speciesData: SpeciesData) {
+        pokemon.imageID = String(pokemon.id)
+        pokemon.height = pokemonData.height / 10
+        pokemon.weight = pokemonData.weight / 10
+
+        // Type
+        pokemon.type = parseType(with: pokemonData)
+
+        // Genus
+        pokemon.genus = parseGenus(with: speciesData)
+
+        // Generation
+        pokemon.generation = speciesData.generation.name
+
+        // Description
+        pokemon.flavorText = parseFlavorText(with: speciesData)
+
+        // Stats
+        pokemon.stats = parseStats(with: pokemonData)
+
+        // Abilities
+        let abilities = parseAbilities(with: pokemonData)
+        for ability in abilities {
+            pokemon.addToAbilities(ability)
+        }
+
+        // Moves
+        let moves = parseMoves(with: pokemonData)
+        for move in moves {
+            pokemon.addToMoves(move)
+        }
+    }
 //    func parsePokemonData(pokemonData: PokemonData, speciesData: SpeciesData) -> Pokemon {
 //        let id = pokemonData.id
 //        let name = pokemonData.name

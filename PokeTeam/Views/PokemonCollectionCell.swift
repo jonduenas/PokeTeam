@@ -40,13 +40,13 @@ class PokemonCollectionCell: UICollectionViewCell {
         pokemonImageView.image = UIImage(named: pokemon.imageID)
         
         // Update Pokemon types
-        if pokemon.type.count > 1 {
-            pokemonType1Label.setType(for: pokemon.type[0])
-            pokemonType2Label.setType(for: pokemon.type[1])
-        } else {
-            pokemonType1Label.setType(for: pokemon.type[0])
-            pokemonType2Label.isHidden = true
-        }
+//        if pokemon.type.count > 1 {
+//            pokemonType1Label.setType(for: pokemon.type[0])
+//            pokemonType2Label.setType(for: pokemon.type[1])
+//        } else {
+//            pokemonType1Label.setType(for: pokemon.type[0])
+//            pokemonType2Label.isHidden = true
+//        }
     }
     
     private func addShadow() {
