@@ -17,6 +17,7 @@ enum PokemonDataType: String {
     case ability = "ability/"
     case move = "move/"
     case allPokemon = "pokemon?limit=5000"
+    case form = "pokemon-form/"
 }
 
 class PokemonManager {

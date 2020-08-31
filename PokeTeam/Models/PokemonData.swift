@@ -11,6 +11,7 @@ import Foundation
 struct PokemonData: Codable {
     let abilities: [Ability]
     let id: Int
+    let order: Int
     let moves: [Move]
     let name: String
     let stats: [Stat]
@@ -18,6 +19,7 @@ struct PokemonData: Codable {
     let height: Float
     let weight: Float
     let species: Species
+    let forms: [Form]
 }
 
 // MARK: Abilities
@@ -148,5 +150,10 @@ struct Type: Codable {
 }
 
 struct Species: Codable {
+    let url: String
+}
+
+struct Form: Codable {
+    let name: String
     let url: String
 }
