@@ -99,35 +99,6 @@ class PokemonManager {
         return Int(url.dropFirst(baseURL.count).dropLast())
     }
     
-//    func parsePokemonData(pokemonData: PokemonData) -> PokemonMO {
-//        let pokemon = PokemonMO(context: context)
-//
-//        pokemon.id = Int64(pokemonData.id)
-//        pokemon.name = pokemonData.name
-//        pokemon.height = pokemonData.height / 10
-//        pokemon.weight = pokemonData.weight / 10
-//
-//        // Type
-//        pokemon.type = parseType(with: pokemonData)
-//
-//        // Stats
-//        pokemon.stats = parseStats(with: pokemonData)
-//
-//        // Abilities
-//        let abilities = parseAbilities(with: pokemonData)
-//        for ability in abilities {
-//            pokemon.addToAbilities(ability)
-//        }
-//
-//        // Moves
-//        let moves = parseMoves(with: pokemonData)
-//        for move in moves {
-//            pokemon.addToMoves(move)
-//        }
-//
-//        return pokemon
-//    }
-    
     func parsePokemonData(pokemonData: PokemonData, speciesData: SpeciesData) -> PokemonMO {
         let pokemonToReturn = PokemonMO(context: context)
 
@@ -194,57 +165,6 @@ class PokemonManager {
         let moves = parseMoves(with: pokemonData)
         pokemon.moves = NSSet(array: moves)
     }
-//    func parsePokemonData(pokemonData: PokemonData, speciesData: SpeciesData) -> Pokemon {
-//        let id = pokemonData.id
-//        let name = pokemonData.name
-//        let height = pokemonData.height / 10
-//        let weight = pokemonData.weight / 10
-//
-//        // Type
-//        let typeArray = parseType(with: pokemonData)
-//
-//        // Genus
-//        let genus = parseGenus(with: speciesData)
-//
-//        // Generation
-//        let generation = speciesData.generation.name
-//
-//        // Description
-//        let flavorText = parseFlavorText(with: speciesData)
-//
-//        // Stats
-//        let stats = parseStats(with: pokemonData)
-//
-//        // Abilities
-//        let abilitiesArray = parseAbilities(with: pokemonData)
-//
-//        // Moves
-//        let movesArray = parseMoves(with: pokemonData)
-//
-//        return Pokemon(id: id, name: name, height: height, weight: weight, type: typeArray, genus: genus, generation: generation, flavorText: flavorText, stats: stats, abilities: abilitiesArray, moves: movesArray)
-//    }
-    
-//    func addAbilityDescription(to ability: PokemonAbility, with abilityData: AbilityData) -> PokemonAbility {
-//        var englishFlavorTextArray = [String]()
-//        let description: String
-//
-//        for flavorText in abilityData.flavorTextEntries {
-//            if flavorText.language == "en" {
-//                englishFlavorTextArray.append(flavorText.flavorText)
-//            }
-//        }
-//
-//        if let latestFlavorText = englishFlavorTextArray.last {
-//            description = latestFlavorText.replacingOccurrences(of: "\n", with: " ")
-//        } else {
-//            description = "Error loading ability description"
-//        }
-//
-//        let abilityToReturn = ability
-//        abilityToReturn.abilityDescription = description
-//
-//        return abilityToReturn
-//    }
     
     func addAbilityDescription(to ability: AbilityMO, with abilityData: AbilityData) {
         var englishFlavorTextArray = [String]()
@@ -267,14 +187,6 @@ class PokemonManager {
     }
     
     // MARK: Private parsing methods
-    
-//    private func parseType(with pokemonData: PokemonData) -> [PokemonType] {
-//        var typeArray = [PokemonType]()
-//        for type in pokemonData.types {
-//            typeArray.insert(PokemonType(rawValue: type.name) ?? .unknown, at: type.slot - 1)
-//        }
-//        return typeArray
-//    }
     
     private func parseType(with pokemonData: PokemonData) -> [String] {
         var typeArray = [String]()
@@ -309,18 +221,6 @@ class PokemonManager {
         }
     }
     
-//    private func parseStats(with pokemonData: PokemonData) -> [PokemonStatName: Float] {
-//        var stats = [PokemonStatName: Float]()
-//
-//        for stat in pokemonData.stats {
-//            if let statName = PokemonStatName(rawValue: stat.statName) {
-//                stats[statName] = Float(stat.baseStat)
-//            }
-//        }
-//
-//        return stats
-//    }
-    
     private func parseStats(with pokemonData: PokemonData) -> [String: Float] {
         var stats = [String: Float]()
         
@@ -329,16 +229,6 @@ class PokemonManager {
         }
         return stats
     }
-    
-//    private func parseAbilities(with pokemonData: PokemonData) -> [PokemonAbility] {
-//        var abilitiesArray = [PokemonAbility]()
-//
-//        for ability in pokemonData.abilities {
-//            abilitiesArray.append(PokemonAbility(name: ability.name, isHidden: ability.isHidden, urlString: ability.url, abilityDescription: nil))
-//        }
-//
-//        return abilitiesArray
-//    }
     
     private func parseAbilities(with pokemonData: PokemonData) -> Array<AbilityMO> {
         var abilitiesArray = [AbilityMO]()
@@ -354,16 +244,6 @@ class PokemonManager {
         
         return abilitiesArray
     }
-    
-//    private func parseMoves(with pokemonData: PokemonData) -> [PokemonMove] {
-//        var movesArray = [PokemonMove]()
-//
-//        for move in pokemonData.moves {
-//            movesArray.append(PokemonMove(name: move.name, levelLearnedAt: move.levelLearnedAt, moveLearnMethod: move.moveLearnMethod, urlString: move.url, moveDescription: nil))
-//        }
-//
-//        return movesArray
-//    }
     
     private func parseMoves(with pokemonData: PokemonData) -> [MoveMO] {
         var movesArray = [MoveMO]()

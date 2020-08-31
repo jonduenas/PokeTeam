@@ -124,36 +124,6 @@ class PokemonDetailVC: UIViewController {
         return PokemonManager.shared.fetchFromAPI(of: SpeciesData.self, from: speciesURL)
     }
     
-//    func loadPokemon() {
-//        let request: NSFetchRequest<PokemonMO> = PokemonMO.fetchRequest()
-//        
-//        let pokemonID = self.pokemon.id
-//        request.predicate = NSPredicate(format: "id == %@", pokemonID)
-//        
-//        do {
-//            self.pokemonDetails = try self.context.fetch(request)[0]
-//            
-//            DispatchQueue.main.async { [weak self] in
-//                self?.updatePokemonUI()
-//                self?.updateStats()
-//                self?.layoutAbilities()
-//                
-//                self?.setState(loading: false)
-//            }
-//        } catch {
-//            print("Fetch from Core Data failed: \(error)")
-//        }
-//    }
-    
-//    private func finishLoadingPokemon(for pokemon: Pokemon) {
-//        DispatchQueue.main.async {
-//            self.updatePokemonUI(for: pokemon)
-//            self.layoutAbilities(for: pokemon)
-//            self.updateStats(for: pokemon)
-//            self.setState(loading: false)
-//        }
-//    }
-    
     private func updatePokemonUI() {
         pokemonNameLabel.text = pokemon.name?.capitalized
         
