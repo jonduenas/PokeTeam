@@ -129,8 +129,7 @@ class PokeDexVC: UITableViewController {
             pokemon = pokemonArray[indexPath.row]
         }
         
-        cell.pokemonNameLabel.text = pokemon.name?.capitalized
-        cell.pokemonImageView.image = UIImage(named: pokemon.name ?? "1")
+        cell.setPokemonInfo(for: pokemon)
         
         return cell
     }

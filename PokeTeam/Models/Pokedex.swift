@@ -30,7 +30,8 @@ struct PokemonEntry: Codable {
         let container = try decoder.container(keyedBy: PokemonEntryCodingKeys.self)
         entryNumber = try container.decode(Int.self, forKey: .entryNumber)
         let pokemonSpecies = try container.nestedContainer(keyedBy: PokemonSpeciesCodingKeys.self, forKey: .pokemonSpecies)
-        name = try pokemonSpecies.decode(String.self, forKey: .name)
+        let speciesName = try pokemonSpecies.decode(String.self, forKey: .name)
+        name = PokemonManager.shared.formatName(for: speciesName)
         url = try pokemonSpecies.decode(String.self, forKey: .url)
     }
     

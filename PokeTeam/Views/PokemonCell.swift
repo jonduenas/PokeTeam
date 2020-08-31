@@ -23,5 +23,10 @@ class PokemonCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+    
+    func setPokemonInfo(for pokemon: PokemonEntry) {
+        self.pokemonNameLabel.text = pokemon.name
+        self.pokemonImageView.image = UIImage(named: String(pokemon.entryNumber))
+    }
 
 }
