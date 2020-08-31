@@ -52,6 +52,9 @@ class PokemonManager {
     // MARK: Core Data parsing methods
   
     func parseNationalPokedex(pokedex: NationalPokedex) -> [PokemonMO] {
+        // API uses ID# greater than 10000 to mark alt forms
+        let altFormIDStart = 10000
+        
         var pokemonMOArray = [PokemonMO]()
         
         for pokemon in pokedex.results {
@@ -62,8 +65,13 @@ class PokemonManager {
             if let pokemonFetched = try? context.fetch(pokemonRequest) {
                 if pokemonFetched.count > 0 {
                     // Pokemon already exists in Core Data
-                    pokemonMOArray.append(pokemonFetched[0])
-                    continue
+                    if pokemonFetched[0].isAltForm {
+                        // Skip alt forms showing in dex
+                        continue
+                    } else {
+                        pokemonMOArray.append(pokemonFetched[0])
+                        continue
+                    }
                 }
             }
             
@@ -74,6 +82,12 @@ class PokemonManager {
             
             // Pull ID out of URL string
             pokemonMO.id = Int64(getID(from: pokemon.url) ?? 0)
+            
+            // Check if Pokemon is alt form
+            if pokemonMO.id > altFormIDStart {
+                pokemonMO.isAltForm = true
+                continue
+            }
             
             pokemonMOArray.append(pokemonMO)
         }        
