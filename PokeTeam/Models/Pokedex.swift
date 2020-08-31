@@ -8,31 +8,31 @@
 
 import Foundation
 
-struct Pokedex: Codable {
-    let name: String
-    let pokemonEntries: [PokemonEntry]
-}
-
-struct PokemonEntry: Codable {
-    let entryNumber: Int
-    let name: String
-    let url: String
-    
-    enum PokemonEntryCodingKeys: String, CodingKey {
-        case entryNumber, pokemonSpecies
-    }
-    
-    enum PokemonSpeciesCodingKeys: String, CodingKey {
-        case name, url
-    }
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: PokemonEntryCodingKeys.self)
-        entryNumber = try container.decode(Int.self, forKey: .entryNumber)
-        let pokemonSpecies = try container.nestedContainer(keyedBy: PokemonSpeciesCodingKeys.self, forKey: .pokemonSpecies)
-        let speciesName = try pokemonSpecies.decode(String.self, forKey: .name)
-        name = PokemonManager.shared.formatName(for: speciesName)
-        url = try pokemonSpecies.decode(String.self, forKey: .url)
-    }
-    
-}
+//struct Pokedex: Codable {
+//    let name: String
+//    let pokemonEntries: [PokemonEntry]
+//}
+//
+//struct PokemonEntry: Codable {
+//    let entryNumber: Int
+//    let name: String
+//    let url: String
+//    
+//    enum PokemonEntryCodingKeys: String, CodingKey {
+//        case entryNumber, pokemonSpecies
+//    }
+//    
+//    enum PokemonSpeciesCodingKeys: String, CodingKey {
+//        case name, url
+//    }
+//    
+//    init(from decoder: Decoder) throws {
+//        let container = try decoder.container(keyedBy: PokemonEntryCodingKeys.self)
+//        entryNumber = try container.decode(Int.self, forKey: .entryNumber)
+//        let pokemonSpecies = try container.nestedContainer(keyedBy: PokemonSpeciesCodingKeys.self, forKey: .pokemonSpecies)
+//        let speciesName = try pokemonSpecies.decode(String.self, forKey: .name)
+//        name = PokemonManager.shared.formatName(for: speciesName)
+//        url = try pokemonSpecies.decode(String.self, forKey: .url)
+//    }
+//    
+//}

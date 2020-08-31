@@ -81,22 +81,32 @@ class PokemonManager {
             pokemonMO.pokemonURL = pokemon.url
             
             // Pull ID out of URL string
-            pokemonMO.id = Int64(getID(from: pokemon.url) ?? 0)
-            
-            // Check if Pokemon is alt form
-            if pokemonMO.id > altFormIDStart {
-                pokemonMO.isAltForm = true
-                continue
+            if let id = getID(from: pokemon.url) {
+                pokemonMO.id = Int64(id)
+                
+                // Check if Pokemon is alt form
+                if id > altFormIDStart {
+                    pokemonMO.isAltForm = true
+                    continue
+                } else if id < 1 {
+                    print("Error parsing Pokemon ID for \(pokemon.name). Got ID: \(id)")
+                }
             }
             
             pokemonMOArray.append(pokemonMO)
-        }        
+        }
+        
         return pokemonMOArray
     }
     
     private func getID(from url: String) -> Int? {
         let baseURL = "https://pokeapi.co/api/v2/pokemon/"
-        return Int(url.dropFirst(baseURL.count).dropLast())
+        if let returnInt = Int(url.dropFirst(baseURL.count).dropLast()) {
+            return returnInt
+        } else {
+            print("Error getting ID from URL")
+            return nil
+        }
     }
     
     func parsePokemonData(pokemonData: PokemonData, speciesData: SpeciesData) -> PokemonMO {
@@ -263,7 +273,7 @@ class PokemonManager {
     
     // MARK: - Core Data Methods
     
-    func loadSavedPokemon() -> [PokemonMO] {
+    func loadSavedPokemon() -> AnyPublisher<[PokemonMO], Never> {
         let request: NSFetchRequest<PokemonMO> = PokemonMO.fetchRequest()
         let sort = NSSortDescriptor(key: "id", ascending: true)
         request.sortDescriptors = [sort]
@@ -277,38 +287,18 @@ class PokemonManager {
             print("Fetch from Core Data failed: \(error)")
         }
         
-        return pokemonToReturn
+        return Just(pokemonToReturn)
+            .eraseToAnyPublisher()
     }
     
     func save() {
         if context.hasChanges {
             do {
                 try context.save()
+                print("MOC successfully saved.")
             } catch {
                 print("Error saving context to Core Data: \(error)")
             }
-        }
-    }
-}
-
-extension String {
-    init(withInt int: Int, leadingZeros: Int = 1) {
-        self.init(format: "%0\(leadingZeros)d", int)
-    }
-
-    func leadingZeros(_ zeros: Int) -> String {
-        if let int = Int(self) {
-            return String(withInt: int, leadingZeros: zeros)
-        }
-        print("Warning: \(self) is not an Int")
-        return ""
-    }
-    
-    func formatAbilityName() -> String {
-        if self == "soul-heart" {
-            return self.capitalized
-        } else {
-            return self.capitalized.replacingOccurrences(of: "-", with: " ")
         }
     }
 }
