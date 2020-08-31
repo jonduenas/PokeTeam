@@ -17,7 +17,7 @@ class PokeDexVC: UITableViewController {
     var searchController: UISearchController!
     var indicatorView: UIActivityIndicatorView!
     
-    var pokedex: Pokedex?
+    //var pokedex: Pokedex?
     var pokemonArray = [PokemonMO]()
     var filteredPokemon = [PokemonMO]()
     var subscriptions: Set<AnyCancellable> = []
@@ -45,6 +45,17 @@ class PokeDexVC: UITableViewController {
         loadSavedData()
     }
     
+    private func loadSavedData() {
+        setState(loading: true)
+        
+        PokemonManager.shared.loadSavedPokemon()
+            .sink(receiveValue: { (cdPokemonArray) in
+                self.pokemonArray = cdPokemonArray
+                self.fetchPokedex()
+            })
+        .store(in: &subscriptions)
+    }
+    
     private func fetchPokedex() {
         guard let url = PokemonManager.shared.createURL(for: .allPokemon) else {
             print("Error creating URL")
@@ -54,17 +65,22 @@ class PokeDexVC: UITableViewController {
         // Downloads list of all Pokemon names and URLs
         PokemonManager.shared.fetchFromAPI(of: NationalPokedex.self, from: url)
             .map({ (pokedex) -> [PokemonMO] in
+                print("Fetched \(pokedex.count) Pokemon from API")
+                
                 if pokedex.count == self.pokemonArray.count && pokedex.count != 0 {
-                    // Saved list of Pokemon is the same as the API
+                    // Saved list of Pokemon is the same as the API - Skip parsing
+                    print("Using Pokemon stored in Core Data")
                     return self.pokemonArray
                 } else {
                     // Creates new list or adds new entries to saved list
+                    print("Updating Pokemon with API")
                     return PokemonManager.shared.parseNationalPokedex(pokedex: pokedex)
                 }
             })
             .sink(receiveCompletion: { results in
                 switch results {
                 case .finished:
+                    print("Finished updating Pokemon.")
                     break
                 case .failure(let error):
                     print(error)
@@ -76,14 +92,6 @@ class PokeDexVC: UITableViewController {
                     self.updateUI()
             })
         .store(in: &subscriptions)
-    }
-    
-    private func loadSavedData() {
-        setState(loading: true)
-        
-        pokemonArray = PokemonManager.shared.loadSavedPokemon()
-        
-        fetchPokedex()
     }
     
     private func updateUI() {
