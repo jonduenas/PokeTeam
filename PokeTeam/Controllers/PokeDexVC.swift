@@ -13,7 +13,6 @@ class PokeDexVC: UITableViewController {
     
     let nationalPokedexID = 1
     let pokemonCellID = "pokemonCell"
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     var searchController: UISearchController!
     var indicatorView: UIActivityIndicatorView!

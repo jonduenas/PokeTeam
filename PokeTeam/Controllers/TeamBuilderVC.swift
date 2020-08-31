@@ -7,13 +7,10 @@
 //
 
 import UIKit
-import CoreData
 
 private let reuseIdentifier = "PokemonCollectionCell"
 
 class TeamBuilderVC: UICollectionViewController {
-    
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     //var teamsArray = [PokemonTeam]()
     var team = [Pokemon]()

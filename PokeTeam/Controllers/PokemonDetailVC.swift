@@ -10,8 +10,6 @@ import UIKit
 import Combine
 
 class PokemonDetailVC: UIViewController {
-
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     let largeTitleSize: CGFloat = 34
     let subTitleSize: CGFloat = 25
@@ -275,13 +273,6 @@ class PokemonDetailVC: UIViewController {
 //        pokemonManaged.type = []
 //        
 //        pokemonManaged.addToTeam(pokemonTeam)
-        
-        
-        do {
-            try context.save()
-        } catch {
-            print("Error saving context: \(error)")
-        }
         
 //        guard let teamBuilderNav = self.tabBarController?.viewControllers?[1] else { return }
 //        let teamBuilderVC = teamBuilderNav.children.first as! TeamBuilderVC
