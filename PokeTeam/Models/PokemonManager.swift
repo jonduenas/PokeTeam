@@ -16,7 +16,7 @@ enum PokemonDataType: String {
     case species = "pokemon-species/"
     case ability = "ability/"
     case move = "move/"
-    case allPokemon = "pokemon?limit=5000"
+    case allPokemon = "pokemon-species?limit=5000"
     case form = "pokemon-form/"
 }
 
@@ -52,9 +52,6 @@ class PokemonManager {
     // MARK: Core Data parsing methods
   
     func parseNationalPokedex(pokedex: NationalPokedex) -> [PokemonMO] {
-        // API uses ID# greater than 10000 to mark alt forms
-        let altFormIDStart = 10000
-        
         var pokemonMOArray = [PokemonMO]()
         
         for pokemon in pokedex.results {
@@ -78,19 +75,11 @@ class PokemonManager {
             // No Pokemon with that name is found - create a new one
             let pokemonMO = PokemonMO(context: context)
             pokemonMO.name = pokemon.name
-            pokemonMO.pokemonURL = pokemon.url
+            pokemonMO.speciesURL = pokemon.url
             
             // Pull ID out of URL string
             if let id = getID(from: pokemon.url) {
                 pokemonMO.id = Int64(id)
-                
-                // Check if Pokemon is alt form
-                if id > altFormIDStart {
-                    pokemonMO.isAltForm = true
-                    continue
-                } else if id < 1 {
-                    print("Error parsing Pokemon ID for \(pokemon.name). Got ID: \(id)")
-                }
             }
             
             pokemonMOArray.append(pokemonMO)
@@ -100,7 +89,7 @@ class PokemonManager {
     }
     
     private func getID(from url: String) -> Int? {
-        let baseURL = "https://pokeapi.co/api/v2/pokemon/"
+        let baseURL = "https://pokeapi.co/api/v2/pokemon-species/"
         if let returnInt = Int(url.dropFirst(baseURL.count).dropLast()) {
             return returnInt
         } else {

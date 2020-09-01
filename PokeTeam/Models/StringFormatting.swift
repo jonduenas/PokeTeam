@@ -51,21 +51,21 @@ extension String {
             return "Tapu Bulu"
         case "tapu-fini":
             return "Tapu Fini"
-        case "ho-oh":
-            return "Ho-Oh"
-        case "porygon-z":
-            return "Porygon-Z"
-        case "jangmo-o":
-            return "Jangmo-O"
-        case "hakamo-o":
-            return "Hakamo-O"
-        case "kommo-o":
-            return "Kommo-O"
+//        case "ho-oh":
+//            return "Ho-Oh"
+//        case "porygon-z":
+//            return "Porygon-Z"
+//        case "jangmo-o":
+//            return "Jangmo-O"
+//        case "hakamo-o":
+//            return "Hakamo-O"
+//        case "kommo-o":
+//            return "Kommo-O"
         default:
-            if let index = self.range(of: "-")?.lowerBound {
-                // Returns capitalized string and removes the default form name
-                return String(self.capitalized.prefix(upTo: index))
-            }
+//            if let index = self.range(of: "-")?.lowerBound {
+//                // Returns capitalized string and removes the default form name
+//                return String(self.capitalized.prefix(upTo: index))
+//            }
             return self.capitalized
         }
     }
