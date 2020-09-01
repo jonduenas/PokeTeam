@@ -63,6 +63,7 @@ extension String {
             return "Kommo-O"
         default:
             if let index = self.range(of: "-")?.lowerBound {
+                // Returns capitalized string and removes the default form name
                 return String(self.capitalized.prefix(upTo: index))
             }
             return self.capitalized

@@ -82,46 +82,95 @@ class PokemonDetailVC: UIViewController {
     }
     
     private func fetchPokemon() {
-        guard let pokemonURL = URL(string: pokemon.pokemonURL!) else {
-            print("Error creating URL")
-            return
-        }
-
         setState(loading: true)
-
-        var pokemonData: PokemonData?
-
-        PokemonManager.shared.fetchFromAPI(of: PokemonData.self, from: pokemonURL)
-            .map({ (pokemon) -> String in
-                pokemonData = pokemon
-                return pokemon.species.url
-            })
-            .flatMap({ (speciesURL) in
-                return self.fetchSpeciesData(for: speciesURL)
-            })
-            .sink(receiveCompletion: { results in
-                switch results {
-                case .finished:
-                    break
-                case .failure(let error):
-                    print(error)
+        
+        fetchPokemonData()
+            .flatMap { (a) in
+                return self.fetchSpeciesData(with: a.species.url).map { (a, $0) }
+        }
+        .flatMap { (a, b) -> AnyPublisher<(PokemonData, SpeciesData, [FormData]?), Error> in
+            switch a.forms.count {
+            case 0, 1:
+                print("No forms to fetch")
+                return Just((a, b, nil)).setFailureType(to: Error.self).eraseToAnyPublisher()
+            default:
+                print("Fetching forms")
+                return a.forms.publisher
+                    .setFailureType(to: Error.self)
+                    .flatMap { (form) in
+                        return self.fetchFormData(with: form)
                 }
-            },
-                  receiveValue: { (speciesData) in
-                    PokemonManager.shared.updateDetails(for: self.pokemon, with: pokemonData!, and: speciesData)
-                    PokemonManager.shared.save()
-                    
-                    DispatchQueue.main.async { [weak self] in
-                        self?.showDetails()
-                        self?.setState(loading: false)
-                    }
-            })
-            .store(in: &subscriptions)
+                .collect()
+                .map { (values) in
+                    print(values)
+                    return (a, b, values)
+                }
+                .eraseToAnyPublisher()
+            }
+        }
+        .sink(receiveCompletion: { results in
+            switch results {
+            case .finished:
+                print("Finished fetching all detail data")
+                break
+            case .failure(let error):
+                print(error)
+            }
+        }) { (values) in
+            let pokemonData = values.0
+            let speciesData = values.1
+            let formsData = values.2
+            print("Pokemon name: ", pokemonData.name)
+            print("Species generation: ", speciesData.generation)
+            if let formsData = formsData {
+                print("Form count: \(formsData.count), form name: \(formsData[1].formName)")
+            }
+        }
+    .store(in: &subscriptions)
+//        PokemonManager.shared.fetchFromAPI(of: PokemonData.self, from: pokemonURL)
+//            .map({ (pokemon) in
+//                pokemonData = pokemon
+//                speciesURL = URL(string: pokemon.species.url)
+//            })
+//            .flatMap({ (speciesURL) in
+//                return self.fetchSpeciesData(for: speciesURL)
+//            })
+//            .sink(receiveCompletion: { results in
+//                switch results {
+//                case .finished:
+//                    break
+//                case .failure(let error):
+//                    print(error)
+//                }
+//            },
+//                  receiveValue: { (speciesData) in
+//                    PokemonManager.shared.updateDetails(for: self.pokemon, with: pokemonData!, and: speciesData)
+//                    PokemonManager.shared.save()
+//
+//                    DispatchQueue.main.async { [weak self] in
+//                        self?.showDetails()
+//                        self?.setState(loading: false)
+//                    }
+//            })
+//            .store(in: &subscriptions)
     }
     
-    private func fetchSpeciesData(for url: String) -> AnyPublisher<SpeciesData, Error> {
+    func fetchPokemonData() -> AnyPublisher<PokemonData, Error> {
+        let pokemonURL = URL(string: pokemon.pokemonURL!)!
+        
+        return PokemonManager.shared.fetchFromAPI(of: PokemonData.self, from: pokemonURL)
+    }
+    
+    func fetchSpeciesData(with url: String) -> AnyPublisher<SpeciesData, Error> {
         let speciesURL = URL(string: url)!
+        
         return PokemonManager.shared.fetchFromAPI(of: SpeciesData.self, from: speciesURL)
+    }
+    
+    func fetchFormData(with form: Form) -> AnyPublisher<FormData, Error> {
+        let formURL = URL(string: form.url)!
+        
+        return PokemonManager.shared.fetchFromAPI(of: FormData.self, from: formURL)
     }
     
     private func updatePokemonUI() {

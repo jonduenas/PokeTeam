@@ -143,18 +143,18 @@ class PokemonManager {
         for move in moves {
             pokemonToReturn.addToMoves(move)
         }
+        
+        // Alt Forms
+        if pokemonData.forms.count > 1 {
+            pokemonToReturn.hasAltForm = true
+        } else {
+            pokemonToReturn.hasAltForm = false
+        }
 
         return pokemonToReturn
     }
     
-    func updateDetails(for pokemon: PokemonMO, with pokemonData: PokemonData, and speciesData: SpeciesData) {
-        pokemon.imageID = String(pokemon.id)
-        pokemon.height = pokemonData.height / 10
-        pokemon.weight = pokemonData.weight / 10
-
-        // Type
-        pokemon.type = parseType(with: pokemonData)
-
+    func updateDetails(for pokemon: PokemonMO, with speciesData: SpeciesData) {
         // Genus
         pokemon.genus = parseGenus(with: speciesData)
 
@@ -163,7 +163,16 @@ class PokemonManager {
 
         // Description
         pokemon.flavorText = parseFlavorText(with: speciesData)
+    }
+    
+    func updateDetails(for pokemon: PokemonMO, with pokemonData: PokemonData) {
+        pokemon.imageID = String(pokemon.id)
+        pokemon.height = pokemonData.height / 10
+        pokemon.weight = pokemonData.weight / 10
 
+        // Type
+        pokemon.type = parseType(with: pokemonData)
+        
         // Stats
         pokemon.stats = parseStats(with: pokemonData)
 
@@ -174,6 +183,12 @@ class PokemonManager {
         // Moves
         let moves = parseMoves(with: pokemonData)
         pokemon.moves = NSSet(array: moves)
+    }
+    
+    func updateDetails(for pokemon: PokemonMO, with formData: [FormData]) {
+        for form in formData {
+            
+        }
     }
     
     func addAbilityDescription(to ability: AbilityMO, with abilityData: AbilityData) {

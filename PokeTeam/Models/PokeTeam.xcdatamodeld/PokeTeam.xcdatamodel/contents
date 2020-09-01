@@ -39,6 +39,8 @@
     </entity>
     <entity name="Pokemon" representedClassName="PokemonMO" syncable="YES" codeGenerationType="class">
         <attribute name="flavorText" optional="YES" attributeType="String" defaultValueString=""/>
+        <attribute name="formName" optional="YES" attributeType="String"/>
+        <attribute name="formOrder" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="generation" optional="YES" attributeType="String" defaultValueString=""/>
         <attribute name="genus" optional="YES" attributeType="String" defaultValueString=""/>
         <attribute name="hasAltForm" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
@@ -46,7 +48,9 @@
         <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="imageID" optional="YES" attributeType="String" defaultValueString=""/>
         <attribute name="isAltForm" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isMega" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String" defaultValueString=""/>
+        <attribute name="order" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="pokemonURL" attributeType="String" defaultValueString=""/>
         <attribute name="speciesURL" optional="YES" attributeType="String" defaultValueString=""/>
         <attribute name="stats" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" customClassName="[String: Float]"/>
@@ -86,7 +90,7 @@
         <element name="Ability" positionX="343.77734375" positionY="-326.91796875" width="128" height="133"/>
         <element name="Move" positionX="347.1015625" positionY="-132.5859375" width="128" height="148"/>
         <element name="Pokedex" positionX="162" positionY="-162" width="128" height="88"/>
-        <element name="Pokemon" positionX="140.90234375" positionY="-317.33203125" width="128" height="328"/>
+        <element name="Pokemon" positionX="140.90234375" positionY="-317.33203125" width="128" height="388"/>
         <element name="Team" positionX="-60.03515625" positionY="-237.5625" width="128" height="73"/>
         <element name="Type" positionX="171" positionY="-135" width="128" height="118"/>
     </elements>
