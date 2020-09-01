@@ -18,8 +18,8 @@ struct PokemonData: Codable {
     let types: [Type]
     let height: Float
     let weight: Float
-    let species: Species
-    let forms: [Form]
+    let species: NameAndURL
+    let forms: [NameAndURL]
 }
 
 // MARK: Abilities
@@ -147,13 +147,4 @@ struct Type: Codable {
         name = try type.decode(String.self, forKey: .name)
         url = try type.decode(String.self, forKey: .url)
     }
-}
-
-struct Species: Codable {
-    let url: String
-}
-
-struct Form: Codable {
-    let name: String
-    let url: String
 }

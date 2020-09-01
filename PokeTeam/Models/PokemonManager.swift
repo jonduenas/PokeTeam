@@ -152,6 +152,12 @@ class PokemonManager {
 
         // Description
         pokemon.flavorText = parseFlavorText(with: speciesData)
+        
+        pokemon.isBaby = speciesData.isBaby
+        pokemon.isLegendary = speciesData.isLegendary
+        pokemon.isMythical = speciesData.isMythical
+        pokemon.order = Int64(speciesData.order)
+        pokemon.nationalPokedexNumber = Int64(speciesData.pokedexNumbers[0].entryNumber)
     }
     
     func updateDetails(for pokemon: PokemonMO, with pokemonData: PokemonData) {
@@ -176,7 +182,15 @@ class PokemonManager {
     
     func updateDetails(for pokemon: PokemonMO, with formData: [FormData]) {
         for form in formData {
+            let altForm = AltFormMO(context: context)
             
+            altForm.formName = form.formName
+            altForm.formOrder = Int64(form.formOrder)
+            altForm.id = Int64(form.id)
+            altForm.isMega = form.isMega
+            altForm.name = form.name
+            altForm.order = Int64(form.order)
+            altForm.pokemon = pokemon
         }
     }
     

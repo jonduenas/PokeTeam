@@ -13,7 +13,7 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
-    <entity name="AltForm" representedClassName="AltForm" syncable="YES" codeGenerationType="class">
+    <entity name="AltForm" representedClassName="AltFormMO" syncable="YES" codeGenerationType="class">
         <attribute name="formName" optional="YES" attributeType="String"/>
         <attribute name="formOrder" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
@@ -55,8 +55,12 @@
         <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="imageID" optional="YES" attributeType="String" defaultValueString=""/>
         <attribute name="isAltForm" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isBaby" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="isLegendary" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="isMega" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isMythical" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String" defaultValueString=""/>
+        <attribute name="nationalPokedexNumber" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="order" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="pokemonURL" attributeType="String" defaultValueString=""/>
         <attribute name="speciesURL" optional="YES" attributeType="String" defaultValueString=""/>
@@ -96,11 +100,11 @@
     </entity>
     <elements>
         <element name="Ability" positionX="343.77734375" positionY="-326.91796875" width="128" height="133"/>
+        <element name="AltForm" positionX="144" positionY="-171" width="128" height="148"/>
         <element name="Move" positionX="347.1015625" positionY="-132.5859375" width="128" height="148"/>
         <element name="Pokedex" positionX="162" positionY="-162" width="128" height="88"/>
-        <element name="Pokemon" positionX="140.90234375" positionY="-317.33203125" width="128" height="373"/>
+        <element name="Pokemon" positionX="140.90234375" positionY="-317.33203125" width="128" height="433"/>
         <element name="Team" positionX="-60.03515625" positionY="-237.5625" width="128" height="73"/>
         <element name="Type" positionX="171" positionY="-135" width="128" height="118"/>
-        <element name="AltForm" positionX="144" positionY="-171" width="128" height="148"/>
     </elements>
 </model>

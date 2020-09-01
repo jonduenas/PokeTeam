@@ -10,10 +10,5 @@ import Foundation
 
 struct NationalPokedex: Codable {
     let count: Int
-    let results: [Results]
-}
-
-struct Results: Codable {
-    let name: String
-    let url: String
+    let results: [NameAndURL]
 }

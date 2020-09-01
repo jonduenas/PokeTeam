@@ -126,7 +126,8 @@ class PokemonDetailVC: UIViewController {
                 print("Form count: \(formsData.count), form name: \(formsData[1].formName)")
             }
         }
-    .store(in: &subscriptions)
+        .store(in: &subscriptions)
+        
 //        PokemonManager.shared.fetchFromAPI(of: PokemonData.self, from: pokemonURL)
 //            .map({ (pokemon) in
 //                pokemonData = pokemon
@@ -167,7 +168,7 @@ class PokemonDetailVC: UIViewController {
         return PokemonManager.shared.fetchFromAPI(of: SpeciesData.self, from: speciesURL)
     }
     
-    func fetchFormData(with form: Form) -> AnyPublisher<FormData, Error> {
+    func fetchFormData(with form: NameAndURL) -> AnyPublisher<FormData, Error> {
         let formURL = URL(string: form.url)!
         
         return PokemonManager.shared.fetchFromAPI(of: FormData.self, from: formURL)

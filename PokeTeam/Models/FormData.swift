@@ -16,10 +16,5 @@ struct FormData: Codable {
     let isDefault: Bool
     let isMega: Bool
     let formName: String
-    let pokemon: PokemonForm
-}
-
-struct PokemonForm: Codable {
-    let name: String
-    let url: String
+    let pokemon: NameAndURL
 }

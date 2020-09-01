@@ -8,18 +8,25 @@
 
 import Foundation
 
+// Generic Struct for reused structure from API
+struct NameAndURL: Codable {
+    let name: String
+    let url: String
+}
+
 // MARK: - Species
 struct SpeciesData: Codable {
     let name: String
     let id: Int
     let flavorTextEntries: [FlavorTextEntry]
     let genera: [Genus]
-    let generation: Generation
+    let generation: NameAndURL
     let isBaby: Bool
     let isLegendary: Bool
     let isMythical: Bool
     let order: Int
     let pokedexNumbers: [PokedexNumber]
+    let varieties: [Variety]
 }
 
 struct FlavorTextEntry: Codable {
@@ -75,17 +82,12 @@ struct Genus: Codable {
     }
 }
 
-struct Generation: Codable {
-    let name: String
-    let url: String
-}
-
 struct PokedexNumber: Codable {
     let entryNumber: Int
-    let pokedex: Pokedex
+    let pokedex: NameAndURL
 }
 
-struct Pokedex: Codable {
-    let name: String
-    let url: String
+struct Variety: Codable {
+    let isDefault: Bool
+    let pokemon: NameAndURL
 }
