@@ -65,7 +65,7 @@ class PokemonDetailVC: UIViewController {
         view.addSubview(indicatorView)
         
         if shouldFetchDetails() {
-            fetchPokemon()
+            fetchDetails()
         } else {
             showDetails()
         }
@@ -81,29 +81,29 @@ class PokemonDetailVC: UIViewController {
         layoutAbilities()
     }
     
-    private func fetchPokemon() {
+    private func fetchDetails() {
         setState(loading: true)
         
-        fetchPokemonData()
-            .flatMap { (a) in
-                return self.fetchSpeciesData(with: a.species.url).map { (a, $0) }
+        fetchSpeciesData(with: pokemon.speciesURL!)
+            .flatMap { (speciesData) in
+                return self.fetchPokemonData(with: speciesData.id).map { (speciesData, $0) }
         }
-        .flatMap { (a, b) -> AnyPublisher<(PokemonData, SpeciesData, [FormData]?), Error> in
-            switch a.forms.count {
+        .flatMap { (speciesData, pokemonData) -> AnyPublisher<(SpeciesData, PokemonData, [FormData]?), Error> in
+            switch pokemonData.forms.count {
             case 0, 1:
                 print("No forms to fetch")
-                return Just((a, b, nil)).setFailureType(to: Error.self).eraseToAnyPublisher()
+                return Just((speciesData, pokemonData, nil)).setFailureType(to: Error.self).eraseToAnyPublisher()
             default:
                 print("Fetching forms")
-                return a.forms.publisher
+                return pokemonData.forms.publisher
                     .setFailureType(to: Error.self)
                     .flatMap { (form) in
                         return self.fetchFormData(with: form)
                 }
                 .collect()
-                .map { (values) in
-                    print(values)
-                    return (a, b, values)
+                .map { (formsDataArray) in
+                    print(formsDataArray)
+                    return (speciesData, pokemonData, formsDataArray)
                 }
                 .eraseToAnyPublisher()
             }
@@ -117,12 +117,12 @@ class PokemonDetailVC: UIViewController {
                 print(error)
             }
         }) { (values) in
-            let pokemonData = values.0
-            let speciesData = values.1
-            let formsData = values.2
+            let speciesData = values.0
+            let pokemonData = values.1
+            let formsDataArray = values.2
             print("Pokemon name: ", pokemonData.name)
             print("Species generation: ", speciesData.generation)
-            if let formsData = formsData {
+            if let formsData = formsDataArray {
                 print("Form count: \(formsData.count), form name: \(formsData[1].formName)")
             }
         }
@@ -155,8 +155,8 @@ class PokemonDetailVC: UIViewController {
 //            .store(in: &subscriptions)
     }
     
-    func fetchPokemonData() -> AnyPublisher<PokemonData, Error> {
-        let pokemonURL = URL(string: pokemon.pokemonURL!)!
+    func fetchPokemonData(with id: Int) -> AnyPublisher<PokemonData, Error> {
+        let pokemonURL = PokemonManager.shared.createURL(for: .pokemon, fromIndex: id)!
         
         return PokemonManager.shared.fetchFromAPI(of: PokemonData.self, from: pokemonURL)
     }
