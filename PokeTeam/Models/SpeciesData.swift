@@ -15,6 +15,11 @@ struct SpeciesData: Codable {
     let flavorTextEntries: [FlavorTextEntry]
     let genera: [Genus]
     let generation: Generation
+    let isBaby: Bool
+    let isLegendary: Bool
+    let isMythical: Bool
+    let order: Int
+    let pokedexNumbers: [PokedexNumber]
 }
 
 struct FlavorTextEntry: Codable {
@@ -71,6 +76,16 @@ struct Genus: Codable {
 }
 
 struct Generation: Codable {
+    let name: String
+    let url: String
+}
+
+struct PokedexNumber: Codable {
+    let entryNumber: Int
+    let pokedex: Pokedex
+}
+
+struct Pokedex: Codable {
     let name: String
     let url: String
 }
