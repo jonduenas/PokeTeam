@@ -13,6 +13,15 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
+    <entity name="AltForm" representedClassName="AltForm" syncable="YES" codeGenerationType="class">
+        <attribute name="formName" optional="YES" attributeType="String"/>
+        <attribute name="formOrder" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="isMega" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="order" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="pokemon" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Pokemon" inverseName="altForm" inverseEntity="Pokemon"/>
+    </entity>
     <entity name="Move" representedClassName="MoveMO" syncable="YES" codeGenerationType="class">
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="levelLearnedAt" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
@@ -39,8 +48,6 @@
     </entity>
     <entity name="Pokemon" representedClassName="PokemonMO" syncable="YES" codeGenerationType="class">
         <attribute name="flavorText" optional="YES" attributeType="String" defaultValueString=""/>
-        <attribute name="formName" optional="YES" attributeType="String"/>
-        <attribute name="formOrder" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="generation" optional="YES" attributeType="String" defaultValueString=""/>
         <attribute name="genus" optional="YES" attributeType="String" defaultValueString=""/>
         <attribute name="hasAltForm" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
@@ -57,10 +64,11 @@
         <attribute name="type" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" customClassName="[String]"/>
         <attribute name="weight" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <relationship name="abilities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Ability" inverseName="pokemon" inverseEntity="Ability"/>
-        <relationship name="altForm" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Pokemon" inverseName="altForm" inverseEntity="Pokemon"/>
+        <relationship name="altForm" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="AltForm" inverseName="pokemon" inverseEntity="AltForm"/>
         <relationship name="moves" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Move" inverseName="pokemon" inverseEntity="Move"/>
         <relationship name="pokedex" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Pokedex" inverseName="pokemon" inverseEntity="Pokedex"/>
         <relationship name="team" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="members" inverseEntity="Team"/>
+        <relationship name="varieties" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Pokemon" inverseName="varieties" inverseEntity="Pokemon"/>
         <fetchIndex name="byNameIndex">
             <fetchIndexElement property="name" type="Binary" order="ascending"/>
         </fetchIndex>
@@ -90,8 +98,9 @@
         <element name="Ability" positionX="343.77734375" positionY="-326.91796875" width="128" height="133"/>
         <element name="Move" positionX="347.1015625" positionY="-132.5859375" width="128" height="148"/>
         <element name="Pokedex" positionX="162" positionY="-162" width="128" height="88"/>
-        <element name="Pokemon" positionX="140.90234375" positionY="-317.33203125" width="128" height="388"/>
+        <element name="Pokemon" positionX="140.90234375" positionY="-317.33203125" width="128" height="373"/>
         <element name="Team" positionX="-60.03515625" positionY="-237.5625" width="128" height="73"/>
         <element name="Type" positionX="171" positionY="-135" width="128" height="118"/>
+        <element name="AltForm" positionX="144" positionY="-171" width="128" height="148"/>
     </elements>
 </model>
