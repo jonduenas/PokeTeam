@@ -20,6 +20,7 @@
         <attribute name="isMega" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="order" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="urlString" optional="YES" attributeType="String"/>
         <relationship name="pokemon" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Pokemon" inverseName="altForm" inverseEntity="Pokemon"/>
     </entity>
     <entity name="Move" representedClassName="MoveMO" syncable="YES" codeGenerationType="class">
@@ -100,7 +101,7 @@
     </entity>
     <elements>
         <element name="Ability" positionX="343.77734375" positionY="-326.91796875" width="128" height="133"/>
-        <element name="AltForm" positionX="144" positionY="-171" width="128" height="148"/>
+        <element name="AltForm" positionX="144" positionY="-171" width="128" height="163"/>
         <element name="Move" positionX="347.1015625" positionY="-132.5859375" width="128" height="148"/>
         <element name="Pokedex" positionX="162" positionY="-162" width="128" height="88"/>
         <element name="Pokemon" positionX="140.90234375" positionY="-317.33203125" width="128" height="433"/>

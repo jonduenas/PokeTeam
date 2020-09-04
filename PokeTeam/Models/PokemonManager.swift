@@ -1,5 +1,5 @@
 //
-//  Service.swift
+//  PokemonManager.swift
 //  PokeTeam
 //
 //  Created by Jon Duenas on 7/31/20.
@@ -24,6 +24,7 @@ class PokemonManager {
     static let shared = PokemonManager()
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    let backgroundContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.newBackgroundContext()
     
     // MARK: Networking methods
     
@@ -51,41 +52,48 @@ class PokemonManager {
     
     // MARK: Core Data parsing methods
   
-    func parseNationalPokedex(pokedex: NationalPokedex) -> [PokemonMO] {
-        var pokemonMOArray = [PokemonMO]()
-        
+    func updateNationalPokedex(pokedex: NationalPokedex) -> AnyPublisher<Bool, Error> {
         for pokemon in pokedex.results {
             // Check if Pokemon already exists in Core Data
-            let pokemonRequest: NSFetchRequest<PokemonMO> = PokemonMO.fetchRequest()
-            pokemonRequest.predicate = NSPredicate(format: "name == %@", pokemon.name)
+            let results = checkCDForMatch(with: pokemon)
             
-            if let pokemonFetched = try? context.fetch(pokemonRequest) {
-                if pokemonFetched.count > 0 {
-                    // Pokemon already exists in Core Data
-                    if pokemonFetched[0].isAltForm {
-                        // Skip alt forms showing in dex
-                        continue
-                    } else {
-                        pokemonMOArray.append(pokemonFetched[0])
-                        continue
+            if results {
+                // Pokemon with matching name is found
+                continue
+            } else {
+                // No Pokemon with that name is found - create a new one
+                let pokemonMO = PokemonMO(context: backgroundContext)
+                pokemonMO.managedObjectContext?.performAndWait {
+                    pokemonMO.name = pokemon.name
+                    pokemonMO.speciesURL = pokemon.url
+                    
+                    // Pull ID out of URL string
+                    if let id = getID(from: pokemon.url) {
+                        pokemonMO.id = Int64(id)
                     }
                 }
             }
-            
-            // No Pokemon with that name is found - create a new one
-            let pokemonMO = PokemonMO(context: context)
-            pokemonMO.name = pokemon.name
-            pokemonMO.speciesURL = pokemon.url
-            
-            // Pull ID out of URL string
-            if let id = getID(from: pokemon.url) {
-                pokemonMO.id = Int64(id)
-            }
-            
-            pokemonMOArray.append(pokemonMO)
         }
         
-        return pokemonMOArray
+        saveContext(backgroundContext)
+        
+        return Just(true).setFailureType(to: Error.self).eraseToAnyPublisher()
+    }
+    
+    private func checkCDForMatch(with pokemon: NameAndURL) -> Bool {
+        var isFound: Bool = false
+        
+        let pokemonRequest: NSFetchRequest<PokemonMO> = PokemonMO.fetchRequest()
+        pokemonRequest.predicate = NSPredicate(format: "name == %@", pokemon.name)
+        
+        if let pokemonFetched = try? backgroundContext.fetch(pokemonRequest) {
+            if pokemonFetched.count > 0 {
+                // Pokemon already exists in Core Data
+                isFound = true
+            }
+        }
+        
+        return isFound
     }
     
     private func getID(from url: String) -> Int? {
@@ -98,58 +106,62 @@ class PokemonManager {
         }
     }
     
-    func parsePokemonData(pokemonData: PokemonData, speciesData: SpeciesData) -> PokemonMO {
-        let pokemonToReturn = PokemonMO(context: context)
-
-        pokemonToReturn.id = Int64(pokemonData.id)
-        pokemonToReturn.name = pokemonData.name
-        pokemonToReturn.height = pokemonData.height / 10
-        pokemonToReturn.weight = pokemonData.weight / 10
-
-        // Type
-        pokemonToReturn.type = parseType(with: pokemonData)
-
-        // Genus
-        pokemonToReturn.genus = parseGenus(with: speciesData)
-
-        // Generation
-        pokemonToReturn.generation = speciesData.generation.name
-
-        // Description
-        pokemonToReturn.flavorText = parseFlavorText(with: speciesData)
-
-        // Stats
-        pokemonToReturn.stats = parseStats(with: pokemonData)
-
-        // Abilities
-        let abilities = parseAbilities(with: pokemonData)
-        for ability in abilities {
-            pokemonToReturn.addToAbilities(ability)
-        }
-
-        // Moves
-        let moves = parseMoves(with: pokemonData)
-        for move in moves {
-            pokemonToReturn.addToMoves(move)
-        }
-        
-        // Alt Forms
-        if pokemonData.forms.count > 1 {
-            pokemonToReturn.hasAltForm = true
-        } else {
-            pokemonToReturn.hasAltForm = false
-        }
-
-        return pokemonToReturn
+    func convertToMO(in context: NSManagedObjectContext, with objectID: NSManagedObjectID) -> NSManagedObject {
+        return context.object(with: objectID)
     }
     
-    func updateDetails(for pokemon: PokemonMO, with speciesData: SpeciesData) {
+//    func parsePokemonData(pokemonData: PokemonData, speciesData: SpeciesData) -> PokemonMO {
+//        let pokemonToReturn = PokemonMO(context: context)
+//
+//        pokemonToReturn.id = Int64(pokemonData.id)
+//        pokemonToReturn.name = pokemonData.name
+//        pokemonToReturn.height = pokemonData.height / 10
+//        pokemonToReturn.weight = pokemonData.weight / 10
+//
+//        // Type
+//        pokemonToReturn.type = parseType(with: pokemonData)
+//
+//        // Genus
+//        pokemonToReturn.genus = parseGenus(with: speciesData)
+//
+//        // Generation
+//        pokemonToReturn.generation = speciesData.generation.name
+//
+//        // Description
+//        pokemonToReturn.flavorText = parseFlavorText(with: speciesData)
+//
+//        // Stats
+//        pokemonToReturn.stats = parseStats(with: pokemonData)
+//
+//        // Abilities
+//        let abilities = parseAbilities(with: pokemonData)
+//        for ability in abilities {
+//            pokemonToReturn.addToAbilities(ability)
+//        }
+//
+//        // Moves
+//        let moves = parseMoves(with: pokemonData)
+//        for move in moves {
+//            pokemonToReturn.addToMoves(move)
+//        }
+//
+//        // Alt Forms
+//        if pokemonData.forms.count > 1 {
+//            pokemonToReturn.hasAltForm = true
+//        } else {
+//            pokemonToReturn.hasAltForm = false
+//        }
+//
+//        return pokemonToReturn
+//    }
+    
+    func updateDetails(for pokemon: PokemonMO, with speciesData: SpeciesData) -> PokemonMO {
         // Genus
         pokemon.genus = parseGenus(with: speciesData)
-
+        
         // Generation
         pokemon.generation = speciesData.generation.name
-
+        
         // Description
         pokemon.flavorText = parseFlavorText(with: speciesData)
         
@@ -158,31 +170,55 @@ class PokemonManager {
         pokemon.isMythical = speciesData.isMythical
         pokemon.order = Int64(speciesData.order)
         pokemon.nationalPokedexNumber = Int64(speciesData.pokedexNumbers[0].entryNumber)
+        
+        pokemon.pokemonURL = speciesData.varieties[0].pokemon.url
+        
+        return pokemon
     }
     
-    func updateDetails(for pokemon: PokemonMO, with pokemonData: PokemonData) {
+    func updateDetails(for pokemon: PokemonMO, with pokemonData: PokemonData) -> PokemonMO {
         pokemon.imageID = String(pokemon.id)
         pokemon.height = pokemonData.height / 10
         pokemon.weight = pokemonData.weight / 10
-
+        pokemon.speciesURL = pokemonData.species.url
+        
         // Type
         pokemon.type = parseType(with: pokemonData)
         
         // Stats
         pokemon.stats = parseStats(with: pokemonData)
-
+        
         // Abilities
         let abilities = parseAbilities(with: pokemonData)
         pokemon.abilities = NSSet(array: abilities)
-
+        
         // Moves
         let moves = parseMoves(with: pokemonData)
         pokemon.moves = NSSet(array: moves)
+        
+        // Forms
+        if pokemonData.forms.count > 1 {
+            pokemon.hasAltForm = true
+            let forms = pokemonData.forms.dropFirst()
+            var altFormsArray = [AltFormMO]()
+            for form in forms {
+                let altFormMO = AltFormMO(context: context)
+                altFormMO.name = form.name
+                altFormMO.urlString = form.url
+                altFormsArray.append(altFormMO)
+            }
+            
+            pokemon.altForm = NSSet(array: altFormsArray)
+        } else {
+            pokemon.hasAltForm = false
+        }
+        
+        return pokemon
     }
     
     func updateDetails(for pokemon: PokemonMO, with formData: [FormData]) {
         for form in formData {
-            let altForm = AltFormMO(context: context)
+            let altForm = AltFormMO(context: backgroundContext)
             
             altForm.formName = form.formName
             altForm.formOrder = Int64(form.formOrder)
@@ -262,7 +298,7 @@ class PokemonManager {
         var abilitiesArray = [AbilityMO]()
         
         for ability in pokemonData.abilities {
-            let abilityMO = AbilityMO(context: context)
+            let abilityMO = AbilityMO(context: backgroundContext)
             abilityMO.name = ability.name
             abilityMO.isHidden = ability.isHidden
             abilityMO.urlString = ability.url
@@ -277,7 +313,7 @@ class PokemonManager {
         var movesArray = [MoveMO]()
         
         for move in pokemonData.moves {
-            let moveMO = MoveMO(context: context)
+            let moveMO = MoveMO(context: backgroundContext)
             moveMO.name = move.name
             moveMO.levelLearnedAt = Int64(move.levelLearnedAt)
             moveMO.moveLearnMethod = move.moveLearnMethod
@@ -299,7 +335,7 @@ class PokemonManager {
         var pokemonToReturn = [PokemonMO]()
         
         do {
-            pokemonToReturn = try self.context.fetch(request)
+            pokemonToReturn = try self.backgroundContext.fetch(request)
             print("Successfully fetched \(pokemonToReturn.count) pokemon from Core Data")
         } catch {
             print("Fetch from Core Data failed: \(error)")
@@ -307,6 +343,17 @@ class PokemonManager {
         
         return Just(pokemonToReturn)
             .eraseToAnyPublisher()
+    }
+    
+    func saveContext(_ context: NSManagedObjectContext) {
+        if context.hasChanges {
+            do {
+                try context.save()
+                print("MOC successfully saved")
+            } catch {
+                print("Error saving context to Core Data: \(error)")
+            }
+        }
     }
     
     func save() {

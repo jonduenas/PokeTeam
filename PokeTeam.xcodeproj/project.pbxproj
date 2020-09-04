@@ -2683,6 +2683,7 @@
 		6554E7ED24D4E14600081EA9 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				651D26DB24F5DA12001A4DD1 /* PokeTeam.xcdatamodeld */,
 				6554E7F324D4E18800081EA9 /* PokemonManager.swift */,
 				6541AB1224FD97E200960D17 /* StringFormatting.swift */,
 				65E36FC724F84B60003F00C3 /* UserDefaultsManager.swift */,
@@ -2698,7 +2699,6 @@
 				6599204224DA25C90082F51C /* PokemonAbility.swift */,
 				6599204424DA25D50082F51C /* PokemonMove.swift */,
 				657E522924F1E87D00A19CB8 /* PokemonTeam.swift */,
-				651D26DB24F5DA12001A4DD1 /* PokeTeam.xcdatamodeld */,
 			);
 			path = Models;
 			sourceTree = "<group>";

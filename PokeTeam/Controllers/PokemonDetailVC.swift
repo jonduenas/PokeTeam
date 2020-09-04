@@ -8,6 +8,7 @@
 
 import UIKit
 import Combine
+import CoreData
 
 class PokemonDetailVC: UIViewController {
     
@@ -16,6 +17,7 @@ class PokemonDetailVC: UIViewController {
     let abilityTransitioningDelegate = AbilityTransitioningDelegate()
 
     let pokemon: PokemonMO
+    let pokemonManagedObjectID: NSManagedObjectID
     var pokemonDetails: PokemonMO?
     //lazy var pokemonTeam = PokemonTeam()
     var abilityArray: [AbilityMO]?
@@ -45,9 +47,11 @@ class PokemonDetailVC: UIViewController {
     @IBOutlet var abilitiesHeaderLabel: UILabel!
     @IBOutlet weak var abilitiesStackView: UIStackView!
     
-    init?(coder: NSCoder, pokemon: PokemonMO) {
-        self.pokemon = pokemon
+    init?(coder: NSCoder, pokemonObjectID: NSManagedObjectID) {
+        self.pokemonManagedObjectID = pokemonObjectID
 
+        pokemon = PokemonManager.shared.convertToMO(in: PokemonManager.shared.context, with: pokemonObjectID) as! PokemonMO
+        
         super.init(coder: coder)
     }
 
@@ -85,45 +89,28 @@ class PokemonDetailVC: UIViewController {
         setState(loading: true)
         
         fetchSpeciesData(with: pokemon.speciesURL!)
-            .flatMap { (speciesData) in
-                return self.fetchPokemonData(with: speciesData.id).map { (speciesData, $0) }
+            .map { (speciesData) -> PokemonMO in
+                return PokemonManager.shared.updateDetails(for: self.pokemon, with: speciesData)
         }
-        .flatMap { (speciesData, pokemonData) -> AnyPublisher<(SpeciesData, PokemonData, [FormData]?), Error> in
-            switch pokemonData.forms.count {
-            case 0, 1:
-                print("No forms to fetch")
-                return Just((speciesData, pokemonData, nil)).setFailureType(to: Error.self).eraseToAnyPublisher()
-            default:
-                print("Fetching forms")
-                return pokemonData.forms.publisher
-                    .setFailureType(to: Error.self)
-                    .flatMap { (form) in
-                        return self.fetchFormData(with: form)
-                }
-                .collect()
-                .map { (formsDataArray) in
-                    print(formsDataArray)
-                    return (speciesData, pokemonData, formsDataArray)
-                }
-                .eraseToAnyPublisher()
-            }
+        .flatMap { (pokemonMO) -> AnyPublisher<PokemonData, Error> in
+            let pokemonURL = URL(string: pokemonMO.pokemonURL!)!
+            return PokemonManager.shared.fetchFromAPI(of: PokemonData.self, from: pokemonURL)
         }
-        .sink(receiveCompletion: { results in
+        .map { (pokemonData) -> PokemonMO in
+            return PokemonManager.shared.updateDetails(for: self.pokemon, with: pokemonData)
+        }
+        .sink(receiveCompletion: { (results) in
             switch results {
             case .finished:
-                print("Finished fetching all detail data")
-                break
+                print("Finished updating Pokemon")
             case .failure(let error):
                 print(error)
             }
-        }) { (values) in
-            let speciesData = values.0
-            let pokemonData = values.1
-            let formsDataArray = values.2
-            print("Pokemon name: ", pokemonData.name)
-            print("Species generation: ", speciesData.generation)
-            if let formsData = formsDataArray {
-                print("Form count: \(formsData.count), form name: \(formsData[1].formName)")
+        }) { (pokemonMO) in
+            PokemonManager.shared.save()
+            DispatchQueue.main.async { [weak self] in
+                self?.showDetails()
+                self?.setState(loading: false)
             }
         }
         .store(in: &subscriptions)

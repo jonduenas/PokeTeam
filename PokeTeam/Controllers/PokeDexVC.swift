@@ -8,8 +8,9 @@
 
 import UIKit
 import Combine
+import CoreData
 
-class PokeDexVC: UITableViewController {
+class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
     
     let nationalPokedexID = 1
     let pokemonCellID = "pokemonCell"
@@ -18,7 +19,8 @@ class PokeDexVC: UITableViewController {
     var indicatorView: UIActivityIndicatorView!
     
     //var pokedex: Pokedex?
-    var pokemonArray = [PokemonMO]()
+    var fetchedResultsController: NSFetchedResultsController<PokemonMO>!
+    //var pokemonArray = [PokemonMO]()
     var filteredPokemon = [PokemonMO]()
     var subscriptions: Set<AnyCancellable> = []
     var isSearchBarEmpty: Bool {
@@ -42,18 +44,43 @@ class PokeDexVC: UITableViewController {
         
         initializeSearchBar()
         
+        setState(loading: true)
         loadSavedData()
+        fetchPokedex()
     }
     
     private func loadSavedData() {
-        setState(loading: true)
+        print("Loading from Core Data")
+        if fetchedResultsController == nil {
+            let request: NSFetchRequest<PokemonMO> = PokemonMO.fetchRequest()
+            let sort = NSSortDescriptor(key: "id", ascending: true)
+            request.sortDescriptors = [sort]
+            request.fetchBatchSize = 20
+            
+            fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: PokemonManager.shared.context, sectionNameKeyPath: nil, cacheName: nil)
+            fetchedResultsController.delegate = self
+        }
         
-        PokemonManager.shared.loadSavedPokemon()
-            .sink(receiveValue: { (cdPokemonArray) in
-                self.pokemonArray = cdPokemonArray
-                self.fetchPokedex()
-            })
-        .store(in: &subscriptions)
+        do {
+            try fetchedResultsController.performFetch()
+            print("Core Data fetch succssful")
+        } catch {
+            print("Core Data fetch failed - \(error)")
+        }
+        
+//        PokemonManager.shared.loadSavedPokemon()
+//            .flatMap({ (pokemonMOArray) in
+//                return pokemonMOArray.publisher
+//                    .map { (pokemonBGContext) -> PokemonMO in
+//                        return PokemonManager.shared.context.object(with: pokemonBGContext.objectID) as! PokemonMO
+//                }
+//            .collect()
+//            })
+//            .sink(receiveValue: { (cdPokemonArray) in
+//                self.pokemonArray = cdPokemonArray
+//                self.fetchPokedex()
+//            })
+//        .store(in: &subscriptions)
     }
     
     private func fetchPokedex() {
@@ -64,17 +91,15 @@ class PokeDexVC: UITableViewController {
         
         // Downloads list of all Pokemon names and URLs
         PokemonManager.shared.fetchFromAPI(of: NationalPokedex.self, from: url)
-            .map({ (pokedex) -> [PokemonMO] in
-                print("Fetched \(pokedex.count) Pokemon from API")
-                
-                if pokedex.count == self.pokemonArray.count && pokedex.count != 0 {
-                    // Saved list of Pokemon is the same as the API - Skip parsing
-                    print("Using Pokemon stored in Core Data")
-                    return self.pokemonArray
+            .flatMap({ pokedex in
+                return self.shouldUpdateWithAPI(pokedex: pokedex).map { (pokedex, $0) } })
+            .flatMap({ (pokedex, shouldUpdate) -> AnyPublisher<Bool, Error> in
+                if shouldUpdate {
+                    print("Updating Pokedex with API")
+                    return PokemonManager.shared.updateNationalPokedex(pokedex: pokedex)
                 } else {
-                    // Creates new list or adds new entries to saved list
-                    print("Updating Pokemon with API")
-                    return PokemonManager.shared.parseNationalPokedex(pokedex: pokedex)
+                    print("Skipping update and using local data")
+                    return Just(shouldUpdate).setFailureType(to: Error.self).eraseToAnyPublisher()
                 }
             })
             .sink(receiveCompletion: { results in
@@ -86,12 +111,35 @@ class PokeDexVC: UITableViewController {
                     print(error)
                 }
             },
-                  receiveValue: { (pokemonArray) in
-                    self.pokemonArray = pokemonArray
-                    PokemonManager.shared.save()
-                    self.updateUI()
+                  receiveValue: { (pokedexUpdated) in
+                    if pokedexUpdated {
+                        // Core Data was updated - reload with new data
+                        self.loadSavedData()
+                        self.updateUI()
+                    } else {
+                        // Core Data is already up to date - skip reloading
+                        self.updateUI()
+                    }
             })
         .store(in: &subscriptions)
+    }
+    
+    private func shouldUpdateWithAPI(pokedex: NationalPokedex) -> AnyPublisher<Bool, Error> {
+        guard let managedObjects = fetchedResultsController.fetchedObjects else {
+            // If for some reason this is nil, just load from the API again
+            return Just(true).setFailureType(to: Error.self).eraseToAnyPublisher()
+        }
+        
+        if pokedex.count == managedObjects.count && managedObjects.count != 0 {
+            // Pokemon count from Core Data is the same as the Pokemon count from the API - skip updating
+            print("Stored Pokemon count matches API - Should skip update")
+            return Just(false).setFailureType(to: Error.self).eraseToAnyPublisher()
+        } else {
+            // Should update with API
+            let difference = pokedex.count - managedObjects.count
+            print("Found \(difference) more Pokemon on the API - Should update.")
+            return Just(true).setFailureType(to: Error.self).eraseToAnyPublisher()
+        }
     }
     
     private func updateUI() {
@@ -124,7 +172,8 @@ class PokeDexVC: UITableViewController {
             return filteredPokemon.count
         }
         
-        return pokemonArray.count
+        let sectionInfo = fetchedResultsController.sections![section]
+        return sectionInfo.numberOfObjects
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -134,7 +183,7 @@ class PokeDexVC: UITableViewController {
         if isFiltering {
             pokemon = filteredPokemon[indexPath.row]
         } else {
-            pokemon = pokemonArray[indexPath.row]
+            pokemon = fetchedResultsController.object(at: indexPath)
         }
         
         cell.setPokemonInfo(for: pokemon)
@@ -145,9 +194,9 @@ class PokeDexVC: UITableViewController {
     // MARK: Search Bar Methods
     
     func filterContentForSearchText(_ searchText: String) {
-        filteredPokemon = searchText.isEmpty ? pokemonArray : pokemonArray.filter({ (pokemon) -> Bool in
+        filteredPokemon = (searchText.isEmpty ? fetchedResultsController.fetchedObjects : fetchedResultsController.fetchedObjects!.filter({ (pokemon) -> Bool in
             return pokemon.name?.range(of: searchText, options: .caseInsensitive) != nil
-        })
+        }))!
         tableView.reloadData()
     }
     
@@ -158,14 +207,14 @@ class PokeDexVC: UITableViewController {
         let indexPath = tableView.indexPathForSelectedRow!
         let selectedRow = indexPath.row
         
-        let pokemon: PokemonMO
+        let pokemon: NSManagedObjectID
         
         if isFiltering {
-            pokemon = filteredPokemon[selectedRow]
+            pokemon = filteredPokemon[selectedRow].objectID
         } else {
-            pokemon = pokemonArray[selectedRow]
+            pokemon = fetchedResultsController.object(at: indexPath).objectID
         }
-        return PokemonDetailVC(coder: coder, pokemon: pokemon)
+        return PokemonDetailVC(coder: coder, pokemonObjectID: pokemon)
     }
     
     private func setState(loading: Bool) {
