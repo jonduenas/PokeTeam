@@ -8,9 +8,11 @@
 
 import UIKit
 import Combine
+import CoreData
 
 class AbilityDetailVC: UIViewController {
     
+    var abilityManagedObjectID: NSManagedObjectID?
     var ability: AbilityMO?
     var abilityData: AbilityData?
     var abilityDescription: String?
@@ -22,7 +24,11 @@ class AbilityDetailVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        if let abilityObjectID = abilityManagedObjectID {
+            ability = PokemonManager.shared.convertToMO(in: PokemonManager.shared.context, with: abilityObjectID) as? AbilityMO
+        }
+        
         initializeActivityIndicator()
         
         if shouldUpdateDetails() {
@@ -61,7 +67,7 @@ class AbilityDetailVC: UIViewController {
                 }
             },
                   receiveValue: { (abilityData) in
-                    PokemonManager.shared.addAbilityDescription(to: ability, with: abilityData)
+                    PokemonManager.shared.addAbilityDescription(to: ability.objectID, with: abilityData)
                     PokemonManager.shared.save()
                     
                     DispatchQueue.main.async {

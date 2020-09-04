@@ -155,82 +155,84 @@ class PokemonManager {
 //        return pokemonToReturn
 //    }
     
-    func updateDetails(for pokemon: PokemonMO, with speciesData: SpeciesData) -> PokemonMO {
-        // Genus
-        pokemon.genus = parseGenus(with: speciesData)
+    func updateDetails(for pokemonManagedObjectID: NSManagedObjectID, with speciesData: SpeciesData) -> AnyPublisher<Bool, Error> {
+        let pokemon = backgroundContext.object(with: pokemonManagedObjectID) as! PokemonMO
         
-        // Generation
-        pokemon.generation = speciesData.generation.name
-        
-        // Description
-        pokemon.flavorText = parseFlavorText(with: speciesData)
-        
-        pokemon.isBaby = speciesData.isBaby
-        pokemon.isLegendary = speciesData.isLegendary
-        pokemon.isMythical = speciesData.isMythical
-        pokemon.order = Int64(speciesData.order)
-        pokemon.nationalPokedexNumber = Int64(speciesData.pokedexNumbers[0].entryNumber)
-        
-        pokemon.pokemonURL = speciesData.varieties[0].pokemon.url
-        
-        return pokemon
+        pokemon.managedObjectContext?.performAndWait {
+            // Genus
+            pokemon.genus = parseGenus(with: speciesData)
+            
+            // Generation
+            pokemon.generation = speciesData.generation.name
+            
+            // Description
+            pokemon.flavorText = parseFlavorText(with: speciesData)
+            
+            pokemon.isBaby = speciesData.isBaby
+            pokemon.isLegendary = speciesData.isLegendary
+            pokemon.isMythical = speciesData.isMythical
+            pokemon.order = Int64(speciesData.order)
+            pokemon.nationalPokedexNumber = Int64(speciesData.pokedexNumbers[0].entryNumber)
+            
+            pokemon.pokemonURL = speciesData.varieties[0].pokemon.url
+        }
+        return Just(true).setFailureType(to: Error.self).eraseToAnyPublisher()
     }
     
-    func updateDetails(for pokemon: PokemonMO, with pokemonData: PokemonData) -> PokemonMO {
-        pokemon.imageID = String(pokemon.id)
-        pokemon.height = pokemonData.height / 10
-        pokemon.weight = pokemonData.weight / 10
-        pokemon.speciesURL = pokemonData.species.url
+    func updateDetails(for pokemonManagedObjectID: NSManagedObjectID, with pokemonData: PokemonData) -> AnyPublisher<Bool, Error> {
+        let pokemon = backgroundContext.object(with: pokemonManagedObjectID) as! PokemonMO
         
-        // Type
-        pokemon.type = parseType(with: pokemonData)
-        
-        // Stats
-        pokemon.stats = parseStats(with: pokemonData)
-        
-        // Abilities
-        let abilities = parseAbilities(with: pokemonData)
-        pokemon.abilities = NSSet(array: abilities)
-        
-        // Moves
-        let moves = parseMoves(with: pokemonData)
-        pokemon.moves = NSSet(array: moves)
-        
-        // Forms
-        if pokemonData.forms.count > 1 {
-            pokemon.hasAltForm = true
-            let forms = pokemonData.forms.dropFirst()
-            var altFormsArray = [AltFormMO]()
-            for form in forms {
-                let altFormMO = AltFormMO(context: context)
-                altFormMO.name = form.name
-                altFormMO.urlString = form.url
-                altFormsArray.append(altFormMO)
+        pokemon.managedObjectContext?.performAndWait {
+            pokemon.imageID = String(pokemon.id)
+            pokemon.height = pokemonData.height / 10
+            pokemon.weight = pokemonData.weight / 10
+            
+            // Type
+            pokemon.type = parseType(with: pokemonData)
+            
+            // Stats
+            pokemon.stats = parseStats(with: pokemonData)
+            
+            // Abilities
+            let abilities = parseAbilities(with: pokemonData)
+            pokemon.abilities = NSSet(array: abilities)
+            
+            // Moves
+            let moves = parseMoves(with: pokemonData)
+            pokemon.moves = NSSet(array: moves)
+            
+            // Forms
+            if pokemonData.forms.count > 1 {
+                pokemon.hasAltForm = true
+                let altFormsArray = parseAltForms(with: pokemonData)
+                pokemon.altForm = NSSet(array: altFormsArray)
+            } else {
+                pokemon.hasAltForm = false
             }
-            
-            pokemon.altForm = NSSet(array: altFormsArray)
-        } else {
-            pokemon.hasAltForm = false
         }
+        return Just(true).setFailureType(to: Error.self).eraseToAnyPublisher()
+    }
+    
+    func updateDetails(for pokemonManagedObjectID: NSManagedObjectID, with formData: [FormData]) {
+        backgroundContext.performAndWait {
+            for form in formData {
+                let pokemon = backgroundContext.object(with: pokemonManagedObjectID) as! PokemonMO
+                let altForm = AltFormMO(context: backgroundContext)
+                
+                altForm.formName = form.formName
+                altForm.formOrder = Int64(form.formOrder)
+                altForm.id = Int64(form.id)
+                altForm.isMega = form.isMega
+                altForm.name = form.name
+                altForm.order = Int64(form.order)
+                altForm.pokemon = pokemon
+            }
+        }
+    }
+    
+    func addAbilityDescription(to abilityManagedObjectID: NSManagedObjectID, with abilityData: AbilityData) {
+        let ability = backgroundContext.object(with: abilityManagedObjectID) as! AbilityMO
         
-        return pokemon
-    }
-    
-    func updateDetails(for pokemon: PokemonMO, with formData: [FormData]) {
-        for form in formData {
-            let altForm = AltFormMO(context: backgroundContext)
-            
-            altForm.formName = form.formName
-            altForm.formOrder = Int64(form.formOrder)
-            altForm.id = Int64(form.id)
-            altForm.isMega = form.isMega
-            altForm.name = form.name
-            altForm.order = Int64(form.order)
-            altForm.pokemon = pokemon
-        }
-    }
-    
-    func addAbilityDescription(to ability: AbilityMO, with abilityData: AbilityData) {
         var englishFlavorTextArray = [String]()
         let flavorText: String
         
@@ -243,11 +245,14 @@ class PokemonManager {
         if let latestEntry = englishFlavorTextArray.last {
             flavorText = latestEntry.replacingOccurrences(of: "\n", with: " ")
         } else {
+            print("Error parsing Pokemon Ability flavor text")
             flavorText = ""
         }
         
-        ability.abilityDescription = flavorText
-        ability.id = Int64(abilityData.id)
+        ability.managedObjectContext?.performAndWait {
+            ability.abilityDescription = flavorText
+            ability.id = Int64(abilityData.id)
+        }
     }
     
     // MARK: Private parsing methods
@@ -266,7 +271,8 @@ class PokemonManager {
                 return genus.genus
             }
         }
-        return "Unknown Genus"
+        print("Error parsing Pokemon genus")
+        return ""
     }
     
     private func parseFlavorText(with speciesData: SpeciesData) -> String {
@@ -281,7 +287,8 @@ class PokemonManager {
         if let latestEntry = englishFlavorTextArray.last {
             return latestEntry.replacingOccurrences(of: "\n", with: " ")
         } else {
-            return "Error loading description"
+            print("Error parsing Pokemon flavor text")
+            return ""
         }
     }
     
@@ -297,13 +304,16 @@ class PokemonManager {
     private func parseAbilities(with pokemonData: PokemonData) -> Array<AbilityMO> {
         var abilitiesArray = [AbilityMO]()
         
-        for ability in pokemonData.abilities {
-            let abilityMO = AbilityMO(context: backgroundContext)
-            abilityMO.name = ability.name
-            abilityMO.isHidden = ability.isHidden
-            abilityMO.urlString = ability.url
-            
-            abilitiesArray.append(abilityMO)
+        backgroundContext.performAndWait {
+            for ability in pokemonData.abilities {
+                let abilityMO = AbilityMO(context: backgroundContext)
+                abilityMO.name = ability.name
+                abilityMO.isHidden = ability.isHidden
+                abilityMO.urlString = ability.url
+                abilityMO.slot = Int64(ability.slot)
+                
+                abilitiesArray.append(abilityMO)
+            }
         }
         
         return abilitiesArray
@@ -312,17 +322,36 @@ class PokemonManager {
     private func parseMoves(with pokemonData: PokemonData) -> [MoveMO] {
         var movesArray = [MoveMO]()
         
-        for move in pokemonData.moves {
-            let moveMO = MoveMO(context: backgroundContext)
-            moveMO.name = move.name
-            moveMO.levelLearnedAt = Int64(move.levelLearnedAt)
-            moveMO.moveLearnMethod = move.moveLearnMethod
-            moveMO.urlString = move.url
-            
-            movesArray.append(moveMO)
+        backgroundContext.performAndWait {
+            for move in pokemonData.moves {
+                let moveMO = MoveMO(context: backgroundContext)
+                moveMO.name = move.name
+                moveMO.levelLearnedAt = Int64(move.levelLearnedAt)
+                moveMO.moveLearnMethod = move.moveLearnMethod
+                moveMO.urlString = move.url
+                
+                movesArray.append(moveMO)
+            }
         }
         
         return movesArray
+    }
+    
+    private func parseAltForms(with pokemonData: PokemonData) -> [AltFormMO] {
+        var altFormsArray = [AltFormMO]()
+        
+        backgroundContext.performAndWait {
+            let forms = pokemonData.forms.dropFirst()
+            
+            for form in forms {
+                let altFormMO = AltFormMO(context: backgroundContext)
+                altFormMO.name = form.name
+                altFormMO.urlString = form.url
+                altFormsArray.append(altFormMO)
+            }
+        }
+        
+        return altFormsArray
     }
     
     // MARK: - Core Data Methods

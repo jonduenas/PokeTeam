@@ -5,6 +5,7 @@
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="isHidden" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String"/>
+        <attribute name="slot" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="urlString" attributeType="String"/>
         <relationship name="pokemon" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Pokemon" inverseName="abilities" inverseEntity="Pokemon"/>
         <uniquenessConstraints>
@@ -100,7 +101,7 @@
         </uniquenessConstraints>
     </entity>
     <elements>
-        <element name="Ability" positionX="343.77734375" positionY="-326.91796875" width="128" height="133"/>
+        <element name="Ability" positionX="343.77734375" positionY="-326.91796875" width="128" height="148"/>
         <element name="AltForm" positionX="144" positionY="-171" width="128" height="163"/>
         <element name="Move" positionX="347.1015625" positionY="-132.5859375" width="128" height="148"/>
         <element name="Pokedex" positionX="162" positionY="-162" width="128" height="88"/>

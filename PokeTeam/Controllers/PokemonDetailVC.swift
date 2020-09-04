@@ -88,16 +88,21 @@ class PokemonDetailVC: UIViewController {
     private func fetchDetails() {
         setState(loading: true)
         
-        fetchSpeciesData(with: pokemon.speciesURL!)
-            .map { (speciesData) -> PokemonMO in
-                return PokemonManager.shared.updateDetails(for: self.pokemon, with: speciesData)
+        print("Fetching Pokemon details from API")
+        
+        let backgroundContext = PokemonManager.shared.backgroundContext
+        let pokemonMO = backgroundContext.object(with: pokemonManagedObjectID) as! PokemonMO
+        
+        fetchSpeciesData(with: pokemonMO.speciesURL!)
+            .flatMap({ (speciesData) -> AnyPublisher<Bool, Error> in
+                PokemonManager.shared.updateDetails(for: self.pokemonManagedObjectID, with: speciesData)
+            })
+            .flatMap { _ -> AnyPublisher<PokemonData, Error> in
+            let pokemonURL = URL(string: pokemonMO.pokemonURL!)
+            return PokemonManager.shared.fetchFromAPI(of: PokemonData.self, from: pokemonURL!)
         }
-        .flatMap { (pokemonMO) -> AnyPublisher<PokemonData, Error> in
-            let pokemonURL = URL(string: pokemonMO.pokemonURL!)!
-            return PokemonManager.shared.fetchFromAPI(of: PokemonData.self, from: pokemonURL)
-        }
-        .map { (pokemonData) -> PokemonMO in
-            return PokemonManager.shared.updateDetails(for: self.pokemon, with: pokemonData)
+        .flatMap { (pokemonData) -> AnyPublisher<Bool, Error> in
+            return PokemonManager.shared.updateDetails(for: self.pokemonManagedObjectID, with: pokemonData)
         }
         .sink(receiveCompletion: { (results) in
             switch results {
@@ -106,8 +111,9 @@ class PokemonDetailVC: UIViewController {
             case .failure(let error):
                 print(error)
             }
-        }) { (pokemonMO) in
-            PokemonManager.shared.save()
+        }) { _ in
+            PokemonManager.shared.saveContext(backgroundContext)
+            
             DispatchQueue.main.async { [weak self] in
                 self?.showDetails()
                 self?.setState(loading: false)
@@ -216,7 +222,8 @@ class PokemonDetailVC: UIViewController {
         guard let abilitySet = pokemon.abilities else { return }
         
         abilityArray = abilitySet.allObjects as? [AbilityMO]
-        guard let abilities = abilityArray else { return }
+        
+        guard let abilities = abilityArray?.sorted(by: { $0.slot < $1.slot }) else { return }
         
         for (index, ability) in abilities.enumerated() {
             let abilityButton = UIButton()
@@ -251,7 +258,7 @@ class PokemonDetailVC: UIViewController {
 
         let storyboard = UIStoryboard(name: "Pokedex", bundle: nil)
         let abilityController = storyboard.instantiateViewController(withIdentifier: "AbilityVC") as! AbilityDetailVC
-        abilityController.ability = abilities[sender.tag]
+        abilityController.abilityManagedObjectID = abilities[sender.tag].objectID
         
         abilityController.transitioningDelegate = abilityTransitioningDelegate
         abilityController.modalPresentationStyle = .custom
