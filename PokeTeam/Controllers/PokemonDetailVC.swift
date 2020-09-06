@@ -16,7 +16,7 @@ class PokemonDetailVC: UIViewController {
     let subTitleSize: CGFloat = 25
     let abilityTransitioningDelegate = AbilityTransitioningDelegate()
 
-    let pokemon: PokemonMO
+    var pokemon: PokemonMO
     let pokemonManagedObjectID: NSManagedObjectID
     var pokemonDetails: PokemonMO?
     //lazy var pokemonTeam = PokemonTeam()
@@ -50,7 +50,7 @@ class PokemonDetailVC: UIViewController {
     init?(coder: NSCoder, pokemonObjectID: NSManagedObjectID) {
         self.pokemonManagedObjectID = pokemonObjectID
 
-        pokemon = PokemonManager.shared.convertToMO(in: PokemonManager.shared.context, with: pokemonObjectID) as! PokemonMO
+        pokemon = PokemonManager.shared.context.object(with: pokemonObjectID) as! PokemonMO
         
         super.init(coder: coder)
     }
@@ -93,33 +93,63 @@ class PokemonDetailVC: UIViewController {
         let backgroundContext = PokemonManager.shared.backgroundContext
         let pokemonMO = backgroundContext.object(with: pokemonManagedObjectID) as! PokemonMO
         
-        fetchSpeciesData(with: pokemonMO.speciesURL!)
-            .flatMap({ (speciesData) -> AnyPublisher<Bool, Error> in
-                PokemonManager.shared.updateDetails(for: self.pokemonManagedObjectID, with: speciesData)
-            })
-            .flatMap { _ -> AnyPublisher<PokemonData, Error> in
-            let pokemonURL = URL(string: pokemonMO.pokemonURL!)
-            return PokemonManager.shared.fetchFromAPI(of: PokemonData.self, from: pokemonURL!)
+        var speciesURL: URL? = nil
+        pokemonMO.managedObjectContext?.performAndWait {
+            guard let speciesStringURL = pokemonMO.speciesURL else { return }
+            speciesURL = URL(string: speciesStringURL)
         }
-        .flatMap { (pokemonData) -> AnyPublisher<Bool, Error> in
-            return PokemonManager.shared.updateDetails(for: self.pokemonManagedObjectID, with: pokemonData)
+        
+        PokemonManager.shared.fetchFromAPI(of: SpeciesData.self, from: speciesURL!)
+            .flatMap { speciesData -> AnyPublisher<PokemonData, Error> in
+                PokemonManager.shared.updateDetails(for: pokemonMO.objectID, with: speciesData)
+                let pokemonDataURL = URL(string: pokemonMO.pokemonURL!)
+                return PokemonManager.shared.fetchFromAPI(of: PokemonData.self, from: pokemonDataURL!)
         }
-        .sink(receiveCompletion: { (results) in
-            switch results {
+        .sink(receiveCompletion: { completion in
+            switch completion {
             case .finished:
                 print("Finished updating Pokemon")
             case .failure(let error):
-                print(error)
+                print("Error updating Pokemon: \(error) - \(error.localizedDescription)")
             }
-        }) { _ in
+        }) { pokemonData in
+            PokemonManager.shared.updateDetails(for: pokemonMO.objectID, with: pokemonData)
             PokemonManager.shared.saveContext(backgroundContext)
-            
+            //self.reloadPokemon(pokemon: pokemonMO)
             DispatchQueue.main.async { [weak self] in
                 self?.showDetails()
                 self?.setState(loading: false)
             }
         }
         .store(in: &subscriptions)
+        
+//        fetchSpeciesData(with: pokemonMO.speciesURL!)
+//            .flatMap({ (speciesData) -> AnyPublisher<Bool, Error> in
+//                PokemonManager.shared.updateDetails(for: self.pokemonManagedObjectID, with: speciesData)
+//            })
+//            .flatMap { _ -> AnyPublisher<PokemonData, Error> in
+//                let pokemonURL = URL(string: pokemonMO.pokemonURL!)
+//                return PokemonManager.shared.fetchFromAPI(of: PokemonData.self, from: pokemonURL!)
+//        }
+//        .flatMap { (pokemonData) -> AnyPublisher<Bool, Error> in
+//            return PokemonManager.shared.updateDetails(for: self.pokemonManagedObjectID, with: pokemonData)
+//        }
+//        .sink(receiveCompletion: { (results) in
+//            switch results {
+//            case .finished:
+//                print("Finished updating Pokemon")
+//            case .failure(let error):
+//                print(error)
+//            }
+//        }) { _ in
+//            PokemonManager.shared.saveContext(backgroundContext)
+//
+//            DispatchQueue.main.async { [weak self] in
+//                self?.showDetails()
+//                self?.setState(loading: false)
+//            }
+//        }
+//        .store(in: &subscriptions)
         
 //        PokemonManager.shared.fetchFromAPI(of: PokemonData.self, from: pokemonURL)
 //            .map({ (pokemon) in
@@ -147,6 +177,22 @@ class PokemonDetailVC: UIViewController {
 //                    }
 //            })
 //            .store(in: &subscriptions)
+    }
+    
+    func reloadPokemon(pokemon: PokemonMO) {
+        guard let pokemonName = pokemon.name else { return }
+        let backgroundContext = PokemonManager.shared.backgroundContext
+        let pokemonRequest: NSFetchRequest<PokemonMO> = PokemonMO.fetchRequest()
+        pokemonRequest.predicate = NSPredicate(format: "name == %@", pokemonName)
+        
+        do {
+            let pokemonFetched = try backgroundContext.fetch(pokemonRequest)
+            if pokemonFetched.count == 1 {
+                self.pokemon = pokemonFetched[0]
+            }
+        } catch {
+            print("Error reloading Pokemon - \(error) - \(error.localizedDescription)")
+        }
     }
     
     func fetchPokemonData(with id: Int) -> AnyPublisher<PokemonData, Error> {
@@ -222,8 +268,9 @@ class PokemonDetailVC: UIViewController {
         guard let abilitySet = pokemon.abilities else { return }
         
         abilityArray = abilitySet.allObjects as? [AbilityMO]
+        abilityArray?.sort(by: { $0.slot < $1.slot })
         
-        guard let abilities = abilityArray?.sorted(by: { $0.slot < $1.slot }) else { return }
+        guard let abilities = abilityArray else { return }
         
         for (index, ability) in abilities.enumerated() {
             let abilityButton = UIButton()

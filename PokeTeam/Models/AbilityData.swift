@@ -12,7 +12,6 @@ struct AbilityData: Codable {
     let flavorTextEntries: [AbilityFlavorTextEntry]
     let name: String
     let id: Int
-    let slot: Int
 }
 
 struct AbilityFlavorTextEntry: Codable {

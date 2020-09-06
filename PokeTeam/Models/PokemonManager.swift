@@ -26,6 +26,10 @@ class PokemonManager {
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     let backgroundContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.newBackgroundContext()
     
+    init() {
+        backgroundContext.mergePolicy = context.mergePolicy
+    }
+    
     // MARK: Networking methods
     
     func fetchFromAPI<T: Decodable>(of type: T.Type, from url: URL) -> AnyPublisher<T, Error> {
@@ -52,12 +56,12 @@ class PokemonManager {
     
     // MARK: Core Data parsing methods
   
-    func updateNationalPokedex(pokedex: NationalPokedex) -> AnyPublisher<Bool, Error> {
+    func updateNationalPokedex(pokedex: NationalPokedex) {
         for pokemon in pokedex.results {
             // Check if Pokemon already exists in Core Data
-            let results = checkCDForMatch(with: pokemon)
+            let isFound = checkCDForMatch(with: pokemon)
             
-            if results {
+            if isFound {
                 // Pokemon with matching name is found
                 continue
             } else {
@@ -76,8 +80,6 @@ class PokemonManager {
         }
         
         saveContext(backgroundContext)
-        
-        return Just(true).setFailureType(to: Error.self).eraseToAnyPublisher()
     }
     
     private func checkCDForMatch(with pokemon: NameAndURL) -> Bool {
@@ -155,7 +157,7 @@ class PokemonManager {
 //        return pokemonToReturn
 //    }
     
-    func updateDetails(for pokemonManagedObjectID: NSManagedObjectID, with speciesData: SpeciesData) -> AnyPublisher<Bool, Error> {
+    func updateDetails(for pokemonManagedObjectID: NSManagedObjectID, with speciesData: SpeciesData) {
         let pokemon = backgroundContext.object(with: pokemonManagedObjectID) as! PokemonMO
         
         pokemon.managedObjectContext?.performAndWait {
@@ -176,10 +178,9 @@ class PokemonManager {
             
             pokemon.pokemonURL = speciesData.varieties[0].pokemon.url
         }
-        return Just(true).setFailureType(to: Error.self).eraseToAnyPublisher()
     }
     
-    func updateDetails(for pokemonManagedObjectID: NSManagedObjectID, with pokemonData: PokemonData) -> AnyPublisher<Bool, Error> {
+    func updateDetails(for pokemonManagedObjectID: NSManagedObjectID, with pokemonData: PokemonData) {
         let pokemon = backgroundContext.object(with: pokemonManagedObjectID) as! PokemonMO
         
         pokemon.managedObjectContext?.performAndWait {
@@ -210,7 +211,6 @@ class PokemonManager {
                 pokemon.hasAltForm = false
             }
         }
-        return Just(true).setFailureType(to: Error.self).eraseToAnyPublisher()
     }
     
     func updateDetails(for pokemonManagedObjectID: NSManagedObjectID, with formData: [FormData]) {
@@ -301,7 +301,7 @@ class PokemonManager {
         return stats
     }
     
-    private func parseAbilities(with pokemonData: PokemonData) -> Array<AbilityMO> {
+    private func parseAbilities(with pokemonData: PokemonData) -> [AbilityMO] {
         var abilitiesArray = [AbilityMO]()
         
         backgroundContext.performAndWait {

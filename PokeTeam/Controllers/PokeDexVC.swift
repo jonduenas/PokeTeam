@@ -91,55 +91,68 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
         
         // Downloads list of all Pokemon names and URLs
         PokemonManager.shared.fetchFromAPI(of: NationalPokedex.self, from: url)
-            .flatMap({ pokedex in
-                return self.shouldUpdateWithAPI(pokedex: pokedex).map { (pokedex, $0) } })
-            .flatMap({ (pokedex, shouldUpdate) -> AnyPublisher<Bool, Error> in
-                if shouldUpdate {
-                    print("Updating Pokedex with API")
-                    return PokemonManager.shared.updateNationalPokedex(pokedex: pokedex)
-                } else {
-                    print("Skipping update and using local data")
-                    return Just(shouldUpdate).setFailureType(to: Error.self).eraseToAnyPublisher()
-                }
-            })
-            .sink(receiveCompletion: { results in
-                switch results {
+            .sink(receiveCompletion: { completion in
+                switch completion {
                 case .finished:
-                    print("Finished updating Pokemon.")
+                    print("Finished fetching from API")
                     break
                 case .failure(let error):
-                    print(error)
+                    print("Error fetching from API: \(error) - \(error.localizedDescription)")
                 }
-            },
-                  receiveValue: { (pokedexUpdated) in
-                    if pokedexUpdated {
-                        // Core Data was updated - reload with new data
-                        self.loadSavedData()
-                        self.updateUI()
-                    } else {
-                        // Core Data is already up to date - skip reloading
-                        self.updateUI()
-                    }
-            })
+            }) { pokedex in
+                guard let managedObjects = self.fetchedResultsController.fetchedObjects else { return }
+                
+                if self.shouldUpdateWithAPI(pokedex: pokedex, managedObjects: managedObjects) {
+                    let difference = pokedex.count - managedObjects.count
+                    print("Found \(difference) more Pokemon on the API - Should update.")
+                    PokemonManager.shared.updateNationalPokedex(pokedex: pokedex)
+                    self.loadSavedData()
+                } else {
+                    print("Stored Pokemon count matches API - Should skip update")
+                }
+                
+                self.updateUI()
+        }
         .store(in: &subscriptions)
+        
+        
+//        PokemonManager.shared.fetchFromAPI(of: NationalPokedex.self, from: url)
+//            .flatMap({ pokedex in
+//                return self.shouldUpdateWithAPI(pokedex: pokedex).map { (pokedex, $0) } })
+//            .flatMap({ (pokedex, shouldUpdate) -> AnyPublisher<Bool, Error> in
+//                if shouldUpdate {
+//                    print("Updating Pokedex with API")
+//                    return PokemonManager.shared.updateNationalPokedex(pokedex: pokedex)
+//                } else {
+//                    print("Skipping update and using local data")
+//                    return Just(shouldUpdate).setFailureType(to: Error.self).eraseToAnyPublisher()
+//                }
+//            })
+//            .sink(receiveCompletion: { results in
+//                switch results {
+//                case .finished:
+//                    print("Finished updating Pokemon.")
+//                    break
+//                case .failure(let error):
+//                    print(error)
+//                }
+//            },
+//                  receiveValue: { (pokedexUpdated) in
+//                    if pokedexUpdated {
+//                        // Core Data was updated - reload with new data
+//                        self.loadSavedData()
+//                        self.updateUI()
+//                    } else {
+//                        // Core Data is already up to date - skip reloading
+//                        self.updateUI()
+//                    }
+//            })
+//        .store(in: &subscriptions)
     }
     
-    private func shouldUpdateWithAPI(pokedex: NationalPokedex) -> AnyPublisher<Bool, Error> {
-        guard let managedObjects = fetchedResultsController.fetchedObjects else {
-            // If for some reason this is nil, just load from the API again
-            return Just(true).setFailureType(to: Error.self).eraseToAnyPublisher()
-        }
-        
-        if pokedex.count == managedObjects.count && managedObjects.count != 0 {
-            // Pokemon count from Core Data is the same as the Pokemon count from the API - skip updating
-            print("Stored Pokemon count matches API - Should skip update")
-            return Just(false).setFailureType(to: Error.self).eraseToAnyPublisher()
-        } else {
-            // Should update with API
-            let difference = pokedex.count - managedObjects.count
-            print("Found \(difference) more Pokemon on the API - Should update.")
-            return Just(true).setFailureType(to: Error.self).eraseToAnyPublisher()
-        }
+    private func shouldUpdateWithAPI(pokedex: NationalPokedex, managedObjects: [NSManagedObject]) -> Bool {
+        // If the count from the API is different from the count in Core Data OR if the Core Data count is 0 - return true
+        return pokedex.count != managedObjects.count || managedObjects.isEmpty
     }
     
     private func updateUI() {

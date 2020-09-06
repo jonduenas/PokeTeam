@@ -26,14 +26,21 @@ class AbilityDetailVC: UIViewController {
         super.viewDidLoad()
         
         if let abilityObjectID = abilityManagedObjectID {
-            ability = PokemonManager.shared.convertToMO(in: PokemonManager.shared.context, with: abilityObjectID) as? AbilityMO
+            ability = PokemonManager.shared.context.object(with: abilityObjectID) as? AbilityMO
         }
         
         initializeActivityIndicator()
         
+        if let abilityMOID = abilityManagedObjectID {
+            ability = PokemonManager.shared.context.object(with: abilityMOID) as? AbilityMO
+            print(ability!.name!)
+        }
+        
         if shouldUpdateDetails() {
+            print("Fetching ability details")
             fetchAbilityDetails()
         } else {
+            print("Ability details already present.")
             showAbilityDetails()
         }
     }
@@ -48,9 +55,11 @@ class AbilityDetailVC: UIViewController {
     }
     
     private func fetchAbilityDetails() {
-        guard let ability = ability else { return }
+        guard let abilityMOID = abilityManagedObjectID else { return }
 
-        guard let abilityURL = URL(string: ability.urlString!) else {
+        let abilityMO = PokemonManager.shared.backgroundContext.object(with: abilityMOID) as! AbilityMO
+        
+        guard let abilityURL = URL(string: abilityMO.urlString!) else {
             print("Error creating ability URL")
             return
         }
@@ -67,8 +76,9 @@ class AbilityDetailVC: UIViewController {
                 }
             },
                   receiveValue: { (abilityData) in
-                    PokemonManager.shared.addAbilityDescription(to: ability.objectID, with: abilityData)
-                    PokemonManager.shared.save()
+                    PokemonManager.shared.addAbilityDescription(to: abilityMO.objectID, with: abilityData)
+                    PokemonManager.shared.saveContext(PokemonManager.shared.backgroundContext)
+                    //self.ability = PokemonManager.shared.context.object(with: abilityMOID) as? AbilityMO
                     
                     DispatchQueue.main.async {
                         self.showAbilityDetails()
@@ -79,15 +89,15 @@ class AbilityDetailVC: UIViewController {
     }
     
     private func showAbilityDetails() {
-        guard let ability = ability else { return }
-
-        abilityHeaderLabel.text = ability.name?.formatAbilityName()
-        abilityDescriptionLabel.text = ability.abilityDescription
+        abilityHeaderLabel.text = ability?.name?.formatAbilityName()
+        abilityDescriptionLabel.text = ability?.abilityDescription
     }
     
     private func setState(loading: Bool) {
         if loading {
             indicatorView.startAnimating()
+            abilityHeaderLabel.isHidden = true
+            abilityDescriptionLabel.isHidden = true
         } else {
             indicatorView.stopAnimating()
             abilityHeaderLabel.isHidden = false
