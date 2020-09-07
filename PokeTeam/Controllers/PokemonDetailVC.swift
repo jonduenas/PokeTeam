@@ -122,61 +122,6 @@ class PokemonDetailVC: UIViewController {
             }
         }
         .store(in: &subscriptions)
-        
-//        fetchSpeciesData(with: pokemonMO.speciesURL!)
-//            .flatMap({ (speciesData) -> AnyPublisher<Bool, Error> in
-//                PokemonManager.shared.updateDetails(for: self.pokemonManagedObjectID, with: speciesData)
-//            })
-//            .flatMap { _ -> AnyPublisher<PokemonData, Error> in
-//                let pokemonURL = URL(string: pokemonMO.pokemonURL!)
-//                return PokemonManager.shared.fetchFromAPI(of: PokemonData.self, from: pokemonURL!)
-//        }
-//        .flatMap { (pokemonData) -> AnyPublisher<Bool, Error> in
-//            return PokemonManager.shared.updateDetails(for: self.pokemonManagedObjectID, with: pokemonData)
-//        }
-//        .sink(receiveCompletion: { (results) in
-//            switch results {
-//            case .finished:
-//                print("Finished updating Pokemon")
-//            case .failure(let error):
-//                print(error)
-//            }
-//        }) { _ in
-//            PokemonManager.shared.saveContext(backgroundContext)
-//
-//            DispatchQueue.main.async { [weak self] in
-//                self?.showDetails()
-//                self?.setState(loading: false)
-//            }
-//        }
-//        .store(in: &subscriptions)
-        
-//        PokemonManager.shared.fetchFromAPI(of: PokemonData.self, from: pokemonURL)
-//            .map({ (pokemon) in
-//                pokemonData = pokemon
-//                speciesURL = URL(string: pokemon.species.url)
-//            })
-//            .flatMap({ (speciesURL) in
-//                return self.fetchSpeciesData(for: speciesURL)
-//            })
-//            .sink(receiveCompletion: { results in
-//                switch results {
-//                case .finished:
-//                    break
-//                case .failure(let error):
-//                    print(error)
-//                }
-//            },
-//                  receiveValue: { (speciesData) in
-//                    PokemonManager.shared.updateDetails(for: self.pokemon, with: pokemonData!, and: speciesData)
-//                    PokemonManager.shared.save()
-//
-//                    DispatchQueue.main.async { [weak self] in
-//                        self?.showDetails()
-//                        self?.setState(loading: false)
-//                    }
-//            })
-//            .store(in: &subscriptions)
     }
     
     func reloadPokemon(pokemon: PokemonMO) {
@@ -314,40 +259,11 @@ class PokemonDetailVC: UIViewController {
     }
     
     @objc private func addToTeam() {
-        //guard let pokemon = pokemon else { return }
-        
         let pokemonTeam = TeamMO(context: PokemonManager.shared.context)
         pokemonTeam.name = "Test Team"
         pokemonTeam.addToMembers(pokemon)
         
         PokemonManager.shared.saveContext(PokemonManager.shared.context)
-        
-//        let pokemonTeam = PokemonTeam(context: context)
-//        pokemonTeam.name = "Test Team"
-//        
-//        let pokemonManaged = PokemonManaged(context: context)
-//        pokemonManaged.name = pokemon.name
-//        pokemonManaged.id = Int64(pokemon.id)
-//        pokemonManaged.height = pokemon.height
-//        pokemonManaged.weight = pokemon.weight
-//        pokemonManaged.genus = pokemon.genus
-//        pokemonManaged.flavorText = pokemon.flavorText
-//        pokemonManaged.imageID = String(pokemon.id)
-//        pokemonManaged.generation = pokemon.generation
-//        pokemonManaged.moves = pokemon.moves
-//        pokemonManaged.abilities = pokemon.abilities
-//        pokemonManaged.stats = [:]
-//        pokemonManaged.type = []
-//        
-//        pokemonManaged.addToTeam(pokemonTeam)
-        
-//        guard let teamBuilderNav = self.tabBarController?.viewControllers?[1] else { return }
-//        let teamBuilderVC = teamBuilderNav.children.first as! TeamBuilderVC
-//
-//        teamBuilderVC.team.append(pokemon)
-        
-        //let success = pokemonTeam.add(pokemon)
-        //print(success)
     }
     
     private func setState(loading: Bool) {
