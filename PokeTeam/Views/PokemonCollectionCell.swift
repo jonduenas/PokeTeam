@@ -35,18 +35,21 @@ class PokemonCollectionCell: UICollectionViewCell {
         addShadow()
     }
     
-    func setPokemonInfo(for pokemon: Pokemon) {
-        pokemonNameLabel.text = pokemon.name.capitalized
-        pokemonImageView.image = UIImage(named: pokemon.imageID)
+    func setPokemonInfo(for pokemon: PokemonMO) {
+        pokemonNameLabel.text = pokemon.name?.capitalized
+        pokemonImageView.image = UIImage(named: pokemon.imageID!)
         
         // Update Pokemon types
-//        if pokemon.type.count > 1 {
-//            pokemonType1Label.setType(for: pokemon.type[0])
-//            pokemonType2Label.setType(for: pokemon.type[1])
-//        } else {
-//            pokemonType1Label.setType(for: pokemon.type[0])
-//            pokemonType2Label.isHidden = true
-//        }
+        if let pokemonTypes = pokemon.type {
+        if pokemonTypes.count > 1 {
+            pokemonType1Label.setType(for: pokemonTypes[0])
+            pokemonType2Label.setType(for: pokemonTypes[1])
+            pokemonType2Label.isHidden = false
+        } else {
+            pokemonType1Label.setType(for: pokemonTypes[0])
+            pokemonType2Label.isHidden = true
+        }
+    }
     }
     
     private func addShadow() {

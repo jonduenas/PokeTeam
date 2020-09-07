@@ -7,13 +7,14 @@
 //
 
 import UIKit
+import CoreData
 
 private let reuseIdentifier = "PokemonCollectionCell"
 
 class TeamBuilderVC: UICollectionViewController {
     
-    //var teamsArray = [PokemonTeam]()
-    var team = [Pokemon]()
+    var teamsArray = [TeamMO]()
+    var team = [PokemonMO]()
     
     private var numberOfItemsInRow = 3
     private var minimumSpacing = 5
@@ -38,16 +39,20 @@ class TeamBuilderVC: UICollectionViewController {
     
     private func loadSavedTeam() {
         print("attempting load of team")
-//        let pokemonTeam = PokemonTeam(context: context)
-        //let request: NSFetchRequest<PokemonTeam> = PokemonTeam.fetchRequest()
         
-//        do {
-//            let teams = try context.fetch(request)
-//            let firstTeam = teams[0]
-//            team = firstTeam.pokemon!
-//        } catch {
-//            print("Team fetch failed: \(error)")
-//        }
+        let request: NSFetchRequest<TeamMO> = TeamMO.fetchRequest()
+        
+        do {
+            teamsArray = try PokemonManager.shared.context.fetch(request)
+            if teamsArray.count > 0 {
+                print("Found \(teamsArray.count) stored teams")
+                let firstTeam = teamsArray[0]
+                let teamSet = firstTeam.members
+                team = teamSet?.allObjects as! [PokemonMO]
+            }
+        } catch {
+            print("Team fetch failed: \(error)")
+        }
         
         DispatchQueue.main.async {
             self.collectionView.reloadData()

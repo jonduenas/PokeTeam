@@ -316,6 +316,12 @@ class PokemonDetailVC: UIViewController {
     @objc private func addToTeam() {
         //guard let pokemon = pokemon else { return }
         
+        let pokemonTeam = TeamMO(context: PokemonManager.shared.context)
+        pokemonTeam.name = "Test Team"
+        pokemonTeam.addToMembers(pokemon)
+        
+        PokemonManager.shared.saveContext(PokemonManager.shared.context)
+        
 //        let pokemonTeam = PokemonTeam(context: context)
 //        pokemonTeam.name = "Test Team"
 //        
