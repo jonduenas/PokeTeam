@@ -25,8 +25,9 @@ class TeamBuilderVC: UICollectionViewController {
 
         navigationItem.title = "TEAM BUILDER"
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Reload", style: .plain, target: self, action: #selector(reloadData))
-        
-        loadSavedTeam()
+        collectionView.isUserInteractionEnabled = true
+        collectionView.allowsSelection = true
+        self.collectionView.delegate = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -53,10 +54,8 @@ class TeamBuilderVC: UICollectionViewController {
         } catch {
             print("Team fetch failed: \(error)")
         }
-        
         DispatchQueue.main.async {
             self.collectionView.reloadData()
-            
         }
     }
 
@@ -72,10 +71,41 @@ class TeamBuilderVC: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? PokemonCollectionCell else { fatalError("Unable to dequeue PokemonCollectionCell") }
         
-        let pokemon = team[indexPath.row]
+        let pokemonObjectID = team[indexPath.row].objectID
         
-        cell.setPokemonInfo(for: pokemon)
+        cell.setPokemonInfo(for: pokemonObjectID)
     
         return cell
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("Selected")
+//        let pokemonSelected = team[indexPath.row]
+//        if let pokemonName = pokemonSelected.name?.formatPokemonName() {
+//            let actionSheet = UIAlertController(title: "Remove \(pokemonName)?", message: nil, preferredStyle: .actionSheet)
+//            actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+//            actionSheet.addAction(UIAlertAction(title: "Remove", style: .destructive, handler: { [weak self] _ in
+//                self?.remove(pokemon: pokemonSelected)
+//            }))
+//            present(actionSheet, animated: true)
+//        }
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        print("Deselected")
+    }
+    
+    private func remove(pokemon: PokemonMO) {
+        PokemonManager.shared.context.performAndWait {
+            let team = teamsArray[0]
+            team.removeFromMembers(pokemon)
+            do {
+                try PokemonManager.shared.context.save()
+            } catch {
+                print(error)
+            }
+            collectionView.reloadData()
+        }
+        
     }
 }
