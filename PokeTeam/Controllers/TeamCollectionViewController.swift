@@ -21,7 +21,9 @@ class TeamCollectionViewController: UICollectionViewController {
         super.viewDidLoad()
         
         navigationItem.title = "TEAM BUILDER"
-
+        
+        collectionView.backgroundView = UIImageView(image: UIImage(named: "team-background"))
+        collectionView.backgroundColor = .clear
     }
     
     override func viewDidAppear(_ animated: Bool) {
