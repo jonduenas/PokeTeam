@@ -865,6 +865,7 @@
 		65DE2F2525081C1400BE36DB /* TeamCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DE2F2425081C1400BE36DB /* TeamCollectionViewController.swift */; };
 		65E36FC624F84AD1003F00C3 /* NationalPokedex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E36FC524F84AD1003F00C3 /* NationalPokedex.swift */; };
 		65E36FC824F84B60003F00C3 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E36FC724F84B60003F00C3 /* UserDefaultsManager.swift */; };
+		65FC770025094B45001EAF59 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FC76FF25094B45001EAF59 /* DataManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1749,6 +1750,7 @@
 		65DE2F2425081C1400BE36DB /* TeamCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamCollectionViewController.swift; sourceTree = "<group>"; };
 		65E36FC524F84AD1003F00C3 /* NationalPokedex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NationalPokedex.swift; sourceTree = "<group>"; };
 		65E36FC724F84B60003F00C3 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
+		65FC76FF25094B45001EAF59 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2690,6 +2692,7 @@
 			isa = PBXGroup;
 			children = (
 				651D26DB24F5DA12001A4DD1 /* PokeTeam.xcdatamodeld */,
+				65FC76FF25094B45001EAF59 /* DataManager.swift */,
 				6554E7F324D4E18800081EA9 /* PokemonManager.swift */,
 				6541AB1224FD97E200960D17 /* StringFormatting.swift */,
 				65E36FC724F84B60003F00C3 /* UserDefaultsManager.swift */,
@@ -3710,6 +3713,7 @@
 				6541AB1124FD7AB900960D17 /* FormData.swift in Sources */,
 				6599203D24D8F1EE0082F51C /* SpeciesData.swift in Sources */,
 				65DBB9D924D8D567003450A0 /* FontKit.swift in Sources */,
+				65FC770025094B45001EAF59 /* DataManager.swift in Sources */,
 				65E36FC624F84AD1003F00C3 /* NationalPokedex.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

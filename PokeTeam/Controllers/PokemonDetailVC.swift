@@ -259,9 +259,24 @@ class PokemonDetailVC: UIViewController {
     }
     
     @objc private func addToTeam() {
-        let pokemonTeam = TeamMO(context: PokemonManager.shared.context)
-        pokemonTeam.name = "Test Team"
-        pokemonTeam.addToMembers(pokemon)
+        if let existingTeam = loadTeam() {
+            let existingTeamArray = existingTeam.members?.allObjects as! [PokemonMO]
+            if existingTeamArray.contains(pokemon) {
+                print("Pokemon already is in your team. Each team member must be a unique species.")
+                return
+            } else if existingTeamArray.count >= 6 {
+                print("You can only have 6 Pokemon in a team. Please remove one before adding another.")
+                return
+            } else {
+                print("Adding \(pokemon.name ?? "pokemon") to team.")
+                existingTeam.addToMembers(pokemon)
+            }
+            
+        } else {
+            let pokemonTeam = TeamMO(context: PokemonManager.shared.context)
+            pokemonTeam.name = "Test Team"
+            pokemonTeam.addToMembers(pokemon)
+        }
         
         PokemonManager.shared.saveContext(PokemonManager.shared.context)
     }
@@ -274,5 +289,22 @@ class PokemonDetailVC: UIViewController {
             detailView.isHidden = false
             indicatorView.stopAnimating()
         }
+    }
+    
+    private func loadTeam() -> TeamMO? {
+        let context = PokemonManager.shared.context
+        let teamRequest: NSFetchRequest<TeamMO> = TeamMO.fetchRequest()
+        
+        do {
+            let teams = try context.fetch(teamRequest)
+            if teams.count > 0 {
+                return teams[0]
+            } else {
+                return nil
+            }
+        } catch {
+            print("Error reloading Pokemon - \(error) - \(error.localizedDescription)")
+        }
+        return nil
     }
 }
