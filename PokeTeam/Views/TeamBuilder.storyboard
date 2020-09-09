@@ -124,7 +124,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="shw-Da-XqG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3683" y="511"/>
+            <point key="canvasLocation" x="2783" y="-217"/>
         </scene>
         <!--Team Builder-->
         <scene sceneID="h4G-bg-X2b">
@@ -137,7 +137,7 @@
                         <color key="barTintColor" name="poke-red"/>
                     </simulatedNavigationBarMetrics>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="HZ1-kL-0gp">
-                        <rect key="frame" x="0.0" y="44" width="414" height="104.5"/>
+                        <rect key="frame" x="0.0" y="44" width="414" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" name="navbar"/>
                     </navigationBar>
@@ -159,24 +159,32 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" name="navbar"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Ckr-tZ-FqU">
-                            <size key="itemSize" width="300" height="95"/>
+                            <size key="itemSize" width="320" height="95"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                             <inset key="sectionInset" minX="0.0" minY="15" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
                             <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PokemonCollectionViewCell" id="xIu-js-CwD" customClass="PokemonCollectionViewCell" customModule="PokeTeam" customModuleProvider="target">
-                                <rect key="frame" x="57" y="15" width="300" height="95"/>
+                                <rect key="frame" x="47" y="15" width="320" height="95"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="aSo-42-4Tf">
-                                    <rect key="frame" x="0.0" y="0.0" width="300" height="95"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="95"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qFA-jc-cRh">
-                                            <rect key="frame" x="103" y="10" width="197" height="75"/>
+                                            <rect key="frame" x="103" y="10" width="217" height="75"/>
                                             <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron.right" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="RAj-Cc-U5Y">
+                                                    <rect key="frame" x="187" y="29.5" width="10" height="16.5"/>
+                                                    <color key="tintColor" systemColor="opaqueSeparatorColor" red="0.77647058820000003" green="0.77647058820000003" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="20" id="gpX-R2-ukV"/>
+                                                        <constraint firstAttribute="width" constant="10" id="l2T-uJ-J5W"/>
+                                                    </constraints>
+                                                </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pokemon" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.69999999999999996" translatesAutoresizingMaskIntoConstraints="NO" id="1Tc-1c-fi2">
-                                                    <rect key="frame" x="0.0" y="0.0" width="197" height="35"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="217" height="35"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="35" id="7EL-JK-qV4"/>
                                                     </constraints>
@@ -226,7 +234,9 @@
                                                 <constraint firstAttribute="trailing" secondItem="1Tc-1c-fi2" secondAttribute="trailing" id="B1X-vV-NfX"/>
                                                 <constraint firstItem="gvj-yt-742" firstAttribute="leading" secondItem="sOQ-Kl-9nG" secondAttribute="trailing" constant="5" id="FWe-XW-wJo"/>
                                                 <constraint firstItem="sOQ-Kl-9nG" firstAttribute="leading" secondItem="1Tc-1c-fi2" secondAttribute="leading" id="LJT-dc-lMo"/>
+                                                <constraint firstAttribute="trailing" secondItem="RAj-Cc-U5Y" secondAttribute="trailing" constant="20" id="P5U-wR-RSQ"/>
                                                 <constraint firstItem="sOQ-Kl-9nG" firstAttribute="top" secondItem="gvj-yt-742" secondAttribute="top" id="Tm1-WV-GZw"/>
+                                                <constraint firstItem="RAj-Cc-U5Y" firstAttribute="centerY" secondItem="qFA-jc-cRh" secondAttribute="centerY" id="aDe-Xd-gnL"/>
                                                 <constraint firstItem="sOQ-Kl-9nG" firstAttribute="top" secondItem="1Tc-1c-fi2" secondAttribute="bottom" constant="5" id="nMA-4G-1y2"/>
                                                 <constraint firstItem="1Tc-1c-fi2" firstAttribute="top" secondItem="qFA-jc-cRh" secondAttribute="top" id="qnQ-dI-qfX"/>
                                             </constraints>
@@ -266,11 +276,12 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dIa-vs-rXA" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2783" y="511"/>
+            <point key="canvasLocation" x="2782.608695652174" y="510.9375"/>
         </scene>
     </scenes>
     <resources>
         <image name="100" width="475" height="475"/>
+        <image name="chevron.right" catalog="system" width="96" height="128"/>
         <image name="shield.lefthalf.fill" catalog="system" width="128" height="121"/>
         <namedColor name="navbar">
             <color red="0.85100001096725464" green="0.2199999988079071" blue="0.2669999897480011" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
