@@ -24,7 +24,7 @@ struct SpeciesData: Codable {
     let isBaby: Bool
     let isLegendary: Bool
     let isMythical: Bool
-    let order: Int
+    let order: Int?
     let pokedexNumbers: [PokedexNumber]
     let varieties: [Variety]
 }

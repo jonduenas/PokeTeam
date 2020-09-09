@@ -173,8 +173,12 @@ class PokemonManager {
             pokemon.isBaby = speciesData.isBaby
             pokemon.isLegendary = speciesData.isLegendary
             pokemon.isMythical = speciesData.isMythical
-            pokemon.order = Int64(speciesData.order)
-            pokemon.nationalPokedexNumber = Int64(speciesData.pokedexNumbers[0].entryNumber)
+            if !speciesData.pokedexNumbers.isEmpty {
+                pokemon.nationalPokedexNumber = Int64(speciesData.pokedexNumbers[0].entryNumber)
+            }
+            if let speciesOrder = speciesData.order {
+                pokemon.order = Int64(speciesOrder)
+            }
             
             pokemon.pokemonURL = speciesData.varieties[0].pokemon.url
         }
