@@ -271,20 +271,25 @@ class PokemonDetailVC: UIViewController {
         if let existingTeam = loadTeam() {
             let existingTeamArray = existingTeam.members?.allObjects as! [PokemonMO]
             if existingTeamArray.contains(pokemon) {
-                print("Pokemon already is in your team. Each team member must be a unique species.")
+                showAlert(title: "Error adding to team", message: "This Pokemon is already in your team. Each team member must be a unique species.")
                 return
             } else if existingTeamArray.count >= 6 {
-                print("You can only have 6 Pokemon in a team. Please remove one before adding another.")
+                showAlert(title: "Error adding to team", message: "You can only have 6 Pokemon in a team. Please remove one before adding another.")
                 return
             } else {
-                print("Adding \(pokemon.name ?? "pokemon") to team.")
-                existingTeam.addToMembers(pokemon)
+                showAlert(title: "Add to team", message: "Would you like to add \(pokemon.name ?? "this pokemon") to your team?") {
+                    existingTeam.addToMembers(self.pokemon)
+                    print("Adding \(self.pokemon.name!) to team.")
+                }
             }
             
         } else {
-            let pokemonTeam = TeamMO(context: PokemonManager.shared.context)
-            pokemonTeam.name = "Test Team"
-            pokemonTeam.addToMembers(pokemon)
+            showAlert(title: "Add to team", message: "Would you like to add \(pokemon.name ?? "this pokemon") to your team?") {
+                let pokemonTeam = TeamMO(context: PokemonManager.shared.context)
+                pokemonTeam.name = "Test Team"
+                pokemonTeam.addToMembers(self.pokemon)
+                print("Adding \(self.pokemon.name!) to team.")
+            }
         }
         
         PokemonManager.shared.saveContext(PokemonManager.shared.context)
@@ -315,5 +320,18 @@ class PokemonDetailVC: UIViewController {
             print("Error reloading Pokemon - \(error) - \(error.localizedDescription)")
         }
         return nil
+    }
+}
+
+extension UIViewController {
+    func showAlert(title: String = "", message: String, afterConfirm: (() -> Void)? = nil) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let OKAction = UIAlertAction(title: "OK", style: .default) { _ in
+            if let action = afterConfirm {
+                action()
+            }
+        }
+        alertController.addAction(OKAction)
+        self.present(alertController, animated: true, completion: nil)
     }
 }
