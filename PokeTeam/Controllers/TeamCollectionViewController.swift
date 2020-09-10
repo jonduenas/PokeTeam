@@ -53,21 +53,6 @@ class TeamCollectionViewController: UICollectionViewController {
             self.collectionView.reloadData()
         }
     }
-    
-    private func remove(pokemon: PokemonMO) {
-        PokemonManager.shared.context.performAndWait {
-            let team = teamsArray[0]
-            team.removeFromMembers(pokemon)
-            do {
-                try PokemonManager.shared.context.save()
-            } catch {
-                print(error)
-            }
-            loadSavedTeam()
-            collectionView.reloadData()
-        }
-        
-    }
 
     // MARK: - Navigation
 

@@ -339,7 +339,13 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="t8D-TB-5Jv"/>
                     </view>
-                    <navigationItem key="navigationItem" title="POKEMON" id="mHI-YY-XmH"/>
+                    <navigationItem key="navigationItem" title="POKEMON" id="mHI-YY-XmH">
+                        <barButtonItem key="rightBarButtonItem" systemItem="trash" id="q09-Y6-z8V">
+                            <connections>
+                                <action selector="trashTapped:" destination="A7p-DA-mdD" id="gYY-Sx-ogp"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="pokemonImageView" destination="Qn0-af-pUH" id="8rn-8a-Hvt"/>
                     </connections>
