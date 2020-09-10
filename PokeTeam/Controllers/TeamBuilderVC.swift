@@ -22,9 +22,16 @@ class TeamBuilderVC: UICollectionViewController {
         super.viewDidLoad()
         
         navigationItem.title = "TEAM BUILDER"
+        navigationController?.navigationBar.setNavigationBarColor(to: UIColor(named: "team-builder"))
         
         collectionView.backgroundView = UIImageView(image: UIImage(named: "team-background"))
         collectionView.backgroundColor = .clear
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {

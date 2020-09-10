@@ -40,7 +40,7 @@
             <objects>
                 <collectionViewController storyboardIdentifier="TeamCollectionViewController" title="TEAM BUILDER" id="W9j-L3-734" customClass="TeamBuilderVC" customModule="PokeTeam" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="gOT-8y-ABG">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="813"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" name="navbar"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Ckr-tZ-FqU">
@@ -169,21 +169,21 @@
             <objects>
                 <viewController id="A7p-DA-mdD" customClass="PokemonBuilderVC" customModule="PokeTeam" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="xET-zi-VV5">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="813"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="team-background" translatesAutoresizingMaskIntoConstraints="NO" id="Xg9-xG-TPC">
-                                <rect key="frame" x="0.0" y="140" width="414" height="673"/>
+                                <rect key="frame" x="0.0" y="148.5" width="414" height="664.5"/>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="100" translatesAutoresizingMaskIntoConstraints="NO" id="Qn0-af-pUH">
-                                <rect key="frame" x="143" y="160" width="128" height="128"/>
+                                <rect key="frame" x="143" y="168.5" width="128" height="128"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="128" id="Ygu-22-elX"/>
                                     <constraint firstAttribute="height" constant="128" id="wFF-OK-FvL"/>
                                 </constraints>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Jf-dr-9Mk" customClass="RoundedCorners" customModule="PokeTeam" customModuleProvider="target">
-                                <rect key="frame" x="20" y="338" width="374" height="128"/>
+                                <rect key="frame" x="20" y="346.5" width="374" height="128"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Coming Soon..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8yP-N5-dAB">
                                         <rect key="frame" x="113.5" y="10" width="147" height="26.5"/>

@@ -14,23 +14,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        // Customize Navigation Bar appearance
-        let coloredAppearance = UINavigationBarAppearance()
-        coloredAppearance.configureWithTransparentBackground()
-        coloredAppearance.backgroundColor = UIColor(named: "navbar")
-        coloredAppearance.titleTextAttributes = [.foregroundColor: UIColor.label]
-        
-        let button = UIBarButtonItemAppearance(style: .plain)
-        button.normal.titleTextAttributes = [.foregroundColor: UIColor.label]
-        coloredAppearance.buttonAppearance = button
-        
-        let done = UIBarButtonItemAppearance(style: .done)
-        done.normal.titleTextAttributes = [.foregroundColor: UIColor.label]
-        coloredAppearance.doneButtonAppearance = done
-        
-        UINavigationBar.appearance().standardAppearance = coloredAppearance
-        UINavigationBar.appearance().scrollEdgeAppearance = coloredAppearance
-        
         return true
     }
 

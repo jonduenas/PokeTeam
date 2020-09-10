@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
@@ -11,20 +12,20 @@
         <scene sceneID="8cG-r6-onm">
             <objects>
                 <tableViewController id="Zp9-45-eKE" customClass="PokeDexVC" customModule="PokeTeam" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="oJQ-KJ-Bl1">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="oJQ-KJ-Bl1">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="pokemonCell" id="omd-A1-0gx" customClass="PokemonTableCell" customModule="PokeTeam" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="600" height="70.5"/>
+                                <rect key="frame" x="0.0" y="28" width="414" height="70"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="omd-A1-0gx" id="a96-6L-Azo">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="70.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="70"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ciP-ev-NY8">
-                                            <rect key="frame" x="10" y="10" width="60" height="50.5"/>
+                                            <rect key="frame" x="10" y="10" width="60" height="50"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="60" id="22i-g1-xPj"/>
                                                 <constraint firstAttribute="height" priority="999" constant="50" id="4Nh-84-Oph"/>
@@ -69,39 +70,39 @@
             <objects>
                 <viewController id="S8U-rw-TgR" customClass="PokemonDetailVC" customModule="PokeTeam" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="gg1-uL-ctG">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="team-background" translatesAutoresizingMaskIntoConstraints="NO" id="PBv-hW-OSu">
-                                <rect key="frame" x="0.0" y="44" width="600" height="556"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pokedex-background" translatesAutoresizingMaskIntoConstraints="NO" id="PBv-hW-OSu">
+                                <rect key="frame" x="0.0" y="88" width="414" height="808"/>
                             </imageView>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zip-Bt-yp4">
-                                <rect key="frame" x="0.0" y="44" width="600" height="556"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L4e-QI-bFf">
-                                        <rect key="frame" x="0.0" y="0.0" width="600" height="1122"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="1122"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="35" translatesAutoresizingMaskIntoConstraints="NO" id="j14-dF-NLD">
-                                                <rect key="frame" x="0.0" y="25" width="600" height="1097"/>
+                                                <rect key="frame" x="0.0" y="25" width="414" height="1097"/>
                                                 <subviews>
                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="poke_ball" translatesAutoresizingMaskIntoConstraints="NO" id="9KX-Et-yFh">
-                                                        <rect key="frame" x="200" y="0.0" width="200" height="200"/>
+                                                        <rect key="frame" x="107" y="0.0" width="200" height="200"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="200" id="2FK-Rf-tNA"/>
                                                             <constraint firstAttribute="height" constant="200" id="Cr5-ki-pdA"/>
                                                         </constraints>
                                                     </imageView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="EAE-Jo-5Hf">
-                                                        <rect key="frame" x="20" y="235" width="560" height="261"/>
+                                                        <rect key="frame" x="20" y="235" width="374" height="261"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bulbasaur" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OSh-HH-YdB">
-                                                                <rect key="frame" x="200" y="0.0" width="160" height="41"/>
+                                                                <rect key="frame" x="107" y="0.0" width="160" height="41"/>
                                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="34"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="dNt-42-tAd">
-                                                                <rect key="frame" x="197.5" y="56" width="165" height="27"/>
+                                                                <rect key="frame" x="104.5" y="56" width="165" height="27"/>
                                                                 <subviews>
                                                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Grass" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gyk-pZ-ujZ" customClass="PokemonTypeLabel" customModule="PokeTeam" customModuleProvider="target">
                                                                         <rect key="frame" x="0.0" y="0.0" width="80" height="27"/>
@@ -138,25 +139,25 @@
                                                                 </subviews>
                                                             </stackView>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="#001 - Seed Pokemon" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EhZ-Gl-G3x">
-                                                                <rect key="frame" x="185.5" y="98" width="189" height="23"/>
+                                                                <rect key="frame" x="92.5" y="98" width="189" height="23"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Weu-te-oOe" customClass="RoundedCorners" customModule="PokeTeam" customModuleProvider="target">
-                                                                <rect key="frame" x="20" y="136" width="520" height="125"/>
+                                                                <rect key="frame" x="20" y="136" width="334" height="125"/>
                                                                 <subviews>
                                                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="5XC-w8-3na">
-                                                                        <rect key="frame" x="15" y="12.5" width="495" height="100"/>
+                                                                        <rect key="frame" x="15" y="12.5" width="309" height="100"/>
                                                                         <subviews>
                                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="For some time after its birth, it grows by gaining nourishment from the seed on its back." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.59999999999999998" translatesAutoresizingMaskIntoConstraints="NO" id="ss8-Uv-laT">
-                                                                                <rect key="frame" x="0.0" y="29" width="460" height="42.5"/>
+                                                                                <rect key="frame" x="0.0" y="18" width="274" height="64.5"/>
                                                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                                                 <nil key="textColor"/>
                                                                                 <nil key="highlightedColor"/>
                                                                             </label>
                                                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron.right" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="jdk-OR-KVF">
-                                                                                <rect key="frame" x="480" y="34.5" width="15" height="31.5"/>
+                                                                                <rect key="frame" x="294" y="34.5" width="15" height="31.5"/>
                                                                                 <color key="tintColor" systemColor="opaqueSeparatorColor" red="0.77647058820000003" green="0.77647058820000003" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                                 <constraints>
                                                                                     <constraint firstAttribute="height" constant="35" id="8RF-Ab-xwb"/>
@@ -184,7 +185,7 @@
                                                         </constraints>
                                                     </stackView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="vsn-Z6-9a9">
-                                                        <rect key="frame" x="192" y="531" width="216.5" height="30"/>
+                                                        <rect key="frame" x="99" y="531" width="216.5" height="30"/>
                                                         <subviews>
                                                             <stackView opaque="NO" contentMode="scaleToFill" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="EyE-Sj-CYf">
                                                                 <rect key="frame" x="0.0" y="0.0" width="88" height="30"/>
@@ -225,7 +226,7 @@
                                                         </subviews>
                                                     </stackView>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bu1-QE-6Yd">
-                                                        <rect key="frame" x="180" y="596" width="240" height="1"/>
+                                                        <rect key="frame" x="87" y="596" width="240" height="1"/>
                                                         <color key="backgroundColor" systemColor="opaqueSeparatorColor" red="0.77647058820000003" green="0.77647058820000003" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="240" id="24B-0i-h6C"/>
@@ -233,55 +234,55 @@
                                                         </constraints>
                                                     </view>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="wEj-kB-aL9">
-                                                        <rect key="frame" x="25" y="632" width="550" height="202.5"/>
+                                                        <rect key="frame" x="25" y="632" width="364" height="202.5"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Base Stats" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wry-Fh-3QK">
-                                                                <rect key="frame" x="221.5" y="0.0" width="107" height="26.5"/>
+                                                                <rect key="frame" x="128.5" y="0.0" width="107" height="26.5"/>
                                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="22"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TOTAL 318" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gnd-R4-p4e">
-                                                                <rect key="frame" x="242" y="36.5" width="66.5" height="16"/>
+                                                                <rect key="frame" x="149" y="36.5" width="66.5" height="16"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="tPy-tC-Tgo">
-                                                                <rect key="frame" x="0.0" y="62.5" width="550" height="140"/>
+                                                                <rect key="frame" x="0.0" y="62.5" width="364" height="140"/>
                                                                 <subviews>
                                                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="acx-7F-zyq" customClass="StatView" customModule="PokeTeam" customModuleProvider="target">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="550" height="15"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="364" height="15"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="15" id="pG1-kA-q2o"/>
                                                                         </constraints>
                                                                     </stackView>
                                                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uxe-3d-L7V" customClass="StatView" customModule="PokeTeam" customModuleProvider="target">
-                                                                        <rect key="frame" x="0.0" y="25" width="550" height="15"/>
+                                                                        <rect key="frame" x="0.0" y="25" width="364" height="15"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="15" id="MCe-kC-j0D"/>
                                                                         </constraints>
                                                                     </stackView>
                                                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IiU-V3-kmQ" customClass="StatView" customModule="PokeTeam" customModuleProvider="target">
-                                                                        <rect key="frame" x="0.0" y="50" width="550" height="15"/>
+                                                                        <rect key="frame" x="0.0" y="50" width="364" height="15"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="15" id="1ez-Ie-4oC"/>
                                                                         </constraints>
                                                                     </stackView>
                                                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="21v-tu-KMI" customClass="StatView" customModule="PokeTeam" customModuleProvider="target">
-                                                                        <rect key="frame" x="0.0" y="75" width="550" height="15"/>
+                                                                        <rect key="frame" x="0.0" y="75" width="364" height="15"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="15" id="klj-qD-g12"/>
                                                                         </constraints>
                                                                     </stackView>
                                                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RJ7-de-jzL" customClass="StatView" customModule="PokeTeam" customModuleProvider="target">
-                                                                        <rect key="frame" x="0.0" y="100" width="550" height="15"/>
+                                                                        <rect key="frame" x="0.0" y="100" width="364" height="15"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="15" id="uYQ-ve-6ci"/>
                                                                         </constraints>
                                                                     </stackView>
                                                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eA7-1a-cSF" customClass="StatView" customModule="PokeTeam" customModuleProvider="target">
-                                                                        <rect key="frame" x="0.0" y="125" width="550" height="15"/>
+                                                                        <rect key="frame" x="0.0" y="125" width="364" height="15"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="15" id="Fh8-uq-cBX"/>
                                                                         </constraints>
@@ -295,7 +296,7 @@
                                                         </constraints>
                                                     </stackView>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Hw-Yx-DkV">
-                                                        <rect key="frame" x="180" y="869.5" width="240" height="1"/>
+                                                        <rect key="frame" x="87" y="869.5" width="240" height="1"/>
                                                         <color key="backgroundColor" systemColor="opaqueSeparatorColor" red="0.77647058820000003" green="0.77647058820000003" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="1" id="MLr-vr-eIN"/>
@@ -303,16 +304,16 @@
                                                         </constraints>
                                                     </view>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="CJr-op-7tc">
-                                                        <rect key="frame" x="25" y="905.5" width="550" height="191.5"/>
+                                                        <rect key="frame" x="25" y="905.5" width="364" height="191.5"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Abilities" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SAb-p6-0hC">
-                                                                <rect key="frame" x="234.5" y="0.0" width="81" height="26.5"/>
+                                                                <rect key="frame" x="141.5" y="0.0" width="81" height="26.5"/>
                                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="22"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="1zo-Fr-I9D">
-                                                                <rect key="frame" x="200" y="41.5" width="150" height="150"/>
+                                                                <rect key="frame" x="107" y="41.5" width="150" height="150"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" priority="250" constant="150" id="wYt-QN-JgS"/>
                                                                 </constraints>
@@ -399,15 +400,15 @@
             <objects>
                 <tableViewController id="CLi-qg-VSW" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="hTC-Ib-zeI">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="Myx-gd-5xj">
-                                <rect key="frame" x="0.0" y="28" width="600" height="43.5"/>
+                                <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Myx-gd-5xj" id="35s-2R-49J">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -427,20 +428,20 @@
             <objects>
                 <viewController storyboardIdentifier="AbilityVC" id="6Zf-jt-lcP" customClass="AbilityDetailVC" customModule="PokeTeam" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Dqf-en-e7e">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5lU-zF-LTT">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="50"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="50"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ability" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="he6-L5-P0z">
-                                        <rect key="frame" x="273.5" y="14.5" width="53" height="21"/>
+                                        <rect key="frame" x="180.5" y="14.5" width="53" height="21"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3qL-6a-64K">
-                                        <rect key="frame" x="555" y="12.5" width="25" height="25"/>
+                                        <rect key="frame" x="369" y="12.5" width="25" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="25" id="Tb2-nG-gjA"/>
                                             <constraint firstAttribute="width" constant="25" id="kHs-Rn-7LQ"/>
@@ -464,7 +465,7 @@
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RLI-4W-SEW">
-                                <rect key="frame" x="20" y="70" width="560" height="20.5"/>
+                                <rect key="frame" x="20" y="70" width="374" height="20.5"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -501,10 +502,10 @@
                         <color key="barTintColor" name="poke-red"/>
                     </simulatedNavigationBarMetrics>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="vo0-cz-KlI">
-                        <rect key="frame" x="0.0" y="44" width="414" height="96"/>
+                        <rect key="frame" x="0.0" y="44" width="414" height="104.5"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
-                        <color key="barTintColor" name="navbar"/>
+                        <color key="barTintColor" name="pokedex"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -523,7 +524,7 @@
         <image name="chevron.right" catalog="system" width="96" height="128"/>
         <image name="heavy-weight" width="50" height="50"/>
         <image name="poke_ball" width="596" height="595"/>
-        <image name="team-background" width="414" height="896"/>
+        <image name="pokedex-background" width="414" height="896"/>
         <image name="x.circle.fill" catalog="system" width="128" height="121"/>
         <namedColor name="navbar">
             <color red="0.85100001096725464" green="0.2199999988079071" blue="0.2669999897480011" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -533,6 +534,9 @@
         </namedColor>
         <namedColor name="poke-red">
             <color red="0.85100001096725464" green="0.2199999988079071" blue="0.2669999897480011" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="pokedex">
+            <color red="0.97647058823529409" green="0.44705882352941179" blue="0.28235294117647058" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>
