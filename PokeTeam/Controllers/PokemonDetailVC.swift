@@ -286,7 +286,7 @@ class PokemonDetailVC: UIViewController {
     }
     
     private func showAddToTeamAlert(team: TeamMO?) {
-        let alertController = UIAlertController(title: "Add to team", message: "Would you like to add \(pokemon.name ?? "this pokemon") to your team?", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "Add to team", message: "Would you like to add \(pokemon.name?.formatPokemonName() ?? "this pokemon") to your team?", preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         alertController.addAction(UIAlertAction(title: "Add", style: .default, handler: { _ in
             if let existingTeam = team {
