@@ -1,5 +1,5 @@
 //
-//  PokemonCollectionViewCell.swift
+//  PokemonCollectionCell.swift
 //  PokeTeam
 //
 //  Created by Jon Duenas on 9/8/20.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PokemonCollectionViewCell: UICollectionViewCell {
+class PokemonCollectionCell: UICollectionViewCell {
     
     let cornerRadius: CGFloat = 45
     @IBOutlet weak var pokemonImageView: UIImageView!

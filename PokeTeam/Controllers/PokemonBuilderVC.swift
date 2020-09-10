@@ -1,5 +1,5 @@
 //
-//  PokemonBuildVC.swift
+//  PokemonBuilderVC.swift
 //  PokeTeam
 //
 //  Created by Jon Duenas on 9/10/20.
@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class PokemonBuildVC: UIViewController {
+class PokemonBuilderVC: UIViewController {
 
     var pokemonName: String?
     var pokemonImageName: String?

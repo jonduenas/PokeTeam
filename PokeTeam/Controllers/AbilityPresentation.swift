@@ -37,7 +37,6 @@ class AbilityPresentation: UIPresentationController {
             frame = CGRect(x: 0, y: containerBounds.height - height, width: containerBounds.width, height: height)
         }
         return frame
-//        return CGRect(origin: CGPoint(x: 0, y: self.containerView!.frame.height/3), size: CGSize(width: self.containerView!.frame.width, height: self.containerView!.frame.height/3))
     }
     
     override func dismissalTransitionWillBegin() {

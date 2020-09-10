@@ -142,7 +142,7 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: pokemonCellID, for: indexPath) as! PokemonCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: pokemonCellID, for: indexPath) as! PokemonTableCell
         
         let pokemon: PokemonMO
         if isFiltering {

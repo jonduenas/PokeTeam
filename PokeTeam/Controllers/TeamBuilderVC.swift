@@ -1,5 +1,5 @@
 //
-//  TeamCollectionViewController.swift
+//  TeamBuilderVC.swift
 //  PokeTeam
 //
 //  Created by Jon Duenas on 9/8/20.
@@ -9,10 +9,10 @@
 import UIKit
 import CoreData
 
-private let reuseIdentifier = "PokemonCollectionViewCell"
+private let reuseIdentifier = "PokemonCollectionCell"
 private let segueIdentifier = "detailSegue"
 
-class TeamCollectionViewController: UICollectionViewController {
+class TeamBuilderVC: UICollectionViewController {
 
     let testArray = ["Pokemon 1", "Pokemon 2", "Pokemon 3"]
     var teamsArray = [TeamMO]()
@@ -62,7 +62,7 @@ class TeamCollectionViewController: UICollectionViewController {
         let selectedItem = indexPath[0].row
         
         if segue.identifier == segueIdentifier {
-            let detailVC = segue.destination as! PokemonBuildVC
+            let detailVC = segue.destination as! PokemonBuilderVC
             detailVC.pokemonName = team[selectedItem].name
             detailVC.pokemonImageName = team[selectedItem].imageID
             detailVC.pokemonManagedObjectID = team[selectedItem].objectID
@@ -84,7 +84,7 @@ class TeamCollectionViewController: UICollectionViewController {
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PokemonCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PokemonCollectionCell
     
         // Configure the cell
         cell.setPokemonInfo(for: team[indexPath.row])
