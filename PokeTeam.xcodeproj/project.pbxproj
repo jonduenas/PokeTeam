@@ -890,7 +890,7 @@
 		651D26DC24F5DA12001A4DD1 /* PokeTeam.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PokeTeam.xcdatamodel; sourceTree = "<group>"; };
 		651E246624F19874000052ED /* validateHTTPStatus+Publisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "validateHTTPStatus+Publisher.swift"; sourceTree = "<group>"; };
 		651E246924F1DD5F000052ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Pokedex.storyboard; sourceTree = "<group>"; };
-		651E246B24F1DDD8000052ED /* TeamBuilder.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = TeamBuilder.storyboard; path = PokeTeam/Views/TeamBuilder.storyboard; sourceTree = SOURCE_ROOT; };
+		651E246B24F1DDD8000052ED /* TeamBuilder.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = TeamBuilder.storyboard; path = PokeTeam/Views/Base.lproj/TeamBuilder.storyboard; sourceTree = SOURCE_ROOT; };
 		651E246E24F1DE10000052ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Settings.storyboard; sourceTree = "<group>"; };
 		6528C08C24E6245000199DA7 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ActivityIndicator.swift; path = PokeTeam/Views/ActivityIndicator.swift; sourceTree = SOURCE_ROOT; };
 		6528C09024E70CAE00199DA7 /* PokemonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonCell.swift; sourceTree = "<group>"; };
