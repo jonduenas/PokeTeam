@@ -269,7 +269,7 @@ class PokemonDetailVC: UIViewController {
     
     @objc private func addToTeam() {
         if let existingTeam = loadTeam() {
-            let existingTeamArray = existingTeam.members?.allObjects as! [PokemonMO]
+            let existingTeamArray = existingTeam.members?.array as! [PokemonMO]
             if existingTeamArray.contains(pokemon) {
                 showAlert(title: "Error adding to team", message: "This Pokemon is already in your team. Each team member must be a unique species.")
                 return
@@ -282,7 +282,7 @@ class PokemonDetailVC: UIViewController {
         } else {
             showAddToTeamAlert(team: nil)
         }
-        PokemonManager.shared.saveContext(PokemonManager.shared.context)
+        
     }
     
     private func showAddToTeamAlert(team: TeamMO?) {
@@ -292,10 +292,12 @@ class PokemonDetailVC: UIViewController {
             if let existingTeam = team {
                 existingTeam.addToMembers(self.pokemon)
                 print("Adding \(self.pokemon.name!) to existing team.")
+                PokemonManager.shared.saveContext(PokemonManager.shared.context)
             } else {
                 let newTeam = TeamMO(context: PokemonManager.shared.context)
                 newTeam.addToMembers(self.pokemon)
                 print("Adding \(self.pokemon.name!) to new team.")
+                PokemonManager.shared.saveContext(PokemonManager.shared.context)
             }
         }))
         present(alertController, animated: true)

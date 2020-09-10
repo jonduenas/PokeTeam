@@ -44,7 +44,8 @@ class TeamCollectionViewController: UICollectionViewController {
                 print("Found \(teamsArray.count) stored teams")
                 let firstTeam = teamsArray[0]
                 let teamSet = firstTeam.members
-                team = teamSet?.allObjects as! [PokemonMO]
+                team = teamSet?.array as! [PokemonMO]
+                //team = teamSet?.allObjects as! [PokemonMO]
             }
         } catch {
             print("Team fetch failed: \(error)")

@@ -86,7 +86,7 @@
     </entity>
     <entity name="Team" representedClassName="TeamMO" syncable="YES" codeGenerationType="class">
         <attribute name="name" optional="YES" attributeType="String"/>
-        <relationship name="members" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Pokemon" inverseName="team" inverseEntity="Pokemon"/>
+        <relationship name="members" optional="YES" toMany="YES" maxCount="6" deletionRule="Nullify" ordered="YES" destinationEntity="Pokemon" inverseName="team" inverseEntity="Pokemon"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="name"/>
