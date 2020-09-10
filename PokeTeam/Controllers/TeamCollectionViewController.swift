@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 
 private let reuseIdentifier = "PokemonCollectionViewCell"
+private let segueIdentifier = "detailSegue"
 
 class TeamCollectionViewController: UICollectionViewController {
 
@@ -67,6 +68,21 @@ class TeamCollectionViewController: UICollectionViewController {
         }
         
     }
+
+    // MARK: - Navigation
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let indexPath = collectionView.indexPathsForSelectedItems!
+        let selectedItem = indexPath[0].row
+        
+        if segue.identifier == segueIdentifier {
+            let detailVC = segue.destination as! PokemonBuildVC
+            detailVC.pokemonName = team[selectedItem].name
+            detailVC.pokemonImageName = team[selectedItem].imageID
+            detailVC.pokemonManagedObjectID = team[selectedItem].objectID
+        }
+    }
+    
 
     // MARK: UICollectionViewDataSource
 

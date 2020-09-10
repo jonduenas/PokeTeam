@@ -12,6 +12,7 @@
 		651E246A24F1DD5F000052ED /* Pokedex.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 651E246824F1DD5F000052ED /* Pokedex.storyboard */; };
 		651E246C24F1DDD8000052ED /* TeamBuilder.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 651E246B24F1DDD8000052ED /* TeamBuilder.storyboard */; };
 		651E246F24F1DE10000052ED /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 651E246D24F1DE10000052ED /* Settings.storyboard */; };
+		6525EE26250AAA91008C2967 /* PokemonBuildVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6525EE25250AAA91008C2967 /* PokemonBuildVC.swift */; };
 		6528C08D24E6245000199DA7 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6528C08C24E6245000199DA7 /* ActivityIndicator.swift */; };
 		6528C09124E70CAE00199DA7 /* PokemonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6528C09024E70CAE00199DA7 /* PokemonCell.swift */; };
 		6528C47824E72B1C00199DA7 /* parasect.png in Resources */ = {isa = PBXBuildFile; fileRef = 6528C09424E72B1700199DA7 /* parasect.png */; };
@@ -892,6 +893,7 @@
 		651E246924F1DD5F000052ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Pokedex.storyboard; sourceTree = "<group>"; };
 		651E246B24F1DDD8000052ED /* TeamBuilder.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = TeamBuilder.storyboard; path = PokeTeam/Views/Base.lproj/TeamBuilder.storyboard; sourceTree = SOURCE_ROOT; };
 		651E246E24F1DE10000052ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Settings.storyboard; sourceTree = "<group>"; };
+		6525EE25250AAA91008C2967 /* PokemonBuildVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonBuildVC.swift; sourceTree = "<group>"; };
 		6528C08C24E6245000199DA7 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ActivityIndicator.swift; path = PokeTeam/Views/ActivityIndicator.swift; sourceTree = SOURCE_ROOT; };
 		6528C09024E70CAE00199DA7 /* PokemonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonCell.swift; sourceTree = "<group>"; };
 		6528C09424E72B1700199DA7 /* parasect.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = parasect.png; sourceTree = "<group>"; };
@@ -2687,6 +2689,7 @@
 				65A7A17A24E6118F00D5E73B /* AbilityTransitioningDelegate.swift */,
 				657E522B24F1ED0700A19CB8 /* TeamBuilderVC-BUGGED.swift */,
 				65DE2F2425081C1400BE36DB /* TeamCollectionViewController.swift */,
+				6525EE25250AAA91008C2967 /* PokemonBuildVC.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -3712,6 +3715,7 @@
 				651D26DD24F5DA12001A4DD1 /* PokeTeam.xcdatamodeld in Sources */,
 				65BD8E0325099EB300083A1D /* UIView+RoundedCorners.swift in Sources */,
 				6554E7BE24D4E09B00081EA9 /* SceneDelegate.swift in Sources */,
+				6525EE26250AAA91008C2967 /* PokemonBuildVC.swift in Sources */,
 				6554E7F424D4E18800081EA9 /* PokemonManager.swift in Sources */,
 				65E36FC824F84B60003F00C3 /* UserDefaultsManager.swift in Sources */,
 				6541AB1124FD7AB900960D17 /* FormData.swift in Sources */,
