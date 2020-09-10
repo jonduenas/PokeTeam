@@ -277,22 +277,28 @@ class PokemonDetailVC: UIViewController {
                 showAlert(title: "Error adding to team", message: "You can only have 6 Pokemon in a team. Please remove one before adding another.")
                 return
             } else {
-                showAlert(title: "Add to team", message: "Would you like to add \(pokemon.name ?? "this pokemon") to your team?") {
-                    existingTeam.addToMembers(self.pokemon)
-                    print("Adding \(self.pokemon.name!) to team.")
-                }
+                showAddToTeamAlert(team: existingTeam)
             }
-            
         } else {
-            showAlert(title: "Add to team", message: "Would you like to add \(pokemon.name ?? "this pokemon") to your team?") {
-                let pokemonTeam = TeamMO(context: PokemonManager.shared.context)
-                pokemonTeam.name = "Test Team"
-                pokemonTeam.addToMembers(self.pokemon)
-                print("Adding \(self.pokemon.name!) to team.")
-            }
+            showAddToTeamAlert(team: nil)
         }
-        
         PokemonManager.shared.saveContext(PokemonManager.shared.context)
+    }
+    
+    private func showAddToTeamAlert(team: TeamMO?) {
+        let alertController = UIAlertController(title: "Add to team", message: "Would you like to add \(pokemon.name ?? "this pokemon") to your team?", preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alertController.addAction(UIAlertAction(title: "Add", style: .default, handler: { _ in
+            if let existingTeam = team {
+                existingTeam.addToMembers(self.pokemon)
+                print("Adding \(self.pokemon.name!) to existing team.")
+            } else {
+                let newTeam = TeamMO(context: PokemonManager.shared.context)
+                newTeam.addToMembers(self.pokemon)
+                print("Adding \(self.pokemon.name!) to new team.")
+            }
+        }))
+        present(alertController, animated: true)
     }
     
     private func setState(loading: Bool) {
