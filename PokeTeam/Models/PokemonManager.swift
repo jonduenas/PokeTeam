@@ -112,51 +112,6 @@ class PokemonManager {
         return context.object(with: objectID)
     }
     
-//    func parsePokemonData(pokemonData: PokemonData, speciesData: SpeciesData) -> PokemonMO {
-//        let pokemonToReturn = PokemonMO(context: context)
-//
-//        pokemonToReturn.id = Int64(pokemonData.id)
-//        pokemonToReturn.name = pokemonData.name
-//        pokemonToReturn.height = pokemonData.height / 10
-//        pokemonToReturn.weight = pokemonData.weight / 10
-//
-//        // Type
-//        pokemonToReturn.type = parseType(with: pokemonData)
-//
-//        // Genus
-//        pokemonToReturn.genus = parseGenus(with: speciesData)
-//
-//        // Generation
-//        pokemonToReturn.generation = speciesData.generation.name
-//
-//        // Description
-//        pokemonToReturn.flavorText = parseFlavorText(with: speciesData)
-//
-//        // Stats
-//        pokemonToReturn.stats = parseStats(with: pokemonData)
-//
-//        // Abilities
-//        let abilities = parseAbilities(with: pokemonData)
-//        for ability in abilities {
-//            pokemonToReturn.addToAbilities(ability)
-//        }
-//
-//        // Moves
-//        let moves = parseMoves(with: pokemonData)
-//        for move in moves {
-//            pokemonToReturn.addToMoves(move)
-//        }
-//
-//        // Alt Forms
-//        if pokemonData.forms.count > 1 {
-//            pokemonToReturn.hasAltForm = true
-//        } else {
-//            pokemonToReturn.hasAltForm = false
-//        }
-//
-//        return pokemonToReturn
-//    }
-    
     func updateDetails(for pokemonManagedObjectID: NSManagedObjectID, with speciesData: SpeciesData) {
         let pokemon = backgroundContext.object(with: pokemonManagedObjectID) as! PokemonMO
         

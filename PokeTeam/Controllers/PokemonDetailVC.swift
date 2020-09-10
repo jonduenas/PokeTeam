@@ -64,6 +64,8 @@ class PokemonDetailVC: UIViewController {
         
         navigationItem.title = "Pokémon Detail"
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addToTeam))
+        
+        
 
         indicatorView = self.view.activityIndicator(style: .large, center: self.view.center)
         view.addSubview(indicatorView)
@@ -233,6 +235,13 @@ class PokemonDetailVC: UIViewController {
             abilityButton.backgroundColor = UIColor(named: "poke-blue")
             abilityButton.titleLabel?.textColor = UIColor.white
             abilityButton.layer.cornerRadius = 20
+            abilityButton.clipsToBounds = false
+            // Shadow
+            abilityButton.layer.shadowColor = UIColor.black.cgColor
+            abilityButton.layer.shadowOpacity = 0.4
+            abilityButton.layer.shadowOffset = CGSize(width: 0, height: 2.5)
+            abilityButton.layer.shadowRadius = 2
+            
             abilityButton.tag = index
             abilityButton.addTarget(self, action: #selector(abilityButtonTapped), for: .touchUpInside)
             abilitiesStackView.addArrangedSubview(abilityButton)

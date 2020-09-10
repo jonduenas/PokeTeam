@@ -95,15 +95,15 @@ class TeamCollectionViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("Selected \(indexPath.item)")
         
-        let pokemonSelected = team[indexPath.row]
-        if let pokemonName = pokemonSelected.name?.formatPokemonName() {
-            let actionSheet = UIAlertController(title: "Remove \(pokemonName)?", message: nil, preferredStyle: .actionSheet)
-            actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-            actionSheet.addAction(UIAlertAction(title: "Remove", style: .destructive, handler: { [weak self] _ in
-                self?.remove(pokemon: pokemonSelected)
-            }))
-            present(actionSheet, animated: true)
-        }
+//        let pokemonSelected = team[indexPath.row]
+//        if let pokemonName = pokemonSelected.name?.formatPokemonName() {
+//            let actionSheet = UIAlertController(title: "Remove \(pokemonName)?", message: nil, preferredStyle: .actionSheet)
+//            actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+//            actionSheet.addAction(UIAlertAction(title: "Remove", style: .destructive, handler: { [weak self] _ in
+//                self?.remove(pokemon: pokemonSelected)
+//            }))
+//            present(actionSheet, animated: true)
+//        }
     }
     
     /*
