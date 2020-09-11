@@ -12,6 +12,7 @@ class PokemonTableCell: UITableViewCell {
 
     @IBOutlet weak var pokemonImageView: UIImageView!
     @IBOutlet weak var pokemonNameLabel: UILabel!
+    @IBOutlet weak var pokedexNumberLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -27,6 +28,7 @@ class PokemonTableCell: UITableViewCell {
     func setPokemonInfo(for pokemon: PokemonMO) {
         self.pokemonNameLabel.text = pokemon.name?.formatPokemonName()
         self.pokemonImageView.image = UIImage(named: String(pokemon.id))
+        self.pokedexNumberLabel.text = "No. " + String(withInt: Int(pokemon.id), leadingZeros: 3)
     }
 
 }

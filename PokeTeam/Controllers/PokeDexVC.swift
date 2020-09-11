@@ -38,7 +38,7 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
         
         navigationItem.title = "POKEDEX"
         navigationItem.largeTitleDisplayMode = .always
-        navigationController?.navigationBar.setNavigationBarColor(to: UIColor(named: "pokedex"))
+        navigationController?.navigationBar.setNavigationBarColor(to: UIColor(patternImage: UIImage(named: "pokedex-background")!))
         
         tableView.backgroundView = UIImageView(image: UIImage(named: "pokedex-background"))
         tableView.backgroundColor = .clear
