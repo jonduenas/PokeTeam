@@ -44,19 +44,13 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
         tableView.backgroundColor = .clear
         
         indicatorView = view.activityIndicator(style: .large, center: self.view.center)
-        //tableView.backgroundView = indicatorView
+        tableView.backgroundView?.addSubview(indicatorView)
         
         initializeSearchBar()
         
         setState(loading: true)
         loadSavedData()
         fetchPokedex()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        
     }
     
     private func loadSavedData() {
