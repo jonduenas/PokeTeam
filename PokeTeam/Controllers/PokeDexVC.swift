@@ -34,13 +34,13 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
-        
         navigationItem.title = "POKEDEX"
         navigationItem.largeTitleDisplayMode = .always
-        navigationController?.navigationBar.setNavigationBarColor(to: UIColor(patternImage: UIImage(named: "pokedex-background")!))
+        navigationController?.navigationBar.setNavigationBarColor(to: UIColor.clear)
         
-        tableView.backgroundView = UIImageView(image: UIImage(named: "pokedex-background"))
+        let radialGradientView = RadialGradient()
+        radialGradientView.frame = tableView.bounds
+        tableView.backgroundView = radialGradientView
         tableView.backgroundColor = .clear
         
         indicatorView = view.activityIndicator(style: .large, center: self.view.center)
@@ -51,6 +51,12 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
         setState(loading: true)
         loadSavedData()
         fetchPokedex()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        
     }
     
     private func loadSavedData() {

@@ -38,7 +38,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Pn-Nu-80x">
-                                            <rect key="frame" x="199.5" y="23" width="49.5" height="24"/>
+                                            <rect key="frame" x="200" y="23" width="49.5" height="24"/>
                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -49,9 +49,9 @@
                                         <constraint firstItem="aYE-ye-Rwy" firstAttribute="centerY" secondItem="a96-6L-Azo" secondAttribute="centerY" id="RY0-b8-hzp"/>
                                         <constraint firstItem="ciP-ev-NY8" firstAttribute="leading" secondItem="a96-6L-Azo" secondAttribute="leading" constant="10" id="TsE-UT-9au"/>
                                         <constraint firstItem="aYE-ye-Rwy" firstAttribute="leading" secondItem="ciP-ev-NY8" secondAttribute="trailing" constant="10" id="V5N-YR-odI"/>
-                                        <constraint firstItem="4Pn-Nu-80x" firstAttribute="leading" secondItem="aYE-ye-Rwy" secondAttribute="trailing" constant="50" id="ceq-rh-6cL"/>
                                         <constraint firstItem="ciP-ev-NY8" firstAttribute="top" secondItem="a96-6L-Azo" secondAttribute="top" constant="10" id="iyK-HB-HYc"/>
                                         <constraint firstAttribute="bottom" secondItem="ciP-ev-NY8" secondAttribute="bottom" constant="10" id="tAz-Mf-Cuf"/>
+                                        <constraint firstItem="4Pn-Nu-80x" firstAttribute="leading" secondItem="ciP-ev-NY8" secondAttribute="trailing" constant="130" id="tBG-qw-Nfg"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
@@ -81,9 +81,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pokedex-background" translatesAutoresizingMaskIntoConstraints="NO" id="PBv-hW-OSu">
-                                <rect key="frame" x="0.0" y="88" width="414" height="808"/>
-                            </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6We-2S-ucx" customClass="RadialGradient" customModule="PokeTeam" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zip-Bt-yp4">
                                 <rect key="frame" x="0.0" y="88" width="414" height="774"/>
                                 <subviews>
@@ -362,15 +363,14 @@
                                 <viewLayoutGuide key="frameLayoutGuide" id="2FL-ec-N8p"/>
                             </scrollView>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="PBv-hW-OSu" firstAttribute="leading" secondItem="UWM-nD-CLm" secondAttribute="leading" id="0hg-as-mdL"/>
-                            <constraint firstAttribute="bottom" secondItem="PBv-hW-OSu" secondAttribute="bottom" id="Nb2-dJ-LoU"/>
-                            <constraint firstItem="PBv-hW-OSu" firstAttribute="top" secondItem="UWM-nD-CLm" secondAttribute="top" id="TpL-an-rks"/>
-                            <constraint firstItem="UWM-nD-CLm" firstAttribute="trailing" secondItem="PBv-hW-OSu" secondAttribute="trailing" id="XFi-3B-spp"/>
+                            <constraint firstItem="6We-2S-ucx" firstAttribute="leading" secondItem="UWM-nD-CLm" secondAttribute="leading" id="Mxa-KF-Mfc"/>
+                            <constraint firstAttribute="bottom" secondItem="6We-2S-ucx" secondAttribute="bottom" id="ZrI-Fm-ohq"/>
+                            <constraint firstItem="6We-2S-ucx" firstAttribute="top" secondItem="gg1-uL-ctG" secondAttribute="top" id="btY-xS-B9a"/>
                             <constraint firstItem="UWM-nD-CLm" firstAttribute="trailing" secondItem="Zip-Bt-yp4" secondAttribute="trailing" id="cKi-NU-wgU"/>
                             <constraint firstItem="Zip-Bt-yp4" firstAttribute="leading" secondItem="UWM-nD-CLm" secondAttribute="leading" id="fr0-W8-aAI"/>
                             <constraint firstItem="Zip-Bt-yp4" firstAttribute="top" secondItem="UWM-nD-CLm" secondAttribute="top" id="mJG-hc-f2L"/>
+                            <constraint firstItem="UWM-nD-CLm" firstAttribute="trailing" secondItem="6We-2S-ucx" secondAttribute="trailing" id="oK8-fu-k7q"/>
                             <constraint firstItem="Zip-Bt-yp4" firstAttribute="bottom" secondItem="UWM-nD-CLm" secondAttribute="bottom" id="rPj-Re-3nh"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="UWM-nD-CLm"/>
@@ -401,7 +401,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="f9t-PZ-elL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3681" y="-350"/>
+            <point key="canvasLocation" x="3679.7101449275365" y="-350.22321428571428"/>
         </scene>
         <!--Table View Controller-->
         <scene sceneID="bYQ-ue-bE4">
@@ -436,7 +436,7 @@
             <objects>
                 <viewController storyboardIdentifier="AbilityVC" id="6Zf-jt-lcP" customClass="AbilityDetailVC" customModule="PokeTeam" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Dqf-en-e7e">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5lU-zF-LTT">
@@ -505,15 +505,10 @@
                 <navigationController storyboardIdentifier="Pokedex" automaticallyAdjustsScrollViewInsets="NO" id="Xyl-Pz-qCL" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Pokédex" image="book.fill" catalog="system" selectedImage="book.fill" id="pGT-8t-TfL"/>
                     <toolbarItems/>
-                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO">
-                        <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
-                        <color key="barTintColor" name="poke-red"/>
-                    </simulatedNavigationBarMetrics>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="vo0-cz-KlI">
+                    <navigationBar key="navigationBar" opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="vo0-cz-KlI">
                         <rect key="frame" x="0.0" y="44" width="414" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
-                        <color key="barTintColor" name="pokedex"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -532,19 +527,12 @@
         <image name="chevron.right" catalog="system" width="96" height="128"/>
         <image name="heavy-weight" width="50" height="50"/>
         <image name="poke_ball" width="596" height="595"/>
-        <image name="pokedex-background" width="414" height="896"/>
         <image name="x.circle.fill" catalog="system" width="128" height="121"/>
         <namedColor name="navbar">
             <color red="0.85100001096725464" green="0.2199999988079071" blue="0.2669999897480011" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="poke-blue">
             <color red="0.23137254901960785" green="0.29803921568627451" blue="0.792156862745098" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="poke-red">
-            <color red="0.85100001096725464" green="0.2199999988079071" blue="0.2669999897480011" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="pokedex">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

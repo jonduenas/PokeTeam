@@ -15,11 +15,10 @@ class PokemonDetailVC: UIViewController {
     let largeTitleSize: CGFloat = 34
     let subTitleSize: CGFloat = 25
     let abilityTransitioningDelegate = AbilityTransitioningDelegate()
-
-    var pokemon: PokemonMO
     let pokemonManagedObjectID: NSManagedObjectID
+    
+    var pokemon: PokemonMO
     var pokemonDetails: PokemonMO?
-    //lazy var pokemonTeam = PokemonTeam()
     var abilityArray: [AbilityMO]?
     var subscriptions: Set<AnyCancellable> = []
     var indicatorView: UIActivityIndicatorView!
@@ -65,8 +64,6 @@ class PokemonDetailVC: UIViewController {
         navigationItem.title = "Pokémon Detail"
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addToTeam))
         
-        
-
         indicatorView = self.view.activityIndicator(style: .large, center: self.view.center)
         view.addSubview(indicatorView)
         

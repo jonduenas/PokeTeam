@@ -15,13 +15,14 @@ extension UINavigationBar {
         coloredAppearance.configureWithTransparentBackground()
         coloredAppearance.backgroundColor = color
         coloredAppearance.titleTextAttributes = [.foregroundColor: UIColor.label]
+        coloredAppearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterial)
         
         let button = UIBarButtonItemAppearance(style: .plain)
         button.normal.titleTextAttributes = [.foregroundColor: UIColor.label]
         coloredAppearance.buttonAppearance = button
         
         let done = UIBarButtonItemAppearance(style: .done)
-        done.normal.titleTextAttributes = [.foregroundColor: UIColor.label]
+        done.normal.titleTextAttributes = [.foregroundColor: UIColor.white]
         coloredAppearance.doneButtonAppearance = done
         
         self.standardAppearance = coloredAppearance

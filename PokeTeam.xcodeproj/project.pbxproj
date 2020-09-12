@@ -848,6 +848,8 @@
 		6554E7F424D4E18800081EA9 /* PokemonManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6554E7F324D4E18800081EA9 /* PokemonManager.swift */; };
 		656DD47424DF48C900C9EC16 /* TypeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 656DD47324DF48C900C9EC16 /* TypeLabel.swift */; };
 		657E522A24F1E87D00A19CB8 /* PokemonTeam.swift in Sources */ = {isa = PBXBuildFile; fileRef = 657E522924F1E87D00A19CB8 /* PokemonTeam.swift */; };
+		6580DF14250C416C00603CED /* CustomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6580DF13250C416C00603CED /* CustomNavigationController.swift */; };
+		6580DF16250C579100603CED /* RadialGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6580DF15250C579100603CED /* RadialGradient.swift */; };
 		658757D824EB261000ECD3CE /* StatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658757D724EB261000ECD3CE /* StatView.swift */; };
 		6599203D24D8F1EE0082F51C /* SpeciesData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6599203C24D8F1EE0082F51C /* SpeciesData.swift */; };
 		6599203F24D8F20F0082F51C /* PokemonData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6599203E24D8F20F0082F51C /* PokemonData.swift */; };
@@ -1733,6 +1735,8 @@
 		6554E7F324D4E18800081EA9 /* PokemonManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonManager.swift; sourceTree = "<group>"; };
 		656DD47324DF48C900C9EC16 /* TypeLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeLabel.swift; sourceTree = "<group>"; };
 		657E522924F1E87D00A19CB8 /* PokemonTeam.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonTeam.swift; sourceTree = "<group>"; };
+		6580DF13250C416C00603CED /* CustomNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationController.swift; sourceTree = "<group>"; };
+		6580DF15250C579100603CED /* RadialGradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadialGradient.swift; sourceTree = "<group>"; };
 		658757D724EB261000ECD3CE /* StatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatView.swift; sourceTree = "<group>"; };
 		6599203C24D8F1EE0082F51C /* SpeciesData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeciesData.swift; sourceTree = "<group>"; };
 		6599203E24D8F20F0082F51C /* PokemonData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonData.swift; sourceTree = "<group>"; };
@@ -2664,7 +2668,9 @@
 				651E246B24F1DDD8000052ED /* TeamBuilder.storyboard */,
 				651E246D24F1DE10000052ED /* Settings.storyboard */,
 				6525EE27250ADC2F008C2967 /* CustomColor+UINavigationBar.swift */,
+				6580DF13250C416C00603CED /* CustomNavigationController.swift */,
 				65BD8E0225099EB300083A1D /* UIView+RoundedCorners.swift */,
+				6580DF15250C579100603CED /* RadialGradient.swift */,
 				6528C09024E70CAE00199DA7 /* PokemonTableCell.swift */,
 				65DE2F2225081BD000BE36DB /* PokemonCollectionCell.swift */,
 				656DD47324DF48C900C9EC16 /* TypeLabel.swift */,
@@ -3692,6 +3698,7 @@
 				6554E7C024D4E09B00081EA9 /* PokeDexVC.swift in Sources */,
 				6599204924DA30530082F51C /* AbilityData.swift in Sources */,
 				658757D824EB261000ECD3CE /* StatView.swift in Sources */,
+				6580DF14250C416C00603CED /* CustomNavigationController.swift in Sources */,
 				65DE2F2525081C1400BE36DB /* TeamBuilderVC.swift in Sources */,
 				6541E39324E0B5D80000564D /* GenerationData.swift in Sources */,
 				651E246724F19874000052ED /* validateHTTPStatus+Publisher.swift in Sources */,
@@ -3712,6 +3719,7 @@
 				65E36FC824F84B60003F00C3 /* UserDefaultsManager.swift in Sources */,
 				6541AB1124FD7AB900960D17 /* FormData.swift in Sources */,
 				6599203D24D8F1EE0082F51C /* SpeciesData.swift in Sources */,
+				6580DF16250C579100603CED /* RadialGradient.swift in Sources */,
 				65DBB9D924D8D567003450A0 /* FontKit.swift in Sources */,
 				65FC770025094B45001EAF59 /* DataManager.swift in Sources */,
 				65E36FC624F84AD1003F00C3 /* NationalPokedex.swift in Sources */,
