@@ -17,11 +17,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="pokemonCell" id="omd-A1-0gx" customClass="PokemonTableCell" customModule="PokeTeam" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="pokemonCell" id="omd-A1-0gx" customClass="PokemonTableCell" customModule="PokeTeam" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="414" height="70"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="omd-A1-0gx" id="a96-6L-Azo">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="70"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="383" height="70"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ciP-ev-NY8">
@@ -58,7 +58,7 @@
                                     <outlet property="pokedexNumberLabel" destination="aYE-ye-Rwy" id="q9q-SC-47f"/>
                                     <outlet property="pokemonImageView" destination="ciP-ev-NY8" id="x9o-Ae-iSp"/>
                                     <outlet property="pokemonNameLabel" destination="4Pn-Nu-80x" id="KOf-VT-u91"/>
-                                    <segue destination="S8U-rw-TgR" kind="show" destinationCreationSelector="makePokemonDetailViewControllerWithCoder:" id="1Mi-mm-IlZ"/>
+                                    <segue destination="S8U-rw-TgR" kind="push" destinationCreationSelector="makePokemonDetailViewControllerWithCoder:" id="1Mi-mm-IlZ"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -76,15 +76,11 @@
         <!--Pokemon DetailVC-->
         <scene sceneID="EWL-w1-H1X">
             <objects>
-                <viewController id="S8U-rw-TgR" customClass="PokemonDetailVC" customModule="PokeTeam" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PokemonDetailVC" id="S8U-rw-TgR" customClass="PokemonDetailVC" customModule="PokeTeam" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="gg1-uL-ctG">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6We-2S-ucx" customClass="RadialGradient" customModule="PokeTeam" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </view>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zip-Bt-yp4">
                                 <rect key="frame" x="0.0" y="88" width="414" height="774"/>
                                 <subviews>
@@ -364,13 +360,9 @@
                             </scrollView>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="6We-2S-ucx" firstAttribute="leading" secondItem="UWM-nD-CLm" secondAttribute="leading" id="Mxa-KF-Mfc"/>
-                            <constraint firstAttribute="bottom" secondItem="6We-2S-ucx" secondAttribute="bottom" id="ZrI-Fm-ohq"/>
-                            <constraint firstItem="6We-2S-ucx" firstAttribute="top" secondItem="gg1-uL-ctG" secondAttribute="top" id="btY-xS-B9a"/>
                             <constraint firstItem="UWM-nD-CLm" firstAttribute="trailing" secondItem="Zip-Bt-yp4" secondAttribute="trailing" id="cKi-NU-wgU"/>
                             <constraint firstItem="Zip-Bt-yp4" firstAttribute="leading" secondItem="UWM-nD-CLm" secondAttribute="leading" id="fr0-W8-aAI"/>
                             <constraint firstItem="Zip-Bt-yp4" firstAttribute="top" secondItem="UWM-nD-CLm" secondAttribute="top" id="mJG-hc-f2L"/>
-                            <constraint firstItem="UWM-nD-CLm" firstAttribute="trailing" secondItem="6We-2S-ucx" secondAttribute="trailing" id="oK8-fu-k7q"/>
                             <constraint firstItem="Zip-Bt-yp4" firstAttribute="bottom" secondItem="UWM-nD-CLm" secondAttribute="bottom" id="rPj-Re-3nh"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="UWM-nD-CLm"/>
@@ -502,7 +494,7 @@
         <!--Pokédex-->
         <scene sceneID="d3q-IJ-HP5">
             <objects>
-                <navigationController storyboardIdentifier="Pokedex" automaticallyAdjustsScrollViewInsets="NO" id="Xyl-Pz-qCL" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="Pokedex" automaticallyAdjustsScrollViewInsets="NO" id="Xyl-Pz-qCL" customClass="CustomNavVC" customModule="PokeTeam" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Pokédex" image="book.fill" catalog="system" selectedImage="book.fill" id="pGT-8t-TfL"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="vo0-cz-KlI">

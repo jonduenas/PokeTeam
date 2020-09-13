@@ -14,6 +14,7 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
     
     let nationalPokedexID = 1
     let pokemonCellID = "pokemonCell"
+    let simpleOver = SimpleOver()
     
     var searchController: UISearchController!
     var indicatorView: UIActivityIndicatorView!
@@ -34,13 +35,11 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationController?.delegate = self
         navigationItem.title = "POKEDEX"
         navigationItem.largeTitleDisplayMode = .always
         navigationController?.navigationBar.setNavigationBarColor(to: UIColor.clear)
         
-        let radialGradientView = RadialGradient()
-        radialGradientView.frame = tableView.bounds
-        tableView.backgroundView = radialGradientView
         tableView.backgroundColor = .clear
         
         indicatorView = view.activityIndicator(style: .large, center: self.view.center)
@@ -51,12 +50,6 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
         setState(loading: true)
         loadSavedData()
         fetchPokedex()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        
     }
     
     private func loadSavedData() {
@@ -205,5 +198,13 @@ extension PokeDexVC: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         let searchBar = searchController.searchBar
         filterContentForSearchText(searchBar.text!)
+    }
+}
+
+extension PokeDexVC: UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
+    
+    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        simpleOver.popStyle = (operation == .pop)
+        return simpleOver
     }
 }
