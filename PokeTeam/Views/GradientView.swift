@@ -23,7 +23,6 @@ class GradientView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         gradientLayer.frame = self.bounds
-        
     }
     
     override init(frame: CGRect) {

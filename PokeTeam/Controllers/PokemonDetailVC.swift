@@ -17,6 +17,8 @@ class PokemonDetailVC: UIViewController {
     let abilityTransitioningDelegate = AbilityTransitioningDelegate()
     let pokemonManagedObjectID: NSManagedObjectID
     
+    var colorBlockView: ColorBlockView!
+    
     var pokemon: PokemonMO
     var pokemonDetails: PokemonMO?
     var abilityArray: [AbilityMO]?
@@ -67,11 +69,21 @@ class PokemonDetailVC: UIViewController {
         indicatorView = self.view.activityIndicator(style: .large, center: self.view.center)
         view.addSubview(indicatorView)
         
+        colorBlockView = ColorBlockView()
+        view.insertSubview(colorBlockView, at: 0)
+        colorBlockView.clipsToBounds = true
+        colorBlockView.translatesAutoresizingMaskIntoConstraints = false
+        
+        
         if shouldFetchDetails() {
             fetchDetails()
         } else {
             showDetails()
         }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        
     }
     
     private func shouldFetchDetails() -> Bool {
