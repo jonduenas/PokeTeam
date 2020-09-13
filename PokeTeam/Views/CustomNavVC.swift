@@ -15,7 +15,7 @@ class CustomNavVC: UINavigationController {
 
         let gradientView = GradientView()
         gradientView.gradientLayer.type = .axial
-        gradientView.gradientLayer.colors = [UIColor(red: 243 / 255, green: 254 / 255, blue: 255 / 255, alpha: 1).cgColor, UIColor.white.cgColor, UIColor(red: 255 / 255, green: 244 / 255, blue: 253 / 255, alpha: 1).cgColor]
+        gradientView.gradientLayer.colors = [UIColor(red: 220 / 255, green: 234 / 255, blue: 236 / 255, alpha: 1).cgColor, UIColor.white.cgColor, UIColor(red: 255 / 255, green: 244 / 255, blue: 253 / 255, alpha: 1).cgColor]
         gradientView.frame = view.bounds
         view.insertSubview(gradientView, at: 0)
     }
