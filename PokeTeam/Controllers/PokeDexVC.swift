@@ -19,7 +19,6 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
     var searchController: UISearchController!
     var indicatorView: UIActivityIndicatorView!
     
-    //var pokedex: Pokedex?
     var fetchedResultsController: NSFetchedResultsController<PokemonMO>!
     //var pokemonArray = [PokemonMO]()
     var filteredPokemon = [PokemonMO]()

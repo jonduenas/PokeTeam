@@ -13,10 +13,11 @@ class CustomNavVC: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let radialGradientView = RadialGradient()
-        radialGradientView.frame = view.bounds
-        view.insertSubview(radialGradientView, at: 0)
-        // Do any additional setup after loading the view.
+        let gradientView = GradientView()
+        gradientView.gradientLayer.type = .axial
+        gradientView.gradientLayer.colors = [UIColor(red: 243 / 255, green: 254 / 255, blue: 255 / 255, alpha: 1).cgColor, UIColor.white.cgColor, UIColor(red: 255 / 255, green: 244 / 255, blue: 253 / 255, alpha: 1).cgColor]
+        gradientView.frame = view.bounds
+        view.insertSubview(gradientView, at: 0)
     }
     
 
