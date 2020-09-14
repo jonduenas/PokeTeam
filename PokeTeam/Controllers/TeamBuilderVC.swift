@@ -14,6 +14,7 @@ private let segueIdentifier = "detailSegue"
 
 class TeamBuilderVC: UICollectionViewController {
 
+    let simpleOver = SimpleOver()
     let testArray = ["Pokemon 1", "Pokemon 2", "Pokemon 3"]
     var teamsArray = [TeamMO]()
     var team = [PokemonMO]()
@@ -21,6 +22,7 @@ class TeamBuilderVC: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationController?.delegate = self
         navigationItem.title = "TEAM BUILDER"
         navigationController?.navigationBar.setNavigationBarColor(to: UIColor(named: "team-builder"))
         
@@ -30,7 +32,6 @@ class TeamBuilderVC: UICollectionViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         
     }
     
@@ -144,4 +145,12 @@ class TeamBuilderVC: UICollectionViewController {
     }
     */
 
+}
+
+extension TeamBuilderVC: UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
+    
+    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        simpleOver.popStyle = (operation == .pop)
+        return simpleOver
+    }
 }
