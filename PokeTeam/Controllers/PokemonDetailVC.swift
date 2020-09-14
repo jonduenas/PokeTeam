@@ -187,7 +187,7 @@ class PokemonDetailVC: UIViewController {
         }
         
         let pokemonIDString = String(withInt: Int(pokemon.id), leadingZeros: 3)
-        pokemonNumberAndGenusLabel.text = "#\(pokemonIDString) –– \(pokemon.genus ?? "")"
+        pokemonNumberAndGenusLabel.text = "No. \(pokemonIDString) –– \(pokemon.genus ?? "")"
         
         pokemonDescriptionLabel.text = pokemon.flavorText
         heightLabel.text = "\(pokemon.height) m"
