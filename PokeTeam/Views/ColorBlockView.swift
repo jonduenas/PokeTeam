@@ -40,6 +40,8 @@ class ColorBlockView: UIView, CAAnimationDelegate {
         self.clipsToBounds = true
         self.translatesAutoresizingMaskIntoConstraints = false
         createColorBlocks()
+        
+        layer.speed = 0.1
     }
     
     private func createColorBlockLayer(strokeColor: UIColor, fillColor: UIColor) -> CAShapeLayer {
@@ -105,8 +107,7 @@ class ColorBlockView: UIView, CAAnimationDelegate {
         basicAnimationTop.delegate = self
         basicAnimationTop.fromValue = fromValueTop
         basicAnimationTop.toValue = toValueTop
-        basicAnimationTop.duration = 0.1
-        basicAnimationTop.beginTime = CACurrentMediaTime() + 0.07
+        basicAnimationTop.duration = 0.2
         basicAnimationTop.timingFunction = CAMediaTimingFunction(name: .easeOut)
         basicAnimationTop.fillMode = .forwards
         basicAnimationTop.isRemovedOnCompletion = false
@@ -115,7 +116,7 @@ class ColorBlockView: UIView, CAAnimationDelegate {
         basicAnimationBottom.delegate = self
         basicAnimationBottom.fromValue = fromValueBottom
         basicAnimationBottom.toValue = toValueBottom
-        basicAnimationBottom.duration = 0.1
+        basicAnimationBottom.duration = 0.15
         basicAnimationBottom.timingFunction = CAMediaTimingFunction(name: .easeOut)
         basicAnimationBottom.fillMode = .forwards
         basicAnimationBottom.isRemovedOnCompletion = false

@@ -34,13 +34,15 @@ class StatView: UIStackView {
         self.spacing = 5
         
         statName = UILabel()
-        statName.font = .systemFont(ofSize: 17)
+        statName.font = .systemFont(ofSize: 18)
+        statName.textColor = .label
         statName.textAlignment = .center
         statName.widthAnchor.constraint(greaterThanOrEqualToConstant: 35).isActive = true
         self.addArrangedSubview(statName)
         
         statValue = UILabel()
-        statValue.font = .systemFont(ofSize: 17)
+        statValue.font = .systemFont(ofSize: 18)
+        statValue.textColor = .label
         statValue.textAlignment = .center
         statValue.widthAnchor.constraint(greaterThanOrEqualToConstant: 35).isActive = true
         self.addArrangedSubview(statValue)
@@ -48,6 +50,9 @@ class StatView: UIStackView {
         statProgress = UIProgressView(progressViewStyle: .default)
         statProgress.trackTintColor = .systemGray5
         statProgress.progressTintColor = UIColor(named: "poke-blue")
+        statProgress.heightAnchor.constraint(equalToConstant: 10).isActive = true
+        statProgress.layer.cornerRadius = 5
+        statProgress.clipsToBounds = true
         self.addArrangedSubview(statProgress)
     }
     
