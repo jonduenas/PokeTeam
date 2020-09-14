@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		650045B6250FFA340074E523 /* TeamBuilderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650045B5250FFA340074E523 /* TeamBuilderViewController.swift */; };
 		651D26DD24F5DA12001A4DD1 /* PokeTeam.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 651D26DB24F5DA12001A4DD1 /* PokeTeam.xcdatamodeld */; };
 		651E246724F19874000052ED /* validateHTTPStatus+Publisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651E246624F19874000052ED /* validateHTTPStatus+Publisher.swift */; };
 		651E246A24F1DD5F000052ED /* Pokedex.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 651E246824F1DD5F000052ED /* Pokedex.storyboard */; };
@@ -890,6 +891,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		650045B5250FFA340074E523 /* TeamBuilderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamBuilderViewController.swift; sourceTree = "<group>"; };
 		651D26DC24F5DA12001A4DD1 /* PokeTeam.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PokeTeam.xcdatamodel; sourceTree = "<group>"; };
 		651E246624F19874000052ED /* validateHTTPStatus+Publisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "validateHTTPStatus+Publisher.swift"; sourceTree = "<group>"; };
 		651E246924F1DD5F000052ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Pokedex.storyboard; sourceTree = "<group>"; };
@@ -2695,6 +2697,7 @@
 				65A7A17624E5FE8000D5E73B /* AbilityPresentation.swift */,
 				65A7A17A24E6118F00D5E73B /* AbilityTransitioningDelegate.swift */,
 				65DE2F2425081C1400BE36DB /* TeamBuilderVC.swift */,
+				650045B5250FFA340074E523 /* TeamBuilderViewController.swift */,
 				6525EE25250AAA91008C2967 /* PokemonBuilderVC.swift */,
 			);
 			path = Controllers;
@@ -3707,6 +3710,7 @@
 				658757D824EB261000ECD3CE /* StatView.swift in Sources */,
 				65DE2F2525081C1400BE36DB /* TeamBuilderVC.swift in Sources */,
 				6541E39324E0B5D80000564D /* GenerationData.swift in Sources */,
+				650045B6250FFA340074E523 /* TeamBuilderViewController.swift in Sources */,
 				65B7E6E3250E922C00EA512E /* ColorBlockView.swift in Sources */,
 				651E246724F19874000052ED /* validateHTTPStatus+Publisher.swift in Sources */,
 				6554E7BC24D4E09B00081EA9 /* AppDelegate.swift in Sources */,
