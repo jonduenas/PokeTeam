@@ -40,8 +40,6 @@ class ColorBlockView: UIView, CAAnimationDelegate {
         self.clipsToBounds = true
         self.translatesAutoresizingMaskIntoConstraints = false
         createColorBlocks()
-        
-        layer.speed = 0.1
     }
     
     private func createColorBlockLayer(strokeColor: UIColor, fillColor: UIColor) -> CAShapeLayer {
