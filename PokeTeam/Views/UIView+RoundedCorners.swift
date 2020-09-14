@@ -43,7 +43,7 @@ class RoundedCorners: UIView {
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowOpacity = 0.4
         layer.shadowOffset = CGSize(width: 0, height: 2.5)
-        layer.shadowRadius = 2
+        layer.shadowRadius = 3
         layer.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: cornerRadius).cgPath
     }
 }
