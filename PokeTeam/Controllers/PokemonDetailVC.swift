@@ -71,9 +71,6 @@ class PokemonDetailVC: UIViewController {
         
         colorBlockView = ColorBlockView()
         view.insertSubview(colorBlockView, at: 0)
-        colorBlockView.clipsToBounds = true
-        colorBlockView.translatesAutoresizingMaskIntoConstraints = false
-        
         
         if shouldFetchDetails() {
             fetchDetails()
@@ -82,8 +79,10 @@ class PokemonDetailVC: UIViewController {
         }
     }
     
-    override func viewDidLayoutSubviews() {
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         
+        colorBlockView.animateOnShow()
     }
     
     private func shouldFetchDetails() -> Bool {

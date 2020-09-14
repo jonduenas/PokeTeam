@@ -17,6 +17,7 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
     let simpleOver = SimpleOver()
     
     var searchController: UISearchController!
+    var colorBlockView: ColorBlockView!
     var indicatorView: UIActivityIndicatorView!
     
     var fetchedResultsController: NSFetchedResultsController<PokemonMO>!
