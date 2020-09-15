@@ -13,9 +13,16 @@ class CustomNavVC: UINavigationController {
     var colorBlockView: ColorBlockView?
     var gradientView: GradientView!
     
+    private var interactionController: UIPercentDrivenInteractiveTransition?
+    private var edgeSwipeGestureRecognizer: UIScreenEdgePanGestureRecognizer?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        edgeSwipeGestureRecognizer = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(handleSwipe))
+        edgeSwipeGestureRecognizer!.edges = .left
+        view.addGestureRecognizer(edgeSwipeGestureRecognizer!)
+        
         setupGradientView()
     }
     
@@ -33,6 +40,29 @@ class CustomNavVC: UINavigationController {
             // Set navigation bar back to clear so it doesn't cover animation of color block
             self.navigationBar.setNavigationBarColor(to: .clear, backgroundEffect: nil)
         }
+    }
+    
+    @objc func handleSwipe(_ gestureRecognizer: UIScreenEdgePanGestureRecognizer) {
+        let percent = gestureRecognizer.translation(in: gestureRecognizer.view!).x / gestureRecognizer.view!.bounds.size.width
+        
+        if gestureRecognizer.state == .began {
+            interactionController = UIPercentDrivenInteractiveTransition()
+            popViewController(animated: true)
+        } else if gestureRecognizer.state == .changed {
+            interactionController?.update(percent)
+        } else if gestureRecognizer.state == .ended {
+            if percent > 0.5 && gestureRecognizer.state != .cancelled {
+                interactionController?.finish()
+            } else {
+                interactionController?.cancel()
+            }
+            
+            interactionController = nil
+        }
+    }
+    
+    func navigationController(_ navigationController: UINavigationController, interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+        return interactionController
     }
     
     func setupGradientView() {
