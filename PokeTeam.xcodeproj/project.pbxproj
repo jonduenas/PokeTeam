@@ -866,7 +866,6 @@
 		65DBB9D724D8C920003450A0 /* PokemonDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DBB9D624D8C920003450A0 /* PokemonDetailVC.swift */; };
 		65DBB9D924D8D567003450A0 /* FontKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DBB9D824D8D567003450A0 /* FontKit.swift */; };
 		65DE2F2325081BD000BE36DB /* PokemonCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DE2F2225081BD000BE36DB /* PokemonCollectionCell.swift */; };
-		65DE2F2525081C1400BE36DB /* TeamBuilderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DE2F2425081C1400BE36DB /* TeamBuilderVC.swift */; };
 		65E36FC624F84AD1003F00C3 /* NationalPokedex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E36FC524F84AD1003F00C3 /* NationalPokedex.swift */; };
 		65E36FC824F84B60003F00C3 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E36FC724F84B60003F00C3 /* UserDefaultsManager.swift */; };
 		65E57469250D7EAD0099B9A7 /* SimpleOver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E57468250D7EAD0099B9A7 /* SimpleOver.swift */; };
@@ -1756,7 +1755,6 @@
 		65DBB9D624D8C920003450A0 /* PokemonDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetailVC.swift; sourceTree = "<group>"; };
 		65DBB9D824D8D567003450A0 /* FontKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontKit.swift; sourceTree = "<group>"; };
 		65DE2F2225081BD000BE36DB /* PokemonCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonCollectionCell.swift; sourceTree = "<group>"; };
-		65DE2F2425081C1400BE36DB /* TeamBuilderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamBuilderVC.swift; sourceTree = "<group>"; };
 		65E36FC524F84AD1003F00C3 /* NationalPokedex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NationalPokedex.swift; sourceTree = "<group>"; };
 		65E36FC724F84B60003F00C3 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		65E57468250D7EAD0099B9A7 /* SimpleOver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleOver.swift; sourceTree = "<group>"; };
@@ -2673,7 +2671,6 @@
 				651E246824F1DD5F000052ED /* Pokedex.storyboard */,
 				651E246B24F1DDD8000052ED /* TeamBuilder.storyboard */,
 				651E246D24F1DE10000052ED /* Settings.storyboard */,
-				654AF693250D49A6000D09D3 /* CustomNavVC.swift */,
 				6525EE27250ADC2F008C2967 /* CustomColor+UINavigationBar.swift */,
 				65BD8E0225099EB300083A1D /* UIView+RoundedCorners.swift */,
 				65E57468250D7EAD0099B9A7 /* SimpleOver.swift */,
@@ -2691,12 +2688,12 @@
 		6554E7EC24D4E12A00081EA9 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				654AF693250D49A6000D09D3 /* CustomNavVC.swift */,
 				6554E7BF24D4E09B00081EA9 /* PokeDexVC.swift */,
 				65DBB9D624D8C920003450A0 /* PokemonDetailVC.swift */,
 				65A7A17824E60F8600D5E73B /* AbilityDetailVC.swift */,
 				65A7A17624E5FE8000D5E73B /* AbilityPresentation.swift */,
 				65A7A17A24E6118F00D5E73B /* AbilityTransitioningDelegate.swift */,
-				65DE2F2425081C1400BE36DB /* TeamBuilderVC.swift */,
 				650045B5250FFA340074E523 /* TeamBuilderViewController.swift */,
 				6525EE25250AAA91008C2967 /* PokemonBuilderVC.swift */,
 			);
@@ -3708,7 +3705,6 @@
 				6554E7C024D4E09B00081EA9 /* PokeDexVC.swift in Sources */,
 				6599204924DA30530082F51C /* AbilityData.swift in Sources */,
 				658757D824EB261000ECD3CE /* StatView.swift in Sources */,
-				65DE2F2525081C1400BE36DB /* TeamBuilderVC.swift in Sources */,
 				6541E39324E0B5D80000564D /* GenerationData.swift in Sources */,
 				650045B6250FFA340074E523 /* TeamBuilderViewController.swift in Sources */,
 				65B7E6E3250E922C00EA512E /* ColorBlockView.swift in Sources */,

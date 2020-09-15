@@ -30,6 +30,7 @@ class CustomNavVC: UINavigationController {
     
     override func viewDidDisappear(_ animated: Bool) {
         if colorBlockView != nil {
+            // Set navigation bar back to clear so it doesn't cover animation of color block
             self.navigationBar.setNavigationBarColor(to: .clear, backgroundEffect: nil)
         }
     }
@@ -50,15 +51,4 @@ class CustomNavVC: UINavigationController {
         
         view.insertSubview(colorBlockView!, at: 1)
     }
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

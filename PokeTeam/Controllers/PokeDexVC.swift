@@ -35,24 +35,27 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        initializeNavigationBar()
+        tableView.backgroundColor = .clear
+        initializeIndicatorView()
+        initializeSearchBar()
+        
+        setState(loading: true)
+        
+        loadSavedData()
+        fetchPokedex()
+    }
+    
+    private func initializeIndicatorView() {
+        indicatorView = view.activityIndicator(style: .large, center: self.view.center)
+        tableView.backgroundView?.addSubview(indicatorView)
+    }
+    
+    private func initializeNavigationBar() {
         navigationController?.delegate = self
         navigationItem.title = "POKEDEX"
         navigationItem.largeTitleDisplayMode = .always
         navigationController?.navigationBar.setNavigationBarColor(to: UIColor.clear, backgroundEffect: UIBlurEffect(style: .systemUltraThinMaterial))
-        
-//        let customNavVC = navigationController as! CustomNavVC
-//        customNavVC.setupColorBlock(bottomColor: #colorLiteral(red: 0.9568627451, green: 0.3215686275, blue: 0.231372549, alpha: 1), topColor: #colorLiteral(red: 0.9764705882, green: 0.4470588235, blue: 0.2823529412, alpha: 1), fillScreen: false)
-        
-        tableView.backgroundColor = .clear
-        
-        indicatorView = view.activityIndicator(style: .large, center: self.view.center)
-        tableView.backgroundView?.addSubview(indicatorView)
-        
-        initializeSearchBar()
-        
-        setState(loading: true)
-        loadSavedData()
-        fetchPokedex()
     }
     
     private func loadSavedData() {
