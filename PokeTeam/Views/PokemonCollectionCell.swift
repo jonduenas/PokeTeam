@@ -33,7 +33,7 @@ class PokemonCollectionCell: UICollectionViewCell {
     }
     
     func setPokemonInfo(for pokemon: PokemonMO) {
-        pokemonNameLabel.text = pokemon.name?.capitalized
+        pokemonNameLabel.text = pokemon.name?.formatPokemonName()
         pokemonImageView.image = UIImage(named: pokemon.imageID!)
         
         // Update Pokemon types

@@ -15,7 +15,6 @@ private let segueIdentifier = "detailSegue"
 class TeamBuilderViewController: UIViewController {
 
     let simpleOver = SimpleOver()
-    let testArray = ["Pokemon 1", "Pokemon 2", "Pokemon 3"]
     var teamsArray = [TeamMO]()
     var team = [PokemonMO]()
     
@@ -25,18 +24,28 @@ class TeamBuilderViewController: UIViewController {
         super.viewDidLoad()
         
         navigationController?.delegate = self
-        navigationItem.title = "TEAM BUILDER"
-        navigationController?.navigationBar.setNavigationBarColor(to: UIColor(named: "team-builder"))
-
+        setupCustomNavController()
+        
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.backgroundColor = .clear
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
         loadSavedTeam()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+    
+    func setupCustomNavController() {
+        let customNavVC = navigationController as! CustomNavVC
+        navigationItem.title = "TEAM BUILDER"
+        
+        customNavVC.setupColorBlock(bottomColor: #colorLiteral(red: 0.768627451, green: 0.1568627451, blue: 0.2078431373, alpha: 1), topColor: #colorLiteral(red: 0.8509803922, green: 0.2196078431, blue: 0.2666666667, alpha: 1), fillScreen: true)
     }
 
     private func loadSavedTeam() {

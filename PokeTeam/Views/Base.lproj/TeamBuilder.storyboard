@@ -152,7 +152,7 @@
                                             <outlet property="pokemonNameLabel" destination="WIp-AY-5S3" id="wyc-pm-cK9"/>
                                             <outlet property="pokemonType1Label" destination="cIF-D4-CZy" id="q2D-Qx-Yxp"/>
                                             <outlet property="pokemonType2Label" destination="5kt-qS-RUs" id="Af8-rx-UlL"/>
-                                            <segue destination="A7p-DA-mdD" kind="show" id="6iG-hC-jgm"/>
+                                            <segue destination="A7p-DA-mdD" kind="show" identifier="detailSegue" id="6iG-hC-jgm"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -306,9 +306,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="team-background" translatesAutoresizingMaskIntoConstraints="NO" id="Xg9-xG-TPC">
-                                <rect key="frame" x="0.0" y="140" width="414" height="673"/>
-                            </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="100" translatesAutoresizingMaskIntoConstraints="NO" id="Qn0-af-pUH">
                                 <rect key="frame" x="143" y="160" width="128" height="128"/>
                                 <constraints>
@@ -343,17 +340,13 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="5Jf-dr-9Mk" firstAttribute="top" secondItem="Qn0-af-pUH" secondAttribute="bottom" constant="50" id="F8d-SF-63w"/>
                             <constraint firstItem="Qn0-af-pUH" firstAttribute="centerX" secondItem="xET-zi-VV5" secondAttribute="centerX" id="JZ8-5n-WXa"/>
                             <constraint firstItem="t8D-TB-5Jv" firstAttribute="trailing" secondItem="5Jf-dr-9Mk" secondAttribute="trailing" constant="20" id="MuA-Lr-nQo"/>
-                            <constraint firstItem="Xg9-xG-TPC" firstAttribute="top" secondItem="t8D-TB-5Jv" secondAttribute="top" id="QaD-1a-Axw"/>
-                            <constraint firstAttribute="bottom" secondItem="Xg9-xG-TPC" secondAttribute="bottom" id="Syi-Gl-xxJ"/>
-                            <constraint firstAttribute="trailing" secondItem="Xg9-xG-TPC" secondAttribute="trailing" id="Wb3-Ii-aQc"/>
                             <constraint firstItem="Qn0-af-pUH" firstAttribute="top" secondItem="t8D-TB-5Jv" secondAttribute="top" constant="20" id="Xd5-uh-uvd"/>
                             <constraint firstItem="5Jf-dr-9Mk" firstAttribute="leading" secondItem="t8D-TB-5Jv" secondAttribute="leading" constant="20" id="jOl-wD-uel"/>
-                            <constraint firstItem="Xg9-xG-TPC" firstAttribute="leading" secondItem="xET-zi-VV5" secondAttribute="leading" id="sue-43-pHH"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="t8D-TB-5Jv"/>
                     </view>
@@ -377,7 +370,6 @@
         <image name="100" width="475" height="475"/>
         <image name="chevron.right" catalog="system" width="96" height="128"/>
         <image name="shield.lefthalf.fill" catalog="system" width="128" height="121"/>
-        <image name="team-background" width="414" height="896"/>
         <namedColor name="navbar">
             <color red="0.85100001096725464" green="0.2199999988079071" blue="0.2669999897480011" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

@@ -70,6 +70,9 @@ class PokemonDetailVC: UIViewController {
         view.addSubview(indicatorView)
         
         colorBlockView = ColorBlockView()
+        colorBlockView.bottomColor = #colorLiteral(red: 0.9568627451, green: 0.3215686275, blue: 0.231372549, alpha: 1)
+        colorBlockView.topColor = #colorLiteral(red: 0.9764705882, green: 0.4470588235, blue: 0.2823529412, alpha: 1)
+        colorBlockView.fillScreen = false
         view.insertSubview(colorBlockView, at: 0)
         
         if shouldFetchDetails() {

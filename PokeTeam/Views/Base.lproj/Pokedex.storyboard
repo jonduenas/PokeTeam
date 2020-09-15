@@ -58,7 +58,7 @@
                                     <outlet property="pokedexNumberLabel" destination="aYE-ye-Rwy" id="q9q-SC-47f"/>
                                     <outlet property="pokemonImageView" destination="ciP-ev-NY8" id="x9o-Ae-iSp"/>
                                     <outlet property="pokemonNameLabel" destination="4Pn-Nu-80x" id="KOf-VT-u91"/>
-                                    <segue destination="S8U-rw-TgR" kind="push" destinationCreationSelector="makePokemonDetailViewControllerWithCoder:" id="1Mi-mm-IlZ"/>
+                                    <segue destination="S8U-rw-TgR" kind="show" destinationCreationSelector="makePokemonDetailViewControllerWithCoder:" id="1Mi-mm-IlZ"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -518,7 +518,7 @@
                     <tabBarItem key="tabBarItem" title="Pokédex" image="book.fill" catalog="system" selectedImage="book.fill" id="pGT-8t-TfL"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="vo0-cz-KlI">
-                        <rect key="frame" x="0.0" y="44" width="414" height="96"/>
+                        <rect key="frame" x="0.0" y="44" width="414" height="104.5"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                     </navigationBar>

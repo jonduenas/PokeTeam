@@ -10,13 +10,22 @@ import UIKit
 
 class ColorBlockView: UIView, CAAnimationDelegate {
     
-    var topColor: UIColor = #colorLiteral(red: 0.9764705882, green: 0.4470588235, blue: 0.2823529412, alpha: 1)
-    var bottomColor: UIColor = #colorLiteral(red: 0.9568627451, green: 0.3215686275, blue: 0.231372549, alpha: 1)
+    var topColor: UIColor = .blue {
+        didSet {
+            createColorBlocks()
+        }
+    }
+    var bottomColor: UIColor = .black {
+        didSet {
+            createColorBlocks()
+        }
+    }
     
     var bottomColorLayer: CAShapeLayer!
     var topColorLayer: CAShapeLayer!
+    var fillScreen: Bool = false
     
-    private(set) var isAnimating: Bool = false
+    var isAnimating: Bool = false
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -36,13 +45,16 @@ class ColorBlockView: UIView, CAAnimationDelegate {
         layoutColorBlocks()
     }
     
-    private func commonInit() {
+    func commonInit() {
         self.clipsToBounds = true
         self.translatesAutoresizingMaskIntoConstraints = false
         createColorBlocks()
+        
+        // Slow animation for simulator testing
+        //layer.speed = 0.1
     }
     
-    private func createColorBlockLayer(strokeColor: UIColor, fillColor: UIColor) -> CAShapeLayer {
+    func createColorBlockLayer(strokeColor: UIColor, fillColor: UIColor) -> CAShapeLayer {
         let layer = CAShapeLayer()
         
         layer.fillColor = fillColor.cgColor
@@ -64,34 +76,60 @@ class ColorBlockView: UIView, CAAnimationDelegate {
     func layoutColorBlocks() {
         guard let superview = self.superview else { return }
         
-        // Set size of view and pin to bottom right of superview
+        // Set size of view to full screen
         self.trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: 0).isActive = true
+        self.leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: 0).isActive = true
+        self.topAnchor.constraint(equalTo: superview.topAnchor, constant: 0).isActive = true
         self.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: 0).isActive = true
-        self.widthAnchor.constraint(equalToConstant: superview.frame.width / 2).isActive = true
-        self.heightAnchor.constraint(equalToConstant: superview.frame.height / 2).isActive = true
         
-        // Create path for shape layers as triangle filling half of view
         let path = UIBezierPath()
-        path.move(to: CGPoint(x: bounds.minX, y: bounds.maxY))
-        path.addLine(to: CGPoint(x: bounds.maxX, y: bounds.minY))
-        path.addLine(to: CGPoint(x: bounds.maxX, y: bounds.maxY))
-        path.addLine(to: CGPoint(x: bounds.minX, y: bounds.maxY))
-        path.close()
-
-        bottomColorLayer.path = path.cgPath
-        topColorLayer.path = path.cgPath
         
-        // Offset layers to prepare for animation
-        bottomColorLayer.transform = CATransform3DMakeTranslation(self.frame.width, 0, 0)
-        topColorLayer.transform = CATransform3DMakeTranslation(self.frame.width + 30, 30, 0)
+        if fillScreen {
+            // Create path for shape layers as triangle filling most of view
+            path.move(to: CGPoint(x: bounds.minX, y: bounds.maxY))
+            path.addLine(to: CGPoint(x: bounds.midX, y: bounds.maxY))
+            path.addLine(to: CGPoint(x: bounds.maxX * 1.5, y: bounds.minY))
+            path.addLine(to: CGPoint(x: bounds.minX, y: bounds.minY))
+            path.addLine(to: CGPoint(x: bounds.minX, y: bounds.maxY))
+            path.close()
+            
+            bottomColorLayer.path = path.cgPath
+            topColorLayer.path = path.cgPath
+            
+            // Offset layers to prepare for animation - Slides in from left
+            bottomColorLayer.transform = CATransform3DMakeTranslation(-self.frame.width, 0, 0)
+            topColorLayer.transform = CATransform3DMakeTranslation(-self.frame.width, 0, 0)
+        } else {
+            // Create path for shape layers as triangle filling half of view
+            path.move(to: CGPoint(x: bounds.midX, y: bounds.maxY))
+            path.addLine(to: CGPoint(x: bounds.maxX, y: bounds.midY))
+            path.addLine(to: CGPoint(x: bounds.maxX, y: bounds.maxY))
+            path.addLine(to: CGPoint(x: bounds.midX, y: bounds.maxY))
+            path.close()
+            
+            bottomColorLayer.path = path.cgPath
+            topColorLayer.path = path.cgPath
+            
+            // Offset layers to prepare for animation - Slides in from right
+            bottomColorLayer.transform = CATransform3DMakeTranslation(self.frame.width, 0, 0)
+            topColorLayer.transform = CATransform3DMakeTranslation(self.frame.width + 30, 30, 0)
+        }
     }
     
-    func animateOnShow() {
-        let fromValueTop = topColorLayer.transform
-        let toValueTop = CATransform3DMakeTranslation(30, 30, 0)
+    func animateOnShow(completion: (() -> Void)? = nil) {
+        let fromValueTop: CATransform3D = topColorLayer.transform
+        let toValueTop: CATransform3D
         
-        let fromValueBottom = bottomColorLayer.transform
-        let toValueBottom = CATransform3DMakeTranslation(0, 0, 0)
+        let fromValueBottom: CATransform3D = bottomColorLayer.transform
+        let toValueBottom: CATransform3D
+        
+        if fillScreen {
+            toValueTop = CATransform3DMakeTranslation(0, 0, 0)
+            toValueBottom = CATransform3DMakeTranslation(40, 0, 0)
+        } else {
+            toValueTop = CATransform3DMakeTranslation(30, 30, 0)
+            toValueBottom = CATransform3DMakeTranslation(0, 0, 0)
+        }
         
         isAnimating = true
         
@@ -122,6 +160,7 @@ class ColorBlockView: UIView, CAAnimationDelegate {
         CATransaction.setCompletionBlock {
             displayLink.invalidate()
             self.isAnimating = false
+            completion?()
         }
         
         topColorLayer.add(basicAnimationTop, forKey: "animateTopOnShow_\(arc4random())")

@@ -9,13 +9,13 @@
 import UIKit
 
 extension UINavigationBar {
-    func setNavigationBarColor(to color: UIColor?) {
+    func setNavigationBarColor(to color: UIColor?, backgroundEffect: UIBlurEffect?) {
         // Customize Navigation Bar appearance
         let coloredAppearance = UINavigationBarAppearance()
         coloredAppearance.configureWithTransparentBackground()
         coloredAppearance.backgroundColor = color
         coloredAppearance.titleTextAttributes = [.foregroundColor: UIColor.label]
-        coloredAppearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+        coloredAppearance.backgroundEffect = backgroundEffect
         
         let button = UIBarButtonItemAppearance(style: .plain)
         button.normal.titleTextAttributes = [.foregroundColor: UIColor.label]
