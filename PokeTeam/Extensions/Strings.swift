@@ -1,5 +1,5 @@
 //
-//  StringFormatting.swift
+//  Strings.swift
 //  PokeTeam
 //
 //  Created by Jon Duenas on 8/31/20.
