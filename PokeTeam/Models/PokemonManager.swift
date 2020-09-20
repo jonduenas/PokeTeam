@@ -10,16 +10,6 @@ import UIKit
 import Combine
 import CoreData
 
-enum PokemonDataType: String {
-    case pokedex = "pokedex/"
-    case pokemon = "pokemon/"
-    case species = "pokemon-species/"
-    case ability = "ability/"
-    case move = "move/"
-    case allPokemon = "pokemon-species?limit=5000"
-    case form = "pokemon-form/"
-}
-
 class PokemonManager {
     static let shared = PokemonManager()
     
