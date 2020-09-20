@@ -867,6 +867,7 @@
 		65DBB9D924D8D567003450A0 /* FontKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DBB9D824D8D567003450A0 /* FontKit.swift */; };
 		65DE2F2325081BD000BE36DB /* PokemonCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DE2F2225081BD000BE36DB /* PokemonCollectionCell.swift */; };
 		65DF93452517FD1F00116BB7 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DF93442517FD1F00116BB7 /* CoreDataStack.swift */; };
+		65DF93542518039A00116BB7 /* TestCoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DF93532518039A00116BB7 /* TestCoreDataStack.swift */; };
 		65E36FC624F84AD1003F00C3 /* NationalPokedex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E36FC524F84AD1003F00C3 /* NationalPokedex.swift */; };
 		65E36FC824F84B60003F00C3 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E36FC724F84B60003F00C3 /* UserDefaultsManager.swift */; };
 		65E57469250D7EAD0099B9A7 /* SimpleOver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E57468250D7EAD0099B9A7 /* SimpleOver.swift */; };
@@ -1757,6 +1758,7 @@
 		65DBB9D824D8D567003450A0 /* FontKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontKit.swift; sourceTree = "<group>"; };
 		65DE2F2225081BD000BE36DB /* PokemonCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonCollectionCell.swift; sourceTree = "<group>"; };
 		65DF93442517FD1F00116BB7 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		65DF93532518039A00116BB7 /* TestCoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCoreDataStack.swift; sourceTree = "<group>"; };
 		65E36FC524F84AD1003F00C3 /* NationalPokedex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NationalPokedex.swift; sourceTree = "<group>"; };
 		65E36FC724F84B60003F00C3 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		65E57468250D7EAD0099B9A7 /* SimpleOver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleOver.swift; sourceTree = "<group>"; };
@@ -2650,6 +2652,7 @@
 		6554E7D124D4E09E00081EA9 /* PokeTeamTests */ = {
 			isa = PBXGroup;
 			children = (
+				65DF93532518039A00116BB7 /* TestCoreDataStack.swift */,
 				6554E7D224D4E09E00081EA9 /* PokeTeamTests.swift */,
 				6554E7D424D4E09E00081EA9 /* Info.plist */,
 			);
@@ -2808,7 +2811,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1160;
-				LastUpgradeCheck = 1160;
+				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = "Jon Duenas";
 				TargetAttributes = {
 					6554E7B724D4E09B00081EA9 = {
@@ -3743,6 +3746,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6554E7D324D4E09E00081EA9 /* PokeTeamTests.swift in Sources */,
+				65DF93542518039A00116BB7 /* TestCoreDataStack.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3831,6 +3835,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -3891,6 +3896,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;

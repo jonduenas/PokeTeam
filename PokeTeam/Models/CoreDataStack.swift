@@ -18,7 +18,7 @@ open class CoreDataStack {
       return self.persistentContainer.viewContext
     }()
     
-    lazy var persistentContainer: NSPersistentContainer = {
+    public lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: CoreDataStack.modelName)
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
