@@ -19,6 +19,9 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
     var searchController: UISearchController!
     var colorBlockView: ColorBlockView!
     var indicatorView: UIActivityIndicatorView!
+    var apiService: APIService!
+    var coreDataStack: CoreDataStack!
+    var dataManager: DataManager!
     
     var fetchedResultsController: NSFetchedResultsController<PokemonMO>!
     //var pokemonArray = [PokemonMO]()
@@ -37,6 +40,9 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
         
         initializeNavigationBar()
         tableView.backgroundColor = .clear
+        apiService = APIService()
+        coreDataStack = CoreDataStack()
+        dataManager = DataManager(managedObjectContext: coreDataStack.mainContext, coreDataStack: coreDataStack)
         initializeIndicatorView()
         initializeSearchBar()
         
@@ -79,13 +85,13 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
     }
     
     private func fetchPokedex() {
-        guard let url = PokemonManager.shared.createURL(for: .allPokemon) else {
+        guard let url = apiService.createURL(for: .allPokemon) else {
             print("Error creating URL")
             return
         }
         
         // Downloads list of all Pokemon names and URLs
-        PokemonManager.shared.fetchFromAPI(of: NationalPokedex.self, from: url)
+        apiService.fetch(type: NationalPokedex.self, from: url)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
@@ -94,7 +100,7 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
                 case .failure(let error):
                     print("Error fetching from API: \(error) - \(error.localizedDescription)")
                 }
-            }) { [weak self] pokedex in
+            }, receiveValue: { [weak self] pokedex in
                 guard let managedObjects = self?.fetchedResultsController.fetchedObjects else { return }
                 
                 if self?.shouldUpdateWithAPI(pokedex: pokedex, managedObjects: managedObjects) ?? false {
@@ -107,7 +113,7 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
                 }
                 
                 self?.updateUI()
-        }
+        })
         .store(in: &subscriptions)
     }
     
