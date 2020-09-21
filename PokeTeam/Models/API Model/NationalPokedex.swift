@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct NationalPokedex: Codable {
+public struct NationalPokedex: Codable {
     let count: Int
     let results: [NameAndURL]
 }

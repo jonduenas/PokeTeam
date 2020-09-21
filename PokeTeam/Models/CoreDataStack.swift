@@ -15,7 +15,7 @@ open class CoreDataStack {
     public init() {}
     
     public lazy var mainContext: NSManagedObjectContext = {
-      return self.persistentContainer.viewContext
+        return self.persistentContainer.viewContext
     }()
     
     public lazy var persistentContainer: NSPersistentContainer = {
