@@ -21,7 +21,7 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
     var indicatorView: UIActivityIndicatorView!
     var apiService: APIService!
     var coreDataStack: CoreDataStack!
-    var dataManager: DataManager!
+    var backgroundDataManager: DataManager!
     
     var fetchedResultsController: NSFetchedResultsController<PokemonMO>!
     //var pokemonArray = [PokemonMO]()
@@ -40,9 +40,19 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
         
         initializeNavigationBar()
         tableView.backgroundColor = .clear
+        
         apiService = APIService()
+        
         coreDataStack = CoreDataStack()
-        dataManager = DataManager(managedObjectContext: coreDataStack.mainContext, coreDataStack: coreDataStack)
+        let backgroundContext = coreDataStack.newDerivedContext()
+        
+        backgroundDataManager = DataManager(managedObjectContext: backgroundContext, coreDataStack: coreDataStack)
+        
+        let teamBuilderNav = tabBarController?.viewControllers?[1] as! CustomNavVC
+        let teamBuilderTab = teamBuilderNav.viewControllers[0] as! TeamBuilderViewController
+        teamBuilderTab.coreDataStack = coreDataStack
+        teamBuilderTab.dataManager = backgroundDataManager
+        
         initializeIndicatorView()
         initializeSearchBar()
         
@@ -72,7 +82,7 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
             request.sortDescriptors = [sort]
             request.fetchBatchSize = 20
             
-            fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: PokemonManager.shared.context, sectionNameKeyPath: nil, cacheName: nil)
+            fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: coreDataStack.mainContext, sectionNameKeyPath: nil, cacheName: nil)
             fetchedResultsController.delegate = self
         }
         
@@ -106,7 +116,7 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
                 if self?.shouldUpdateWithAPI(pokedex: pokedex, managedObjects: managedObjects) ?? false {
                     let difference = pokedex.count - managedObjects.count
                     print("Found \(difference) more Pokemon on the API - Should update.")
-                    PokemonManager.shared.updateNationalPokedex(pokedex: pokedex)
+                    self?.backgroundDataManager.updatePokedex(pokedex: pokedex)
                     self?.loadSavedData()
                 } else {
                     print("Stored Pokemon count matches API - Should skip update")
@@ -194,7 +204,7 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
         } else {
             pokemon = fetchedResultsController.object(at: indexPath).objectID
         }
-        return PokemonDetailVC(coder: coder, pokemonObjectID: pokemon)
+        return PokemonDetailVC(coder: coder, pokemonObjectID: pokemon, coreDataStack: coreDataStack, dataManager: backgroundDataManager, apiService: apiService)
     }
     
     private func setState(loading: Bool) {

@@ -18,6 +18,9 @@ class PokemonDetailVC: UIViewController {
     let pokemonManagedObjectID: NSManagedObjectID
     
     var colorBlockView: ColorBlockView!
+    var backgroundDataManager: DataManager!
+    var coreDataStack: CoreDataStack!
+    var apiService: APIService!
     
     var pokemon: PokemonMO
     var pokemonDetails: PokemonMO?
@@ -48,10 +51,13 @@ class PokemonDetailVC: UIViewController {
     @IBOutlet var abilitiesHeaderLabel: UILabel!
     @IBOutlet weak var abilitiesStackView: UIStackView!
     
-    init?(coder: NSCoder, pokemonObjectID: NSManagedObjectID) {
+    init?(coder: NSCoder, pokemonObjectID: NSManagedObjectID, coreDataStack: CoreDataStack, dataManager: DataManager, apiService: APIService) {
+        self.coreDataStack = coreDataStack
+        self.backgroundDataManager = dataManager
+        self.apiService = apiService
         self.pokemonManagedObjectID = pokemonObjectID
 
-        pokemon = PokemonManager.shared.context.object(with: pokemonObjectID) as! PokemonMO
+        pokemon = coreDataStack.mainContext.object(with: pokemonObjectID) as! PokemonMO
         
         super.init(coder: coder)
     }
@@ -103,20 +109,17 @@ class PokemonDetailVC: UIViewController {
         
         print("Fetching Pokemon details from API")
         
-        let backgroundContext = PokemonManager.shared.backgroundContext
-        let pokemonMO = backgroundContext.object(with: pokemonManagedObjectID) as! PokemonMO
-        
         var speciesURL: URL? = nil
-        pokemonMO.managedObjectContext?.performAndWait {
-            guard let speciesStringURL = pokemonMO.speciesURL else { return }
+        pokemon.managedObjectContext?.performAndWait {
+            guard let speciesStringURL = pokemon.speciesURL else { return }
             speciesURL = URL(string: speciesStringURL)
         }
         
-        PokemonManager.shared.fetchFromAPI(of: SpeciesData.self, from: speciesURL!)
+        apiService.fetch(type: SpeciesData.self, from: speciesURL!)
             .flatMap { speciesData -> AnyPublisher<PokemonData, Error> in
-                PokemonManager.shared.updateDetails(for: pokemonMO.objectID, with: speciesData)
-                let pokemonDataURL = URL(string: pokemonMO.pokemonURL!)
-                return PokemonManager.shared.fetchFromAPI(of: PokemonData.self, from: pokemonDataURL!)
+                let updatedPokemon = self.backgroundDataManager.updateDetails(for: self.pokemon.objectID, with: speciesData)
+                let pokemonDataURL = URL(string: updatedPokemon.pokemonURL!)
+                return self.apiService.fetch(type: PokemonData.self, from: pokemonDataURL!)
         }
         .sink(receiveCompletion: { completion in
             switch completion {
@@ -126,8 +129,8 @@ class PokemonDetailVC: UIViewController {
                 print("Error updating Pokemon: \(error) - \(error.localizedDescription)")
             }
         }) { pokemonData in
-            PokemonManager.shared.updateDetails(for: pokemonMO.objectID, with: pokemonData)
-            PokemonManager.shared.saveContext(backgroundContext)
+            self.backgroundDataManager.updateDetails(for: self.pokemon.objectID, with: pokemonData)
+            self.coreDataStack.saveContext(self.backgroundDataManager.managedObjectContext)
             //self.reloadPokemon(pokemon: pokemonMO)
             DispatchQueue.main.async { [weak self] in
                 self?.showDetails()
@@ -139,12 +142,12 @@ class PokemonDetailVC: UIViewController {
     
     func reloadPokemon(pokemon: PokemonMO) {
         guard let pokemonName = pokemon.name else { return }
-        let backgroundContext = PokemonManager.shared.backgroundContext
+
         let pokemonRequest: NSFetchRequest<PokemonMO> = PokemonMO.fetchRequest()
         pokemonRequest.predicate = NSPredicate(format: "name == %@", pokemonName)
         
         do {
-            let pokemonFetched = try backgroundContext.fetch(pokemonRequest)
+            let pokemonFetched = try backgroundDataManager.managedObjectContext.fetch(pokemonRequest)
             if pokemonFetched.count == 1 {
                 self.pokemon = pokemonFetched[0]
             }
@@ -154,21 +157,21 @@ class PokemonDetailVC: UIViewController {
     }
     
     func fetchPokemonData(with id: Int) -> AnyPublisher<PokemonData, Error> {
-        let pokemonURL = PokemonManager.shared.createURL(for: .pokemon, fromIndex: id)!
+        let pokemonURL = apiService.createURL(for: .pokemon, fromIndex: id)!
         
-        return PokemonManager.shared.fetchFromAPI(of: PokemonData.self, from: pokemonURL)
+        return apiService.fetch(type: PokemonData.self, from: pokemonURL)
     }
     
     func fetchSpeciesData(with url: String) -> AnyPublisher<SpeciesData, Error> {
         let speciesURL = URL(string: url)!
         
-        return PokemonManager.shared.fetchFromAPI(of: SpeciesData.self, from: speciesURL)
+        return apiService.fetch(type: SpeciesData.self, from: speciesURL)
     }
     
     func fetchFormData(with form: NameAndURL) -> AnyPublisher<FormData, Error> {
         let formURL = URL(string: form.url)!
         
-        return PokemonManager.shared.fetchFromAPI(of: FormData.self, from: formURL)
+        return apiService.fetch(type: FormData.self, from: formURL)
     }
     
     private func updatePokemonUI() {
@@ -271,6 +274,9 @@ class PokemonDetailVC: UIViewController {
         let storyboard = UIStoryboard(name: "Pokedex", bundle: nil)
         let abilityController = storyboard.instantiateViewController(withIdentifier: "AbilityVC") as! AbilityDetailVC
         abilityController.abilityManagedObjectID = abilities[sender.tag].objectID
+        abilityController.coreDataStack = coreDataStack
+        abilityController.backgroundDataManager = backgroundDataManager
+        abilityController.apiService = apiService
         
         abilityController.transitioningDelegate = abilityTransitioningDelegate
         abilityController.modalPresentationStyle = .custom
@@ -303,12 +309,12 @@ class PokemonDetailVC: UIViewController {
             if let existingTeam = team {
                 existingTeam.addToMembers(self.pokemon)
                 print("Adding \(self.pokemon.name!) to existing team.")
-                PokemonManager.shared.saveContext(PokemonManager.shared.context)
+                self.coreDataStack.saveContext()
             } else {
-                let newTeam = TeamMO(context: PokemonManager.shared.context)
+                let newTeam = self.backgroundDataManager.addTeam()
                 newTeam.addToMembers(self.pokemon)
                 print("Adding \(self.pokemon.name!) to new team.")
-                PokemonManager.shared.saveContext(PokemonManager.shared.context)
+                self.coreDataStack.saveContext()
             }
         }))
         present(alertController, animated: true)
@@ -325,7 +331,7 @@ class PokemonDetailVC: UIViewController {
     }
     
     private func loadTeam() -> TeamMO? {
-        let context = PokemonManager.shared.context
+        let context = coreDataStack.mainContext
         let teamRequest: NSFetchRequest<TeamMO> = TeamMO.fetchRequest()
         
         do {

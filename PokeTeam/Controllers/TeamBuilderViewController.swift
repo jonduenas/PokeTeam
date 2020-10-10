@@ -17,6 +17,8 @@ class TeamBuilderViewController: UIViewController {
     let simpleOver = SimpleOver()
     var teamsArray = [TeamMO]()
     var team = [PokemonMO]()
+    var coreDataStack: CoreDataStack!
+    var dataManager: DataManager!
     
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -54,7 +56,7 @@ class TeamBuilderViewController: UIViewController {
         let request: NSFetchRequest<TeamMO> = TeamMO.fetchRequest()
         
         do {
-            teamsArray = try PokemonManager.shared.context.fetch(request)
+            teamsArray = try coreDataStack.mainContext.fetch(request)
             if teamsArray.count > 0 {
                 print("Found \(teamsArray.count) stored teams")
                 let firstTeam = teamsArray[0]
@@ -80,6 +82,7 @@ class TeamBuilderViewController: UIViewController {
             detailVC.pokemonName = team[selectedItem].name
             detailVC.pokemonImageName = team[selectedItem].imageID
             detailVC.pokemonManagedObjectID = team[selectedItem].objectID
+            detailVC.coreDataStack = coreDataStack
         }
     }
 }

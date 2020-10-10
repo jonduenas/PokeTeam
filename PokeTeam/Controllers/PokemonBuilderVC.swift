@@ -11,6 +11,8 @@ import CoreData
 
 class PokemonBuilderVC: UIViewController {
 
+    var coreDataStack: CoreDataStack!
+    
     var pokemonName: String?
     var pokemonImageName: String?
     var pokemonManagedObjectID: NSManagedObjectID?
@@ -22,7 +24,7 @@ class PokemonBuilderVC: UIViewController {
         super.viewDidLoad()
         
         if let pokemonID = pokemonManagedObjectID {
-            pokemon = PokemonManager.shared.context.object(with: pokemonID) as? PokemonMO
+            pokemon = coreDataStack.mainContext.object(with: pokemonID) as? PokemonMO
         }
         
         if let name = pokemonName {
@@ -45,7 +47,7 @@ class PokemonBuilderVC: UIViewController {
     }
     
     private func remove(pokemon: PokemonMO) {
-        PokemonManager.shared.context.performAndWait {
+        coreDataStack.mainContext.performAndWait {
             let teamSet = pokemon.team
             let teamArray = teamSet?.allObjects as? [TeamMO]
             if teamArray?.count == 1 {
@@ -53,12 +55,7 @@ class PokemonBuilderVC: UIViewController {
                     team.removeFromMembers(pokemon)
                 }
             }
-            
-            do {
-                try PokemonManager.shared.context.save()
-            } catch {
-                print(error)
-            }
+            coreDataStack.saveContext()
         }
     }
 }

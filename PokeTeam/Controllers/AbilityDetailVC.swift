@@ -12,6 +12,10 @@ import CoreData
 
 class AbilityDetailVC: UIViewController {
     
+    var coreDataStack: CoreDataStack!
+    var backgroundDataManager: DataManager!
+    var apiService: APIService!
+    
     var abilityManagedObjectID: NSManagedObjectID?
     var ability: AbilityMO?
     var abilityData: AbilityData?
@@ -25,14 +29,27 @@ class AbilityDetailVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if coreDataStack == nil {
+            coreDataStack = CoreDataStack()
+        }
+        
+        if backgroundDataManager == nil {
+            let backgroundContext = coreDataStack.newDerivedContext()
+            backgroundDataManager = DataManager(managedObjectContext: backgroundContext, coreDataStack: coreDataStack)
+        }
+        
+        if apiService == nil {
+            apiService = APIService()
+        }
+        
         if let abilityObjectID = abilityManagedObjectID {
-            ability = PokemonManager.shared.context.object(with: abilityObjectID) as? AbilityMO
+            ability = coreDataStack.mainContext.object(with: abilityObjectID) as? AbilityMO
         }
         
         initializeActivityIndicator()
         
         if let abilityMOID = abilityManagedObjectID {
-            ability = PokemonManager.shared.context.object(with: abilityMOID) as? AbilityMO
+            ability = coreDataStack.mainContext.object(with: abilityMOID) as? AbilityMO
             print(ability!.name!)
         }
         
@@ -57,7 +74,7 @@ class AbilityDetailVC: UIViewController {
     private func fetchAbilityDetails() {
         guard let abilityMOID = abilityManagedObjectID else { return }
 
-        let abilityMO = PokemonManager.shared.backgroundContext.object(with: abilityMOID) as! AbilityMO
+        let abilityMO = backgroundDataManager.managedObjectContext.object(with: abilityMOID) as! AbilityMO
         
         guard let abilityURL = URL(string: abilityMO.urlString!) else {
             print("Error creating ability URL")
@@ -66,7 +83,7 @@ class AbilityDetailVC: UIViewController {
 
         setState(loading: true)
 
-        PokemonManager.shared.fetchFromAPI(of: AbilityData.self, from: abilityURL)
+        apiService.fetch(type: AbilityData.self, from: abilityURL)
             .sink(receiveCompletion: { results in
                 switch results {
                 case .finished:
@@ -76,8 +93,8 @@ class AbilityDetailVC: UIViewController {
                 }
             },
                   receiveValue: { (abilityData) in
-                    PokemonManager.shared.addAbilityDescription(to: abilityMO.objectID, with: abilityData)
-                    PokemonManager.shared.saveContext(PokemonManager.shared.backgroundContext)
+                    self.backgroundDataManager.addAbilityDescription(to: abilityMO.objectID, with: abilityData)
+                    self.coreDataStack.saveContext(self.backgroundDataManager.managedObjectContext)
                     //self.ability = PokemonManager.shared.context.object(with: abilityMOID) as? AbilityMO
                     
                     DispatchQueue.main.async {
