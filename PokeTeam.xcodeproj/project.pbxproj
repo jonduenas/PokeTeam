@@ -13,6 +13,8 @@
 		651E246A24F1DD5F000052ED /* Pokedex.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 651E246824F1DD5F000052ED /* Pokedex.storyboard */; };
 		651E246C24F1DDD8000052ED /* TeamBuilder.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 651E246B24F1DDD8000052ED /* TeamBuilder.storyboard */; };
 		651E246F24F1DE10000052ED /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 651E246D24F1DE10000052ED /* Settings.storyboard */; };
+		65221D13253508BD00C83E41 /* mewtwo.json in Resources */ = {isa = PBXBuildFile; fileRef = 65221D12253508BC00C83E41 /* mewtwo.json */; };
+		65221D1B25350DB600C83E41 /* unown.json in Resources */ = {isa = PBXBuildFile; fileRef = 65221D1A25350DB500C83E41 /* unown.json */; };
 		6525EE26250AAA91008C2967 /* PokemonBuilderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6525EE25250AAA91008C2967 /* PokemonBuilderVC.swift */; };
 		6525EE28250ADC2F008C2967 /* CustomColor+UINavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6525EE27250ADC2F008C2967 /* CustomColor+UINavigationBar.swift */; };
 		6528C08D24E6245000199DA7 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6528C08C24E6245000199DA7 /* ActivityIndicator.swift */; };
@@ -847,7 +849,6 @@
 		6554E7DE24D4E09E00081EA9 /* PokeTeamUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6554E7DD24D4E09E00081EA9 /* PokeTeamUITests.swift */; };
 		6554E7F124D4E16C00081EA9 /* Pokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6554E7F024D4E16C00081EA9 /* Pokemon.swift */; };
 		6554E7F424D4E18800081EA9 /* PokemonManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6554E7F324D4E18800081EA9 /* PokemonManager.swift */; };
-		655711502533B18D001350BB /* pikachu.json in Resources */ = {isa = PBXBuildFile; fileRef = 6557114F2533B18D001350BB /* pikachu.json */; };
 		656DD47424DF48C900C9EC16 /* TypeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 656DD47324DF48C900C9EC16 /* TypeLabel.swift */; };
 		657E522A24F1E87D00A19CB8 /* PokemonTeam.swift in Sources */ = {isa = PBXBuildFile; fileRef = 657E522924F1E87D00A19CB8 /* PokemonTeam.swift */; };
 		6580DF16250C579100603CED /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6580DF15250C579100603CED /* GradientView.swift */; };
@@ -900,6 +901,8 @@
 		651E246924F1DD5F000052ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Pokedex.storyboard; sourceTree = "<group>"; };
 		651E246B24F1DDD8000052ED /* TeamBuilder.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = TeamBuilder.storyboard; path = PokeTeam/Views/Base.lproj/TeamBuilder.storyboard; sourceTree = SOURCE_ROOT; };
 		651E246E24F1DE10000052ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Settings.storyboard; sourceTree = "<group>"; };
+		65221D12253508BC00C83E41 /* mewtwo.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = mewtwo.json; sourceTree = "<group>"; };
+		65221D1A25350DB500C83E41 /* unown.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = unown.json; sourceTree = "<group>"; };
 		6525EE25250AAA91008C2967 /* PokemonBuilderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonBuilderVC.swift; sourceTree = "<group>"; };
 		6525EE27250ADC2F008C2967 /* CustomColor+UINavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CustomColor+UINavigationBar.swift"; sourceTree = "<group>"; };
 		6528C08C24E6245000199DA7 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ActivityIndicator.swift; path = PokeTeam/Views/ActivityIndicator.swift; sourceTree = SOURCE_ROOT; };
@@ -1740,7 +1743,6 @@
 		6554E7DF24D4E09E00081EA9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6554E7F024D4E16C00081EA9 /* Pokemon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pokemon.swift; sourceTree = "<group>"; };
 		6554E7F324D4E18800081EA9 /* PokemonManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonManager.swift; sourceTree = "<group>"; };
-		6557114F2533B18D001350BB /* pikachu.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = pikachu.json; sourceTree = "<group>"; };
 		656DD47324DF48C900C9EC16 /* TypeLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeLabel.swift; sourceTree = "<group>"; };
 		657E522924F1E87D00A19CB8 /* PokemonTeam.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonTeam.swift; sourceTree = "<group>"; };
 		6580DF15250C579100603CED /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
@@ -2658,7 +2660,8 @@
 			isa = PBXGroup;
 			children = (
 				65CBACED2518272A000444C5 /* DataManagerTests.swift */,
-				6557114F2533B18D001350BB /* pikachu.json */,
+				65221D1A25350DB500C83E41 /* unown.json */,
+				65221D12253508BC00C83E41 /* mewtwo.json */,
 				65DF93532518039A00116BB7 /* TestCoreDataStack.swift */,
 				6554E7D224D4E09E00081EA9 /* PokeTeamTests.swift */,
 				6554E7D424D4E09E00081EA9 /* Info.plist */,
@@ -3703,7 +3706,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				655711502533B18D001350BB /* pikachu.json in Resources */,
+				65221D13253508BD00C83E41 /* mewtwo.json in Resources */,
+				65221D1B25350DB600C83E41 /* unown.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

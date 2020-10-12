@@ -114,7 +114,7 @@ extension DataManager {
         return pokemon
     }
     
-    func updateDetails(for pokemonManagedObjectID: NSManagedObjectID, with pokemonData: PokemonData) {
+    @discardableResult func updateDetails(for pokemonManagedObjectID: NSManagedObjectID, with pokemonData: PokemonData) -> PokemonMO {
         let pokemon = managedObjectContext.object(with: pokemonManagedObjectID) as! PokemonMO
         
         pokemon.managedObjectContext?.performAndWait {
@@ -145,6 +145,7 @@ extension DataManager {
                 pokemon.hasAltForm = false
             }
         }
+        return pokemon
     }
     
     func updateDetails(for pokemonManagedObjectID: NSManagedObjectID, with formData: [FormData]) {

@@ -59,9 +59,9 @@ class DataManagerTests: XCTestCase {
         XCTAssertEqual(testPokemonArray[1].id, 2, "ID should be 2")
     }
     
-    func testUpdateDetails() {
+    func testUpdateDetails_SpeciesData() {
         // Create test Pokemon MO
-        let pokemon = sut.addPokemon(name: "pikachu", speciesURL: "http://testurl.com", id: 25)
+        let pokemon = sut.addPokemon(name: "mewtwo", speciesURL: "http://testurl.com", id: 150)
         let managedObjectID = pokemon.objectID
         
         // Inject test JSON file and decode to SpeciesData
@@ -69,8 +69,8 @@ class DataManagerTests: XCTestCase {
         jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
         
         let bundle = Bundle(for: type(of: self))
-        guard let url = bundle.url(forResource: "pikachu", withExtension: "json") else {
-            XCTFail("Missing pikachu.json file")
+        guard let url = bundle.url(forResource: "mewtwo", withExtension: "json") else {
+            XCTFail("Missing mewtwo.json file")
             return
         }
         
@@ -82,14 +82,47 @@ class DataManagerTests: XCTestCase {
         let updatedPokemon = sut.updateDetails(for: managedObjectID, with: speciesData!)
         
         XCTAssertNotNil(updatedPokemon)
-        XCTAssertNotNil(updatedPokemon.genus)
-        XCTAssertNotNil(updatedPokemon.generation)
-        XCTAssertNotNil(updatedPokemon.flavorText)
-        XCTAssertNotNil(updatedPokemon.isBaby)
-        XCTAssertNotNil(updatedPokemon.isLegendary)
-        XCTAssertNotNil(updatedPokemon.isMythical)
-        XCTAssertNotNil(updatedPokemon.nationalPokedexNumber)
-        XCTAssertNotNil(updatedPokemon.order)
-        XCTAssertNotNil(updatedPokemon.pokemonURL)
+        XCTAssertNotEqual(updatedPokemon.genus, "")
+        XCTAssertNotEqual(updatedPokemon.generation, "")
+        XCTAssertNotEqual(updatedPokemon.flavorText, "")
+        XCTAssertEqual(updatedPokemon.isBaby, false)
+        XCTAssertEqual(updatedPokemon.isLegendary, true)
+        XCTAssertEqual(updatedPokemon.isMythical, false)
+        XCTAssertNotEqual(updatedPokemon.nationalPokedexNumber, 0)
+        XCTAssertNotEqual(updatedPokemon.order, 0)
+        XCTAssertNotEqual(updatedPokemon.pokemonURL, "")
+    }
+    
+    func testUpdateDetails_PokemonData() {
+        // Create test Pokemon MO
+        let pokemon = sut.addPokemon(name: "unown", speciesURL: "http://testurl.com", id: 201)
+        let managedObjectID = pokemon.objectID
+        
+        // Inject test JSON file and decode to SpeciesData
+        let jsonDecoder = JSONDecoder()
+        jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
+        
+        let bundle = Bundle(for: type(of: self))
+        guard let url = bundle.url(forResource: "unown", withExtension: "json") else {
+            XCTFail("Missing unown.json file")
+            return
+        }
+        
+        let testJSON = try? Data(contentsOf: url)
+        
+        let pokemonData = try? jsonDecoder.decode(PokemonData.self, from: testJSON!)
+        
+        // Test updateDetails(for:with:)
+        let updatedPokemon = sut.updateDetails(for: managedObjectID, with: pokemonData!)
+        
+        XCTAssertNotEqual(updatedPokemon.imageID, "")
+        XCTAssertNotEqual(updatedPokemon.height, 0)
+        XCTAssertNotEqual(updatedPokemon.weight, 0)
+        XCTAssertNotNil(updatedPokemon.type)
+        XCTAssertNotNil(updatedPokemon.stats)
+        XCTAssertNotEqual(updatedPokemon.abilities?.count, 0)
+        XCTAssertNotEqual(updatedPokemon.moves?.count, 0)
+        XCTAssertEqual(updatedPokemon.hasAltForm, true)
+        XCTAssertNotEqual(updatedPokemon.altForm?.count, 0)
     }
 }
