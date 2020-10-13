@@ -143,4 +143,33 @@ class DataManagerTests: XCTestCase {
         XCTAssertEqual(updatedAltForm.formOrder, 1)
         XCTAssertEqual(updatedAltForm.id, 201)
     }
+    
+    func testAddAbilityDescription() {
+        let ability = AbilityMO(context: sut.managedObjectContext)
+        ability.name = "battle-armor"
+        ability.isHidden = false
+        ability.slot = 1
+        ability.urlString = "http://testurl.com"
+        
+        let managedObjectID = ability.objectID
+        
+        // Inject test JSON file and decode to SpeciesData
+        let jsonDecoder = JSONDecoder()
+        jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
+        
+        let bundle = Bundle(for: type(of: self))
+        guard let url = bundle.url(forResource: "battle-armor", withExtension: "json") else {
+            XCTFail("Missing battle-armor.json file")
+            return
+        }
+        
+        let testJSON = try? Data(contentsOf: url)
+        
+        let abilityData = try? jsonDecoder.decode(AbilityData.self, from: testJSON!)
+        
+        let updatedAbility = sut.addAbilityDescription(to: managedObjectID, with: abilityData!)
+        
+        XCTAssertNotEqual(updatedAbility.abilityDescription, "")
+        XCTAssertNotEqual(updatedAbility.id, 0)
+    }
 }

@@ -162,7 +162,7 @@ extension DataManager {
         return altForm
     }
     
-    func addAbilityDescription(to abilityManagedObjectID: NSManagedObjectID, with abilityData: AbilityData) {
+    @discardableResult func addAbilityDescription(to abilityManagedObjectID: NSManagedObjectID, with abilityData: AbilityData) -> AbilityMO {
         let ability = managedObjectContext.object(with: abilityManagedObjectID) as! AbilityMO
         
         var englishFlavorTextArray = [String]()
@@ -185,6 +185,7 @@ extension DataManager {
             ability.abilityDescription = flavorText
             ability.id = Int64(abilityData.id)
         }
+        return ability
     }
     
     // MARK: Private parsing methods
