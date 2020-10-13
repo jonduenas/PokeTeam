@@ -148,21 +148,18 @@ extension DataManager {
         return pokemon
     }
     
-    func updateDetails(for pokemonManagedObjectID: NSManagedObjectID, with formData: [FormData]) {
+    @discardableResult func updateDetails(for altFormManagedObjectID: NSManagedObjectID, with formData: FormData) -> AltFormMO {
+        let altForm = managedObjectContext.object(with: altFormManagedObjectID) as! AltFormMO
+        
         managedObjectContext.performAndWait {
-            for form in formData {
-                let pokemon = managedObjectContext.object(with: pokemonManagedObjectID) as! PokemonMO
-                let altForm = AltFormMO(context: managedObjectContext)
-                
-                altForm.formName = form.formName
-                altForm.formOrder = Int64(form.formOrder)
-                altForm.id = Int64(form.id)
-                altForm.isMega = form.isMega
-                altForm.name = form.name
-                altForm.order = Int64(form.order)
-                altForm.pokemon = pokemon
-            }
+            altForm.formName = formData.formName
+            altForm.formOrder = Int64(formData.formOrder)
+            altForm.id = Int64(formData.id)
+            altForm.isMega = formData.isMega
+            altForm.name = formData.name
+            altForm.order = Int64(formData.order)
         }
+        return altForm
     }
     
     func addAbilityDescription(to abilityManagedObjectID: NSManagedObjectID, with abilityData: AbilityData) {

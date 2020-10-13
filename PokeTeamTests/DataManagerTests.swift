@@ -125,4 +125,22 @@ class DataManagerTests: XCTestCase {
         XCTAssertEqual(updatedPokemon.hasAltForm, true)
         XCTAssertNotEqual(updatedPokemon.altForm?.count, 0)
     }
+    
+    func testUpdateDetails_FormData() {
+        let altForm = AltFormMO(context: sut.managedObjectContext)
+        altForm.name = "unown-a"
+        altForm.urlString = "http://testurl.com"
+        
+        let managedObjectID = altForm.objectID
+        
+        let formA = FormData(id: 201, name: "unown-a", order: 283, formOrder: 1, isDefault: true, isMega: false, formName: "a", pokemon: NameAndURL(name: "unown", url: "http://testurl.com"))
+        
+        let updatedAltForm = sut.updateDetails(for: managedObjectID, with: formA)
+        
+        XCTAssertEqual(updatedAltForm.name, "unown-a")
+        XCTAssertEqual(updatedAltForm.formName, "a")
+        XCTAssertEqual(updatedAltForm.order, 283)
+        XCTAssertEqual(updatedAltForm.formOrder, 1)
+        XCTAssertEqual(updatedAltForm.id, 201)
+    }
 }
