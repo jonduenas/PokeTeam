@@ -233,11 +233,6 @@ class PokemonDetailVC: UIViewController {
 
             if let abilityName = ability.name {
                 abilityButton.setTitle(abilityName.formatAbilityName(), for: .normal)
-//                if ability.isHidden {
-//                    abilityButton.setTitle("\(abilityName.formatAbilityName()) *", for: .normal)
-//                } else {
-//                    abilityButton.setTitle(abilityName.formatAbilityName(), for: .normal)
-//                }
             }
 
             abilityButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
@@ -257,11 +252,6 @@ class PokemonDetailVC: UIViewController {
             abilitiesStackView.addArrangedSubview(abilityButton)
             abilitiesStackView.translatesAutoresizingMaskIntoConstraints = false
         }
-
-//        let hiddenLabel = UILabel()
-//        hiddenLabel.text = "* Hidden Ability"
-//        hiddenLabel.font = UIFont.systemFont(ofSize: 12)
-//        abilitiesStackView.addArrangedSubview(hiddenLabel)
     }
     
     @objc private func abilityButtonTapped(sender: UIButton!) {
