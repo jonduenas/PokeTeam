@@ -86,6 +86,33 @@ extension DataManager {
         }
     }
     
+    public func getSinglePokemon(pokemonName: String) -> PokemonMO? {
+        let pokemonRequest: NSFetchRequest<PokemonMO> = PokemonMO.fetchRequest()
+        pokemonRequest.predicate = NSPredicate(format: "name == %@", pokemonName)
+        
+        do {
+            let pokemonFetched = try managedObjectContext.fetch(pokemonRequest)
+            if pokemonFetched.count == 1 {
+                return pokemonFetched[0]
+            }
+        } catch {
+            print("Error loading Pokemon - \(error) - \(error.localizedDescription)")
+        }
+        return nil
+    }
+    
+    public func getAllPokemon() -> [PokemonMO]? {
+        let pokemonRequest: NSFetchRequest<PokemonMO> = PokemonMO.fetchRequest()
+        
+        do {
+            let pokemonFetched = try managedObjectContext.fetch(pokemonRequest)
+            return pokemonFetched
+        } catch {
+            print("Error loading Pokemon - \(error) - \(error.localizedDescription)")
+        }
+        return nil
+    }
+    
     @discardableResult func updateDetails(for pokemonManagedObjectID: NSManagedObjectID, with speciesData: SpeciesData) -> PokemonMO {
         let pokemon = managedObjectContext.object(with: pokemonManagedObjectID) as! PokemonMO
         
@@ -111,6 +138,7 @@ extension DataManager {
             
             pokemon.pokemonURL = speciesData.varieties[0].pokemon.url
         }
+        coreDataStack.saveContext(managedObjectContext)
         return pokemon
     }
     
@@ -118,7 +146,7 @@ extension DataManager {
         let pokemon = managedObjectContext.object(with: pokemonManagedObjectID) as! PokemonMO
         
         pokemon.managedObjectContext?.performAndWait {
-            pokemon.imageID = String(pokemon.id)
+            pokemon.imageID = String(pokemonData.id)
             pokemon.height = pokemonData.height / 10
             pokemon.weight = pokemonData.weight / 10
             
@@ -145,6 +173,7 @@ extension DataManager {
                 pokemon.hasAltForm = false
             }
         }
+        coreDataStack.saveContext(managedObjectContext)
         return pokemon
     }
     
@@ -159,6 +188,7 @@ extension DataManager {
             altForm.name = formData.name
             altForm.order = Int64(formData.order)
         }
+        coreDataStack.saveContext(managedObjectContext)
         return altForm
     }
     
@@ -185,6 +215,7 @@ extension DataManager {
             ability.abilityDescription = flavorText
             ability.id = Int64(abilityData.id)
         }
+        coreDataStack.saveContext(managedObjectContext)
         return ability
     }
     

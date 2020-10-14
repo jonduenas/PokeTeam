@@ -33,6 +33,7 @@ open class CoreDataStack {
     public func newDerivedContext() -> NSManagedObjectContext {
         let context = persistentContainer.newBackgroundContext()
         context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        context.automaticallyMergesChangesFromParent = true
         return context
     }
     

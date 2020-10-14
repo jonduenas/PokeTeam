@@ -15,7 +15,7 @@ class PokemonDetailVC: UIViewController {
     let largeTitleSize: CGFloat = 34
     let subTitleSize: CGFloat = 25
     let abilityTransitioningDelegate = AbilityTransitioningDelegate()
-    let pokemonManagedObjectID: NSManagedObjectID
+    let pokemonObjectID: NSManagedObjectID
     
     var colorBlockView: ColorBlockView!
     var backgroundDataManager: DataManager!
@@ -55,7 +55,7 @@ class PokemonDetailVC: UIViewController {
         self.coreDataStack = coreDataStack
         self.backgroundDataManager = dataManager
         self.apiService = apiService
-        self.pokemonManagedObjectID = pokemonObjectID
+        self.pokemonObjectID = pokemonObjectID
 
         pokemon = coreDataStack.mainContext.object(with: pokemonObjectID) as! PokemonMO
         
@@ -131,7 +131,12 @@ class PokemonDetailVC: UIViewController {
         }) { pokemonData in
             self.backgroundDataManager.updateDetails(for: self.pokemon.objectID, with: pokemonData)
             self.coreDataStack.saveContext(self.backgroundDataManager.managedObjectContext)
-            //self.reloadPokemon(pokemon: pokemonMO)
+            
+            if let updatedPokemon = self.backgroundDataManager.getSinglePokemon(pokemonName: self.pokemon.name!) {
+                self.pokemon = updatedPokemon
+            } else {
+                print("Error reloading pokemon")
+            }
             DispatchQueue.main.async { [weak self] in
                 self?.showDetails()
                 self?.setState(loading: false)
@@ -140,20 +145,9 @@ class PokemonDetailVC: UIViewController {
         .store(in: &subscriptions)
     }
     
-    func reloadPokemon(pokemon: PokemonMO) {
-        guard let pokemonName = pokemon.name else { return }
-
-        let pokemonRequest: NSFetchRequest<PokemonMO> = PokemonMO.fetchRequest()
-        pokemonRequest.predicate = NSPredicate(format: "name == %@", pokemonName)
-        
-        do {
-            let pokemonFetched = try backgroundDataManager.managedObjectContext.fetch(pokemonRequest)
-            if pokemonFetched.count == 1 {
-                self.pokemon = pokemonFetched[0]
-            }
-        } catch {
-            print("Error reloading Pokemon - \(error) - \(error.localizedDescription)")
-        }
+    func reloadPokemon() {
+        pokemon = coreDataStack.mainContext.object(with: pokemonObjectID) as! PokemonMO
+        print("Pokemon object reloaded")
     }
     
     func fetchPokemonData(with id: Int) -> AnyPublisher<PokemonData, Error> {
@@ -175,6 +169,7 @@ class PokemonDetailVC: UIViewController {
     }
     
     private func updatePokemonUI() {
+        print("Updating UI")
         pokemonNameLabel.text = pokemon.name?.capitalized
         
         if let imageID = pokemon.imageID {

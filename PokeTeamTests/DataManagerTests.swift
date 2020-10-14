@@ -59,6 +59,30 @@ class DataManagerTests: XCTestCase {
         XCTAssertEqual(testPokemonArray[1].id, 2, "ID should be 2")
     }
     
+    func testGetSinglePokemon() {
+        let pokemonName = "pikachu"
+        sut.addPokemon(name: pokemonName, speciesURL: "testurl", id: 10)
+        
+        let pokemon = sut.getSinglePokemon(pokemonName: pokemonName)
+        
+        XCTAssertNotNil(pokemon)
+        XCTAssertEqual(pokemon?.name, pokemonName)
+        XCTAssertEqual(pokemon?.speciesURL, "testurl")
+        XCTAssertEqual(pokemon?.id, 10)
+    }
+    
+    func testGetAllPokemon() {
+        sut.addPokemon(name: "pikachu", speciesURL: "testurl", id: 1)
+        sut.addPokemon(name: "bulbasaur", speciesURL: "testurl", id: 2)
+        sut.addPokemon(name: "squirtle", speciesURL: "testurl", id: 3)
+        sut.addPokemon(name: "charmander", speciesURL: "testurl", id: 4)
+        
+        let allPokemon = sut.getAllPokemon()
+        
+        XCTAssertNotNil(allPokemon)
+        XCTAssertEqual(allPokemon?.count, 4)
+    }
+    
     func testUpdateDetails_SpeciesData() {
         // Create test Pokemon MO
         let pokemon = sut.addPokemon(name: "mewtwo", speciesURL: "http://testurl.com", id: 150)
@@ -171,5 +195,9 @@ class DataManagerTests: XCTestCase {
         
         XCTAssertNotEqual(updatedAbility.abilityDescription, "")
         XCTAssertNotEqual(updatedAbility.id, 0)
+    }
+    
+    func testAddPokemonVariety() {
+        
     }
 }
