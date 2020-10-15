@@ -59,28 +59,17 @@ class DataManagerTests: XCTestCase {
         XCTAssertEqual(testPokemonArray[1].id, 2, "ID should be 2")
     }
     
-    func testGetSinglePokemon() {
-        let pokemonName = "pikachu"
-        sut.addPokemon(name: pokemonName, speciesURL: "testurl", id: 10)
-        
-        let pokemon = sut.getSinglePokemon(pokemonName: pokemonName)
-        
-        XCTAssertNotNil(pokemon)
-        XCTAssertEqual(pokemon?.name, pokemonName)
-        XCTAssertEqual(pokemon?.speciesURL, "testurl")
-        XCTAssertEqual(pokemon?.id, 10)
-    }
-    
-    func testGetAllPokemon() {
+    func testGetFromCoreData() {
         sut.addPokemon(name: "pikachu", speciesURL: "testurl", id: 1)
         sut.addPokemon(name: "bulbasaur", speciesURL: "testurl", id: 2)
         sut.addPokemon(name: "squirtle", speciesURL: "testurl", id: 3)
         sut.addPokemon(name: "charmander", speciesURL: "testurl", id: 4)
         
-        let allPokemon = sut.getAllPokemon()
+        let allPokemon = sut.getFromCoreData(entity: PokemonMO.self, sortBy: "id", isAscending: true) as? [PokemonMO]
         
         XCTAssertNotNil(allPokemon)
         XCTAssertEqual(allPokemon?.count, 4)
+        XCTAssertEqual(allPokemon?[1].name, "bulbasaur")
     }
     
     func testUpdateDetails_SpeciesData() {

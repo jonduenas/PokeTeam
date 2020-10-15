@@ -132,8 +132,8 @@ class PokemonDetailVC: UIViewController {
             self.backgroundDataManager.updateDetails(for: self.pokemon.objectID, with: pokemonData)
             self.coreDataStack.saveContext(self.backgroundDataManager.managedObjectContext)
             
-            if let updatedPokemon = self.backgroundDataManager.getSinglePokemon(pokemonName: self.pokemon.name!) {
-                self.pokemon = updatedPokemon
+            if let updatedPokemon = self.backgroundDataManager.getFromCoreData(entity: PokemonMO.self, predicate: NSPredicate(format: "name == %@", pokemonData.name)) as? [PokemonMO] {
+                self.pokemon = updatedPokemon[0]
             } else {
                 print("Error reloading pokemon")
             }

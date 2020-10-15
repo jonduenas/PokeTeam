@@ -86,29 +86,23 @@ extension DataManager {
         }
     }
     
-    public func getSinglePokemon(pokemonName: String) -> PokemonMO? {
-        let pokemonRequest: NSFetchRequest<PokemonMO> = PokemonMO.fetchRequest()
-        pokemonRequest.predicate = NSPredicate(format: "name == %@", pokemonName)
+    public func getFromCoreData<T: NSManagedObject>(entity: T.Type, sortBy: String? = nil, isAscending: Bool = true, predicate: NSPredicate? = nil) -> [Any]?  {
+        let request = T.fetchRequest()
         
-        do {
-            let pokemonFetched = try managedObjectContext.fetch(pokemonRequest)
-            if pokemonFetched.count == 1 {
-                return pokemonFetched[0]
-            }
-        } catch {
-            print("Error loading Pokemon - \(error) - \(error.localizedDescription)")
+        request.returnsObjectsAsFaults = false
+        request.predicate = predicate
+        
+        if (sortBy != nil) {
+            let sorter = NSSortDescriptor(key: sortBy, ascending: isAscending)
+            request.sortDescriptors = [sorter]
         }
-        return nil
-    }
-    
-    public func getAllPokemon() -> [PokemonMO]? {
-        let pokemonRequest: NSFetchRequest<PokemonMO> = PokemonMO.fetchRequest()
         
         do {
-            let pokemonFetched = try managedObjectContext.fetch(pokemonRequest)
-            return pokemonFetched
+            let fetchedResult = try managedObjectContext.fetch(request)
+            print("retrieved \(fetchedResult.count) elements for \(entity)")
+            return fetchedResult
         } catch {
-            print("Error loading Pokemon - \(error) - \(error.localizedDescription)")
+            print("Error loading from Core Data - \(error) - \(error.localizedDescription)")
         }
         return nil
     }
