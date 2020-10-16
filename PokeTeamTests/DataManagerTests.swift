@@ -159,12 +159,17 @@ class DataManagerTests: XCTestCase {
     
     func testAddAbilityDescription() {
         let ability = AbilityMO(context: sut.managedObjectContext)
-        ability.name = "battle-armor"
+        ability.name = "pokemon-battle-armor"
         ability.isHidden = false
         ability.slot = 1
-        ability.urlString = "http://testurl.com"
         
-        let managedObjectID = ability.objectID
+        let abilityDetails = AbilityDetails(context: sut.managedObjectContext)
+        abilityDetails.name = "battle-armor"
+        abilityDetails.urlString = "http://testurl.com"
+        
+        ability.abilityDetails = abilityDetails
+
+        let managedObjectID = abilityDetails.objectID
         
         // Inject test JSON file and decode to SpeciesData
         let jsonDecoder = JSONDecoder()
