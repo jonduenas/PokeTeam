@@ -64,7 +64,7 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
     
     private func initializeIndicatorView() {
         indicatorView = view.activityIndicator(style: .large, center: self.view.center)
-        tableView.backgroundView?.addSubview(indicatorView)
+        navigationController?.view.insertSubview(indicatorView, at: 1)
     }
     
     private func initializeNavigationBar() {
@@ -116,6 +116,7 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
                 if self?.shouldUpdateWithAPI(pokedex: pokedex, managedObjects: managedObjects) ?? false {
                     let difference = pokedex.count - managedObjects.count
                     print("Found \(difference) more Pokemon on the API - Should update.")
+                    
                     self?.backgroundDataManager.updatePokedex(pokedex: pokedex)
                     self?.loadSavedData()
                 } else {
@@ -134,6 +135,7 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
     
     private func updateUI() {
         DispatchQueue.main.async { [weak self] in
+            print("Updating UI")
             self?.tableView.reloadData()
             self?.setState(loading: false)
         }
