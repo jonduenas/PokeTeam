@@ -41,22 +41,26 @@ extension DataManager {
     @discardableResult public func updatePokedex(pokedex: NationalPokedex) -> [PokemonMO] {
         var newPokemonArray = [PokemonMO]()
         
-        for pokemon in pokedex.results {
-            // Check if Pokemon already exists in Core Data
-            let isFound = checkCDForMatch(with: pokemon)
-            
-            if isFound {
-                // Pokemon with matching name is found
-                continue
-            } else {
-                // No Pokemon with that name is found - create a new one
-                guard let id = getID(from: pokemon.url) else { continue }
+        managedObjectContext.performAndWait {
+            for pokemon in pokedex.results {
+                // Check if Pokemon already exists in Core Data
+                let isFound = checkCDForMatch(with: pokemon)
                 
-                let newPokemon = addPokemon(name: pokemon.name, speciesURL: pokemon.url, id: Int64(id))
-                newPokemonArray.append(newPokemon)
+                if isFound {
+                    // Pokemon with matching name is found
+                    continue
+                } else {
+                    // No Pokemon with that name is found - create a new one
+                    guard let id = getID(from: pokemon.url) else { continue }
+                    
+                    let newPokemon = addPokemon(name: pokemon.name, speciesURL: pokemon.url, id: Int64(id))
+                    newPokemonArray.append(newPokemon)
+                }
             }
+            print("Finished updating Pokedex")
+            coreDataStack.saveContext(managedObjectContext)
         }
-        coreDataStack.saveContext(managedObjectContext)
+        
         return newPokemonArray
     }
     
