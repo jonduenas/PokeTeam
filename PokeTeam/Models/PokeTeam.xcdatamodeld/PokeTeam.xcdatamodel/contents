@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="19H2" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Ability" representedClassName="AbilityMO" syncable="YES" codeGenerationType="class">
+        <attribute name="isHidden" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="slot" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="abilityDetails" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AbilityDetails" inverseName="ability" inverseEntity="AbilityDetails"/>
+        <relationship name="pokemon" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Pokemon" inverseName="abilities" inverseEntity="Pokemon"/>
+    </entity>
+    <entity name="AbilityDetails" representedClassName="AbilityDetails" syncable="YES" codeGenerationType="class">
         <attribute name="abilityDescription" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="isHidden" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String"/>
-        <attribute name="slot" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="urlString" attributeType="String"/>
-        <relationship name="pokemon" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Pokemon" inverseName="abilities" inverseEntity="Pokemon"/>
+        <relationship name="ability" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Ability" inverseName="abilityDetails" inverseEntity="Ability"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="name"/>
@@ -74,9 +79,9 @@
         <attribute name="stats" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" customClassName="[String: Float]"/>
         <attribute name="type" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" customClassName="[String]"/>
         <attribute name="weight" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <relationship name="abilities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Ability" inverseName="pokemon" inverseEntity="Ability"/>
-        <relationship name="altForm" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="AltForm" inverseName="pokemon" inverseEntity="AltForm"/>
-        <relationship name="moves" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Move" inverseName="pokemon" inverseEntity="Move"/>
+        <relationship name="abilities" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Ability" inverseName="pokemon" inverseEntity="Ability"/>
+        <relationship name="altForm" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="AltForm" inverseName="pokemon" inverseEntity="AltForm"/>
+        <relationship name="moves" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Move" inverseName="pokemon" inverseEntity="Move"/>
         <relationship name="pokedex" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Pokedex" inverseName="pokemon" inverseEntity="Pokedex"/>
         <relationship name="team" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="members" inverseEntity="Team"/>
         <relationship name="varieties" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Pokemon" inverseName="varieties" inverseEntity="Pokemon"/>
@@ -111,12 +116,13 @@
         </uniquenessConstraints>
     </entity>
     <elements>
-        <element name="Ability" positionX="343.77734375" positionY="-326.91796875" width="128" height="148"/>
-        <element name="AltForm" positionX="144" positionY="-171" width="128" height="163"/>
-        <element name="Move" positionX="347.1015625" positionY="-132.5859375" width="128" height="148"/>
-        <element name="Pokedex" positionX="162" positionY="-162" width="128" height="88"/>
-        <element name="Pokemon" positionX="140.90234375" positionY="-317.33203125" width="128" height="433"/>
-        <element name="Team" positionX="-60.03515625" positionY="-237.5625" width="128" height="73"/>
-        <element name="Type" positionX="171" positionY="-135" width="128" height="118"/>
+        <element name="Ability" positionX="266.94921875" positionY="-797.61328125" width="128" height="118"/>
+        <element name="AbilityDetails" positionX="490.140625" positionY="-795.50390625" width="129.19921875" height="118"/>
+        <element name="AltForm" positionX="79.828125" positionY="-179.87109375" width="128" height="163"/>
+        <element name="Move" positionX="497.80859375" positionY="-285.21484375" width="128" height="148"/>
+        <element name="Pokedex" positionX="-165.30078125" positionY="-616.83984375" width="128" height="88"/>
+        <element name="Pokemon" positionX="25.265625" positionY="-793.3671875" width="128" height="433"/>
+        <element name="Team" positionX="-176.80859375" positionY="-266.953125" width="128" height="73"/>
+        <element name="Type" positionX="419.37109375" positionY="-512.08984375" width="128" height="118"/>
     </elements>
 </model>

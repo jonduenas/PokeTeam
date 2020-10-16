@@ -223,15 +223,17 @@ class PokemonDetailVC: UIViewController {
     private func layoutAbilities() {
         guard let abilitySet = pokemon.abilities else { return }
         
-        abilityArray = abilitySet.allObjects as? [AbilityMO]
+        abilityArray = abilitySet.array as? [AbilityMO]
         abilityArray?.sort(by: { $0.slot < $1.slot })
         
         guard let abilities = abilityArray else { return }
         
+        print(abilities)
+        
         for (index, ability) in abilities.enumerated() {
             let abilityButton = UIButton()
 
-            if let abilityName = ability.name {
+            if let abilityName = ability.abilityDetails?.name {
                 abilityButton.setTitle(abilityName.formatAbilityName(), for: .normal)
             }
 
@@ -255,14 +257,17 @@ class PokemonDetailVC: UIViewController {
     }
     
     @objc private func abilityButtonTapped(sender: UIButton!) {
+        print(sender.tag)
         guard let abilities = abilityArray else { return }
 
         let storyboard = UIStoryboard(name: "Pokedex", bundle: nil)
         let abilityController = storyboard.instantiateViewController(withIdentifier: "AbilityVC") as! AbilityDetailVC
-        abilityController.abilityManagedObjectID = abilities[sender.tag].objectID
+        abilityController.abilityName = abilities[sender.tag].abilityDetails?.name
+//        abilityController.abilityManagedObjectID = abilities[sender.tag].objectID
+//        print(abilities[sender.tag])
         abilityController.coreDataStack = coreDataStack
-        abilityController.backgroundDataManager = backgroundDataManager
-        abilityController.apiService = apiService
+//        abilityController.backgroundDataManager = backgroundDataManager
+//        abilityController.apiService = apiService
         
         abilityController.transitioningDelegate = abilityTransitioningDelegate
         abilityController.modalPresentationStyle = .custom

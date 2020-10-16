@@ -17,7 +17,8 @@ class AbilityDetailVC: UIViewController {
     var apiService: APIService!
     
     var abilityManagedObjectID: NSManagedObjectID?
-    var ability: AbilityMO?
+    var abilityDetails: AbilityDetails?
+    var abilityName: String?
     var abilityData: AbilityData?
     var abilityDescription: String?
     var indicatorView = UIActivityIndicatorView()
@@ -30,28 +31,37 @@ class AbilityDetailVC: UIViewController {
         super.viewDidLoad()
         
         if coreDataStack == nil {
+            print("Initializing new CoreDataStack")
             coreDataStack = CoreDataStack()
         }
         
         if backgroundDataManager == nil {
+            print("Initializing new DataManager")
             let backgroundContext = coreDataStack.newDerivedContext()
             backgroundDataManager = DataManager(managedObjectContext: backgroundContext, coreDataStack: coreDataStack)
         }
         
         if apiService == nil {
+            print("Initializing new APIService")
             apiService = APIService()
         }
         
-        if let abilityObjectID = abilityManagedObjectID {
-            ability = coreDataStack.mainContext.object(with: abilityObjectID) as? AbilityMO
+        if let abilityName = abilityName {
+            let fetchedAbilityArray = backgroundDataManager.getFromCoreData(entity: AbilityDetails.self, predicate: NSPredicate(format: "name == %@", abilityName)) as! [AbilityDetails]
+            abilityDetails = fetchedAbilityArray[0]
+            print(abilityDetails?.name)
+        } else {
+            print("abilityName is nill")
         }
+        
+//        if let abilityObjectID = abilityManagedObjectID {
+//            ability = backgroundDataManager.managedObjectContext.object(with: abilityObjectID) as? AbilityMO
+//            print(ability?.name)
+//            print(ability?.isHidden)
+//            print(ability?.urlString)
+//        }
         
         initializeActivityIndicator()
-        
-        if let abilityMOID = abilityManagedObjectID {
-            ability = coreDataStack.mainContext.object(with: abilityMOID) as? AbilityMO
-            print(ability!.name!)
-        }
         
         if shouldUpdateDetails() {
             print("Fetching ability details")
@@ -68,15 +78,16 @@ class AbilityDetailVC: UIViewController {
     }
     
     private func shouldUpdateDetails() -> Bool {
-        return ability?.abilityDescription == nil || ability?.abilityDescription == ""
+        return abilityDetails?.abilityDescription == nil || abilityDetails?.abilityDescription == ""
     }
     
     private func fetchAbilityDetails() {
-        guard let abilityMOID = abilityManagedObjectID else { return }
-
-        let abilityMO = backgroundDataManager.managedObjectContext.object(with: abilityMOID) as! AbilityMO
+        guard let abilityURLString = abilityDetails?.urlString else {
+            print("Error finding ability.urlString")
+            return
+        }
         
-        guard let abilityURL = URL(string: abilityMO.urlString!) else {
+        guard let abilityURL = URL(string: abilityURLString) else {
             print("Error creating ability URL")
             return
         }
@@ -93,9 +104,13 @@ class AbilityDetailVC: UIViewController {
                 }
             },
                   receiveValue: { (abilityData) in
-                    self.backgroundDataManager.addAbilityDescription(to: abilityMO.objectID, with: abilityData)
+                    guard let objectID = self.abilityDetails?.objectID else { return }
+                    self.backgroundDataManager.addAbilityDescription(to: objectID, with: abilityData)
                     self.coreDataStack.saveContext(self.backgroundDataManager.managedObjectContext)
-                    //self.ability = PokemonManager.shared.context.object(with: abilityMOID) as? AbilityMO
+                    
+                    if let updatedAbility = self.backgroundDataManager.getFromCoreData(entity: AbilityDetails.self, predicate: NSPredicate(format: "name == %@", abilityData.name)) as? [AbilityDetails] {
+                        self.abilityDetails = updatedAbility[0]
+                    }
                     
                     DispatchQueue.main.async {
                         self.showAbilityDetails()
@@ -106,8 +121,8 @@ class AbilityDetailVC: UIViewController {
     }
     
     private func showAbilityDetails() {
-        abilityHeaderLabel.text = ability?.name?.formatAbilityName()
-        abilityDescriptionLabel.text = ability?.abilityDescription
+        abilityHeaderLabel.text = abilityDetails?.name?.formatAbilityName()
+        abilityDescriptionLabel.text = abilityDetails?.abilityDescription
     }
     
     private func setState(loading: Bool) {

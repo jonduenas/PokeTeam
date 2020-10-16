@@ -152,17 +152,17 @@ extension DataManager {
             
             // Abilities
             let abilities = parseAbilities(with: pokemonData)
-            pokemon.abilities = NSSet(array: abilities)
+            pokemon.abilities = NSOrderedSet(array: abilities)
             
             // Moves
             let moves = parseMoves(with: pokemonData)
-            pokemon.moves = NSSet(array: moves)
+            pokemon.moves = NSOrderedSet(array: moves)
             
             // Forms
             if pokemonData.forms.count > 1 {
                 pokemon.hasAltForm = true
                 let altFormsArray = parseAltForms(with: pokemonData)
-                pokemon.altForm = NSSet(array: altFormsArray)
+                pokemon.altForm = NSOrderedSet(array: altFormsArray)
             } else {
                 pokemon.hasAltForm = false
             }
@@ -186,8 +186,8 @@ extension DataManager {
         return altForm
     }
     
-    @discardableResult func addAbilityDescription(to abilityManagedObjectID: NSManagedObjectID, with abilityData: AbilityData) -> AbilityMO {
-        let ability = managedObjectContext.object(with: abilityManagedObjectID) as! AbilityMO
+    @discardableResult func addAbilityDescription(to abilityDetailObjectID: NSManagedObjectID, with abilityData: AbilityData) -> AbilityDetails {
+        let ability = managedObjectContext.object(with: abilityDetailObjectID) as! AbilityDetails
         
         var englishFlavorTextArray = [String]()
         let flavorText: String
@@ -264,10 +264,15 @@ extension DataManager {
         
         for ability in pokemonData.abilities {
             let abilityMO = AbilityMO(context: managedObjectContext)
-            abilityMO.name = ability.name
+            abilityMO.name = "\(pokemonData.name)-\(ability.name)"
             abilityMO.isHidden = ability.isHidden
-            abilityMO.urlString = ability.url
             abilityMO.slot = Int64(ability.slot)
+            
+            let abilityDetails = AbilityDetails(context: managedObjectContext)
+            abilityDetails.urlString = ability.url
+            abilityDetails.name = ability.name
+            
+            abilityMO.abilityDetails = abilityDetails
             
             abilitiesArray.append(abilityMO)
         }
