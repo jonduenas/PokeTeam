@@ -97,7 +97,7 @@ class DataManagerTests: XCTestCase {
         XCTAssertNotNil(updatedPokemon)
         XCTAssertNotEqual(updatedPokemon.genus, "")
         XCTAssertNotEqual(updatedPokemon.generation, "")
-        XCTAssertNotEqual(updatedPokemon.flavorText, "")
+        XCTAssertNotNil(updatedPokemon.flavorText)
         XCTAssertEqual(updatedPokemon.isBaby, false)
         XCTAssertEqual(updatedPokemon.isLegendary, true)
         XCTAssertEqual(updatedPokemon.isMythical, false)

@@ -95,7 +95,7 @@ class PokemonDetailVC: UIViewController {
     }
     
     private func shouldFetchDetails() -> Bool {
-        return pokemon.flavorText == "" || pokemon.flavorText == nil
+        return pokemon.flavorText?.isEmpty ?? true
     }
     
     private func showDetails() {
@@ -190,7 +190,10 @@ class PokemonDetailVC: UIViewController {
         let pokemonIDString = String(withInt: Int(pokemon.id), leadingZeros: 3)
         pokemonNumberAndGenusLabel.text = "No. \(pokemonIDString) –– \(pokemon.genus ?? "")"
         
-        pokemonDescriptionLabel.text = pokemon.flavorText
+        // TODO: Allow selection of specific flavor text
+        let flavorText = pokemon.flavorText?.randomElement()
+        print("\(flavorText?.key) - \(flavorText?.value)")
+        pokemonDescriptionLabel.text = flavorText?.value
         heightLabel.text = "\(pokemon.height) m"
         weightLabel.text = "\(pokemon.weight) kg"
     }
@@ -227,8 +230,6 @@ class PokemonDetailVC: UIViewController {
         abilityArray?.sort(by: { $0.slot < $1.slot })
         
         guard let abilities = abilityArray else { return }
-        
-        print(abilities)
         
         for (index, ability) in abilities.enumerated() {
             let abilityButton = UIButton()

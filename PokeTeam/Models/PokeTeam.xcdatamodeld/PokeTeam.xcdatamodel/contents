@@ -59,7 +59,7 @@
         </uniquenessConstraints>
     </entity>
     <entity name="Pokemon" representedClassName="PokemonMO" syncable="YES" codeGenerationType="class">
-        <attribute name="flavorText" optional="YES" attributeType="String" defaultValueString=""/>
+        <attribute name="flavorText" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" defaultValueString="" customClassName="[String: String]"/>
         <attribute name="generation" optional="YES" attributeType="String" defaultValueString=""/>
         <attribute name="genus" optional="YES" attributeType="String" defaultValueString=""/>
         <attribute name="hasAltForm" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>

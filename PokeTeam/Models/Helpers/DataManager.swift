@@ -237,21 +237,19 @@ extension DataManager {
         return ""
     }
     
-    private func parseFlavorText(with speciesData: SpeciesData) -> String {
-        var englishFlavorTextArray = [String]()
+    private func parseFlavorText(with speciesData: SpeciesData) -> [String: String] {
+        var englishFlavorTexts = [String: String]()
         
         for entry in speciesData.flavorTextEntries {
             if entry.language == "en" {
-                englishFlavorTextArray.append(entry.flavorText)
+                var flavorText = entry.flavorText.replacingOccurrences(of: "-\n", with: "-")
+                flavorText = flavorText.replacingOccurrences(of: "\\s", with: " ", options: .regularExpression)
+                englishFlavorTexts[entry.version] = flavorText
+            } else {
+                continue
             }
         }
-        
-        if let latestEntry = englishFlavorTextArray.last {
-            return latestEntry.replacingOccurrences(of: "\n", with: " ")
-        } else {
-            print("Error parsing Pokemon flavor text")
-            return ""
-        }
+        return englishFlavorTexts
     }
     
     private func parseStats(with pokemonData: PokemonData) -> [String: Float] {
