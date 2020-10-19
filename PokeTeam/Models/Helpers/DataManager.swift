@@ -254,7 +254,6 @@ extension DataManager {
                 continue
             }
         }
-        print(englishFlavorTexts)
         return englishFlavorTexts
     }
     
