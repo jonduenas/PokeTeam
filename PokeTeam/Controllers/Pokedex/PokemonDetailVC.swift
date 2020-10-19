@@ -170,7 +170,7 @@ class PokemonDetailVC: UIViewController {
     
     private func updatePokemonUI() {
         print("Updating UI")
-        pokemonNameLabel.text = pokemon.name?.capitalized
+        pokemonNameLabel.text = pokemon.name?.formatPokemonName()
         
         if let imageID = pokemon.imageID {
             pokemonImageView.image = UIImage(named: imageID)
@@ -188,7 +188,9 @@ class PokemonDetailVC: UIViewController {
         }
         
         let pokemonIDString = String(withInt: Int(pokemon.id), leadingZeros: 3)
-        pokemonNumberAndGenusLabel.text = "No. \(pokemonIDString) –– \(pokemon.genus ?? "")"
+        pokemonNumberAndGenusLabel.text = "No. \(pokemonIDString) – \(pokemon.genus ?? "")"
+        
+        pokemonDescriptionLabel.text = "Error finding Pokemon description."
         
         // TODO: Allow selection of specific flavor text
         switch pokemon.generation {
