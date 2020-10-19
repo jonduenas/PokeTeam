@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -15,7 +17,7 @@
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="oJQ-KJ-Bl1">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="pokemonCell" id="omd-A1-0gx" customClass="PokemonTableCell" customModule="PokeTeam" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="414" height="70"/>
@@ -38,7 +40,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Pn-Nu-80x">
-                                            <rect key="frame" x="200" y="23" width="49.5" height="24"/>
+                                            <rect key="frame" x="200" y="23" width="49" height="24"/>
                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -111,7 +113,7 @@
                                                                 <subviews>
                                                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Grass" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gyk-pZ-ujZ" customClass="PokemonTypeLabel" customModule="PokeTeam" customModuleProvider="target">
                                                                         <rect key="frame" x="0.0" y="0.0" width="80" height="27"/>
-                                                                        <color key="backgroundColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                        <color key="backgroundColor" systemColor="systemGreenColor"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="80" id="fbW-Xg-RWK"/>
                                                                             <constraint firstAttribute="height" constant="27" id="zM8-RP-SrU"/>
@@ -127,7 +129,7 @@
                                                                     </label>
                                                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Poison" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GJh-9N-qMj" customClass="PokemonTypeLabel" customModule="PokeTeam" customModuleProvider="target">
                                                                         <rect key="frame" x="85" y="0.0" width="80" height="27"/>
-                                                                        <color key="backgroundColor" systemColor="systemPurpleColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                        <color key="backgroundColor" systemColor="systemPurpleColor"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="27" id="0C7-6B-PsV"/>
                                                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="80" id="tnZ-88-yVw"/>
@@ -144,7 +146,7 @@
                                                                 </subviews>
                                                             </stackView>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="#001 - Seed Pokemon" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EhZ-Gl-G3x">
-                                                                <rect key="frame" x="92.5" y="98" width="189" height="23"/>
+                                                                <rect key="frame" x="93" y="98" width="188" height="23"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
@@ -152,35 +154,19 @@
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Weu-te-oOe" customClass="RoundedCorners" customModule="PokeTeam" customModuleProvider="target">
                                                                 <rect key="frame" x="20" y="136" width="334" height="125"/>
                                                                 <subviews>
-                                                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="5XC-w8-3na">
-                                                                        <rect key="frame" x="15" y="12.5" width="309" height="100"/>
-                                                                        <subviews>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="For some time after its birth, it grows by gaining nourishment from the seed on its back." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.59999999999999998" translatesAutoresizingMaskIntoConstraints="NO" id="ss8-Uv-laT">
-                                                                                <rect key="frame" x="0.0" y="18" width="274" height="64.5"/>
-                                                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                                                <nil key="textColor"/>
-                                                                                <nil key="highlightedColor"/>
-                                                                            </label>
-                                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron.right" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="jdk-OR-KVF">
-                                                                                <rect key="frame" x="294" y="34.5" width="15" height="31.5"/>
-                                                                                <color key="tintColor" systemColor="opaqueSeparatorColor" red="0.77647058820000003" green="0.77647058820000003" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                                <constraints>
-                                                                                    <constraint firstAttribute="height" constant="35" id="8RF-Ab-xwb"/>
-                                                                                    <constraint firstAttribute="width" constant="15" id="jwq-6G-75o"/>
-                                                                                </constraints>
-                                                                            </imageView>
-                                                                        </subviews>
-                                                                        <constraints>
-                                                                            <constraint firstAttribute="height" constant="100" id="lxm-Ui-Dw2"/>
-                                                                        </constraints>
-                                                                    </stackView>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="For some time after its birth, it grows by gaining nourishment from the seed on its back." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ss8-Uv-laT">
+                                                                        <rect key="frame" x="15" y="15" width="304" height="95"/>
+                                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                                        <nil key="textColor"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
                                                                 </subviews>
-                                                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                 <constraints>
-                                                                    <constraint firstItem="5XC-w8-3na" firstAttribute="centerY" secondItem="Weu-te-oOe" secondAttribute="centerY" id="Cb1-yT-4Fe"/>
-                                                                    <constraint firstItem="5XC-w8-3na" firstAttribute="leading" secondItem="Weu-te-oOe" secondAttribute="leading" constant="15" id="o3r-VH-dEC"/>
-                                                                    <constraint firstAttribute="height" constant="125" id="onx-Jy-8IK"/>
-                                                                    <constraint firstAttribute="trailing" secondItem="5XC-w8-3na" secondAttribute="trailing" constant="10" id="p2j-Qe-SDB"/>
+                                                                    <constraint firstItem="ss8-Uv-laT" firstAttribute="top" secondItem="Weu-te-oOe" secondAttribute="top" constant="15" id="OFF-As-dRG"/>
+                                                                    <constraint firstAttribute="trailing" secondItem="ss8-Uv-laT" secondAttribute="trailing" constant="15" id="T8X-Sh-SPd"/>
+                                                                    <constraint firstItem="ss8-Uv-laT" firstAttribute="leading" secondItem="Weu-te-oOe" secondAttribute="leading" constant="15" id="ifB-E6-ZFc"/>
+                                                                    <constraint firstAttribute="bottom" secondItem="ss8-Uv-laT" secondAttribute="bottom" constant="15" id="tZQ-h4-iOd"/>
                                                                 </constraints>
                                                             </view>
                                                         </subviews>
@@ -190,7 +176,7 @@
                                                         </constraints>
                                                     </stackView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="vsn-Z6-9a9">
-                                                        <rect key="frame" x="99" y="531" width="216.5" height="30"/>
+                                                        <rect key="frame" x="99" y="531" width="216" height="30"/>
                                                         <subviews>
                                                             <stackView opaque="NO" contentMode="scaleToFill" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="EyE-Sj-CYf">
                                                                 <rect key="frame" x="0.0" y="0.0" width="88" height="30"/>
@@ -211,7 +197,7 @@
                                                                 </subviews>
                                                             </stackView>
                                                             <stackView opaque="NO" contentMode="scaleToFill" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="gKG-HG-X5E">
-                                                                <rect key="frame" x="138" y="0.0" width="78.5" height="30"/>
+                                                                <rect key="frame" x="138" y="0.0" width="78" height="30"/>
                                                                 <subviews>
                                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="heavy-weight" translatesAutoresizingMaskIntoConstraints="NO" id="YMF-Hu-hUA">
                                                                         <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
@@ -221,7 +207,7 @@
                                                                         </constraints>
                                                                     </imageView>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3 kg" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VzJ-ea-hLl">
-                                                                        <rect key="frame" x="45" y="0.0" width="33.5" height="30"/>
+                                                                        <rect key="frame" x="45" y="0.0" width="33" height="30"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                         <nil key="textColor"/>
                                                                         <nil key="highlightedColor"/>
@@ -232,7 +218,7 @@
                                                     </stackView>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bu1-QE-6Yd">
                                                         <rect key="frame" x="87" y="596" width="240" height="1"/>
-                                                        <color key="backgroundColor" systemColor="opaqueSeparatorColor" red="0.77647058820000003" green="0.77647058820000003" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="backgroundColor" systemColor="opaqueSeparatorColor"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="240" id="24B-0i-h6C"/>
                                                             <constraint firstAttribute="height" constant="1" id="h3q-OU-su8"/>
@@ -242,7 +228,7 @@
                                                         <rect key="frame" x="25" y="632" width="364" height="286.5"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Base Stats" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wry-Fh-3QK">
-                                                                <rect key="frame" x="128.5" y="0.0" width="107" height="26.5"/>
+                                                                <rect key="frame" x="129" y="0.0" width="106.5" height="26.5"/>
                                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="22"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
@@ -306,7 +292,7 @@
                                                                         </constraints>
                                                                     </stackView>
                                                                 </subviews>
-                                                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="bottom" secondItem="ZJd-ne-zSa" secondAttribute="bottom" constant="15" id="1mx-US-oai"/>
                                                                     <constraint firstAttribute="trailing" secondItem="ZJd-ne-zSa" secondAttribute="trailing" id="N2J-YV-uMt"/>
@@ -322,7 +308,7 @@
                                                     </stackView>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Hw-Yx-DkV">
                                                         <rect key="frame" x="87" y="953.5" width="240" height="1"/>
-                                                        <color key="backgroundColor" systemColor="opaqueSeparatorColor" red="0.77647058820000003" green="0.77647058820000003" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="backgroundColor" systemColor="opaqueSeparatorColor"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="1" id="MLr-vr-eIN"/>
                                                             <constraint firstAttribute="width" constant="240" id="c28-uY-I7D"/>
@@ -332,7 +318,7 @@
                                                         <rect key="frame" x="25" y="989.5" width="364" height="191.5"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Abilities" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SAb-p6-0hC">
-                                                                <rect key="frame" x="141.5" y="0.0" width="81" height="26.5"/>
+                                                                <rect key="frame" x="142" y="0.0" width="80.5" height="26.5"/>
                                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="22"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
@@ -379,13 +365,13 @@
                                 <viewLayoutGuide key="frameLayoutGuide" id="2FL-ec-N8p"/>
                             </scrollView>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="UWM-nD-CLm"/>
                         <constraints>
                             <constraint firstItem="UWM-nD-CLm" firstAttribute="trailing" secondItem="Zip-Bt-yp4" secondAttribute="trailing" id="cKi-NU-wgU"/>
                             <constraint firstItem="Zip-Bt-yp4" firstAttribute="leading" secondItem="UWM-nD-CLm" secondAttribute="leading" id="fr0-W8-aAI"/>
                             <constraint firstItem="Zip-Bt-yp4" firstAttribute="top" secondItem="UWM-nD-CLm" secondAttribute="top" id="mJG-hc-f2L"/>
                             <constraint firstItem="Zip-Bt-yp4" firstAttribute="bottom" secondItem="UWM-nD-CLm" secondAttribute="bottom" id="rPj-Re-3nh"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="UWM-nD-CLm"/>
                     </view>
                     <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="ic9-MM-obd"/>
                     <connections>
@@ -422,7 +408,7 @@
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="hTC-Ib-zeI">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="Myx-gd-5xj">
                                 <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
@@ -491,7 +477,8 @@
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="uQA-Kj-y0P"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="RLI-4W-SEW" firstAttribute="leading" secondItem="uQA-Kj-y0P" secondAttribute="leading" constant="20" id="8z3-vi-k6Q"/>
                             <constraint firstItem="RLI-4W-SEW" firstAttribute="top" secondItem="5lU-zF-LTT" secondAttribute="bottom" constant="20" id="H6X-AY-C7W"/>
@@ -500,7 +487,6 @@
                             <constraint firstItem="5lU-zF-LTT" firstAttribute="top" secondItem="uQA-Kj-y0P" secondAttribute="top" id="hzO-Xt-erl"/>
                             <constraint firstItem="uQA-Kj-y0P" firstAttribute="trailing" secondItem="RLI-4W-SEW" secondAttribute="trailing" constant="20" id="l58-JG-NZm"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="uQA-Kj-y0P"/>
                     </view>
                     <connections>
                         <outlet property="abilityDescriptionLabel" destination="RLI-4W-SEW" id="UsZ-p8-5ct"/>
@@ -518,9 +504,9 @@
                     <tabBarItem key="tabBarItem" title="Pokédex" image="book.fill" catalog="system" selectedImage="book.fill" id="pGT-8t-TfL"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="vo0-cz-KlI">
-                        <rect key="frame" x="0.0" y="44" width="414" height="104.5"/>
+                        <rect key="frame" x="0.0" y="44" width="414" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <color key="tintColor" systemColor="labelColor"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -532,16 +518,38 @@
             <point key="canvasLocation" x="2042" y="-352"/>
         </scene>
     </scenes>
+    <designables>
+        <designable name="GJh-9N-qMj">
+            <size key="intrinsicContentSize" width="51.5" height="20.5"/>
+        </designable>
+        <designable name="Gyk-pZ-ujZ">
+            <size key="intrinsicContentSize" width="44.5" height="20.5"/>
+        </designable>
+    </designables>
     <color key="tintColor" name="poke-blue"/>
     <resources>
         <image name="big-ruler" width="50" height="50"/>
-        <image name="book.fill" catalog="system" width="128" height="100"/>
-        <image name="chevron.right" catalog="system" width="96" height="128"/>
+        <image name="book.fill" catalog="system" width="128" height="102"/>
         <image name="heavy-weight" width="50" height="50"/>
         <image name="poke_ball" width="596" height="595"/>
         <image name="x.circle.fill" catalog="system" width="128" height="121"/>
         <namedColor name="poke-blue">
             <color red="0.23137254901960785" green="0.29803921568627451" blue="0.792156862745098" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="opaqueSeparatorColor">
+            <color red="0.77647058823529413" green="0.77647058823529413" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGreenColor">
+            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemPurpleColor">
+            <color red="0.68627450980392157" green="0.32156862745098042" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>
