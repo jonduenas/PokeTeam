@@ -269,26 +269,15 @@ class PokemonDetailVC: UIViewController {
             abilitiesStackView.addArrangedSubview(notFoundLabel)
         } else {
             for (index, ability) in abilities.enumerated() {
-                let abilityButton = UIButton()
+                let abilityButton = AbilityButton()
 
                 if let abilityName = ability.abilityDetails?.name {
                     abilityButton.setTitle(abilityName.formatAbilityName(), for: .normal)
                 }
 
-                abilityButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-                abilityButton.widthAnchor.constraint(equalToConstant: 175).isActive = true
-                abilityButton.backgroundColor = UIColor(named: "poke-blue")
-                abilityButton.titleLabel?.textColor = UIColor.white
-                abilityButton.layer.cornerRadius = 20
-                abilityButton.clipsToBounds = false
-                // Shadow
-                abilityButton.layer.shadowColor = UIColor.black.cgColor
-                abilityButton.layer.shadowOpacity = 0.4
-                abilityButton.layer.shadowOffset = CGSize(width: 0, height: 2.5)
-                abilityButton.layer.shadowRadius = 2
-                
                 abilityButton.tag = index
                 abilityButton.addTarget(self, action: #selector(abilityButtonTapped), for: .touchUpInside)
+                
                 abilitiesStackView.addArrangedSubview(abilityButton)
                 abilitiesStackView.translatesAutoresizingMaskIntoConstraints = false
             }
