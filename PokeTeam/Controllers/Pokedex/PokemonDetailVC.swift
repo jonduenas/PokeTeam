@@ -191,9 +191,27 @@ class PokemonDetailVC: UIViewController {
         pokemonNumberAndGenusLabel.text = "No. \(pokemonIDString) –– \(pokemon.genus ?? "")"
         
         // TODO: Allow selection of specific flavor text
-        let flavorText = pokemon.flavorText?.randomElement()
-        print("\(flavorText?.key) - \(flavorText?.value)")
-        pokemonDescriptionLabel.text = flavorText?.value
+        switch pokemon.generation {
+        case "generation-viii":
+            // Use Sword flavor text for Gen 8 only since not every pokemon is in Sword/Shield
+            if let flavorText = pokemon.flavorText?["sword"] {
+                print(flavorText[0])
+                pokemonDescriptionLabel.text = flavorText[0]
+            }
+        case "generation-vii":
+            // Use Ultra-Sun flavor text for anything Gen 7
+            if let flavorText = pokemon.flavorText?["ultra-sun"] {
+                print(flavorText[0])
+                pokemonDescriptionLabel.text = flavorText[0]
+            }
+        default:
+            // Default for all other Pokemon is Pokemon X flavor text
+            if let flavorText = pokemon.flavorText?["x"] {
+                print(flavorText[0])
+                pokemonDescriptionLabel.text = flavorText[0]
+            }
+        }
+        
         heightLabel.text = "\(pokemon.height) m"
         weightLabel.text = "\(pokemon.weight) kg"
     }
