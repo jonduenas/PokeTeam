@@ -188,7 +188,12 @@ class PokemonDetailVC: UIViewController {
         }
         
         let pokemonIDString = String(withInt: Int(pokemon.id), leadingZeros: 3)
-        pokemonNumberAndGenusLabel.text = "No. \(pokemonIDString) – \(pokemon.genus ?? "")"
+        if pokemon.genus == "" {
+            pokemonNumberAndGenusLabel.text = "No. \(pokemonIDString) – Genus Unknown"
+        } else {
+            pokemonNumberAndGenusLabel.text = "No. \(pokemonIDString) – \(pokemon.genus ?? "Genus Unknown")"
+        }
+        
         
         pokemonDescriptionLabel.text = "Error finding Pokemon description."
         
