@@ -49,7 +49,6 @@ class AbilityDetailVC: UIViewController {
         if let abilityName = abilityName {
             let fetchedAbilityArray = backgroundDataManager.getFromCoreData(entity: AbilityDetails.self, predicate: NSPredicate(format: "name == %@", abilityName)) as! [AbilityDetails]
             abilityDetails = fetchedAbilityArray[0]
-            print(abilityDetails?.name)
         } else {
             print("abilityName is nill")
         }
