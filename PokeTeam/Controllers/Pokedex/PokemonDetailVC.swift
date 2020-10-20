@@ -51,6 +51,10 @@ class PokemonDetailVC: UIViewController {
     @IBOutlet var abilitiesHeaderLabel: UILabel!
     @IBOutlet weak var abilitiesStackView: UIStackView!
     
+    @IBOutlet weak var imageLeftButton: UIButton!
+    @IBOutlet weak var imageRightButton: UIButton!
+    
+    
     init?(coder: NSCoder, pokemonObjectID: NSManagedObjectID, coreDataStack: CoreDataStack, dataManager: DataManager, apiService: APIService) {
         self.coreDataStack = coreDataStack
         self.backgroundDataManager = dataManager
@@ -291,6 +295,12 @@ class PokemonDetailVC: UIViewController {
                 abilitiesStackView.translatesAutoresizingMaskIntoConstraints = false
             }
         }
+    }
+    
+    @IBAction func imageLeftButtonTapped(_ sender: UIButton) {
+    }
+    
+    @IBAction func imageRightButtonTapped(_ sender: UIButton) {
     }
     
     @objc private func abilityButtonTapped(sender: UIButton!) {
