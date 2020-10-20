@@ -23,11 +23,15 @@ public final class DataManager {
 
 extension DataManager {
     
-    @discardableResult public func addPokemon(name: String, speciesURL: String, id: Int64) -> PokemonMO {
+    @discardableResult public func addPokemon(name: String, speciesURL: String, pokemonURL: String? = nil, id: Int64) -> PokemonMO {
         let pokemonMO = PokemonMO(context: managedObjectContext)
         pokemonMO.name = name
         pokemonMO.speciesURL = speciesURL
         pokemonMO.id = id
+        
+        if let pokemonURL = pokemonURL {
+            pokemonMO.pokemonURL = pokemonURL
+        }
         
         return pokemonMO
     }
@@ -134,7 +138,13 @@ extension DataManager {
                 pokemon.order = Int64(speciesOrder)
             }
             
-            pokemon.pokemonURL = speciesData.varieties[0].pokemon.url
+            if pokemon.pokemonURL == "" || pokemon.pokemonURL == nil {
+                pokemon.pokemonURL = speciesData.varieties[0].pokemon.url
+            }
+            
+            let varieties = parseVarieties(with: speciesData, speciesURL: pokemon.speciesURL, id: pokemon.id)
+            pokemon.varieties = NSOrderedSet(array: varieties)
+            
         }
         coreDataStack.saveContext(managedObjectContext)
         return pokemon
@@ -318,5 +328,22 @@ extension DataManager {
         }
         
         return altFormsArray
+    }
+    
+    private func parseVarieties(with speciesData: SpeciesData, speciesURL: String?, id: Int64) -> [PokemonMO] {
+        var pokemonVarieties = [PokemonMO]()
+        
+        for variety in speciesData.varieties {
+            if variety.isDefault {
+                continue
+            }
+            
+            if let speciesURL = speciesURL {
+                let pokemonVariety = addPokemon(name: variety.pokemon.name, speciesURL: speciesURL, pokemonURL: variety.pokemon.url, id: id)
+                
+                pokemonVarieties.append(pokemonVariety)
+            }
+        }
+        return pokemonVarieties
     }
 }

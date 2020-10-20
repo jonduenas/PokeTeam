@@ -104,6 +104,7 @@ class DataManagerTests: XCTestCase {
         XCTAssertNotEqual(updatedPokemon.nationalPokedexNumber, 0)
         XCTAssertNotEqual(updatedPokemon.order, 0)
         XCTAssertNotEqual(updatedPokemon.pokemonURL, "")
+        XCTAssertEqual(updatedPokemon.varieties?.count, 2)
     }
     
     func testUpdateDetails_PokemonData() {
