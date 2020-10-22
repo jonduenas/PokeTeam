@@ -503,6 +503,8 @@ extension PokemonDetailVC: UICollectionViewDelegate, UICollectionViewDataSource 
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let varieties = pokemon.varieties?.array as? [PokemonMO] else { return }
+        print("Selected \(varieties[indexPath.row].name!)")
         
     }
 }

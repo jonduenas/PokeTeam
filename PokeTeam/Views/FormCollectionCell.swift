@@ -10,7 +10,7 @@ import UIKit
 
 class FormCollectionCell: UICollectionViewCell {
     
-    let selectedBackgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+    let selectedBackgroundColor = #colorLiteral(red: 0.9025042653, green: 0.9025042653, blue: 0.9025042653, alpha: 1)
     var cornerRadius: CGFloat = 5
     
     @IBOutlet weak var formImageView: UIImageView!
@@ -20,9 +20,9 @@ class FormCollectionCell: UICollectionViewCell {
         
         layer.cornerRadius = cornerRadius
         
-        if isSelected {
-            backgroundColor = selectedBackgroundColor
-        }
+        let backgroundView = UIView(frame: bounds)
+        backgroundView.backgroundColor = selectedBackgroundColor
+        selectedBackgroundView = backgroundView
     }
     
     func setImage(to imageName: String) {
