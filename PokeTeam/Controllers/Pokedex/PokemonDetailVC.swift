@@ -25,11 +25,14 @@ class PokemonDetailVC: UIViewController {
     var pokemon: PokemonMO
     var pokemonDetails: PokemonMO?
     var abilityArray: [AbilityMO]?
+    var formIndex = 0
+    var formImageArray: [String]?
     var subscriptions: Set<AnyCancellable> = []
     var indicatorView: UIActivityIndicatorView!
     
     @IBOutlet var detailView: UIView!
     @IBOutlet var pokemonImageView: UIImageView!
+    @IBOutlet weak var pokemonFormsStackView: UIStackView!
     
     @IBOutlet var pokemonNameLabel: UILabel!
     @IBOutlet var pokemonType1Label: PokemonTypeLabel!
@@ -50,10 +53,6 @@ class PokemonDetailVC: UIViewController {
     
     @IBOutlet var abilitiesHeaderLabel: UILabel!
     @IBOutlet weak var abilitiesStackView: UIStackView!
-    
-    @IBOutlet weak var imageLeftButton: UIButton!
-    @IBOutlet weak var imageRightButton: UIButton!
-    
     
     init?(coder: NSCoder, pokemonObjectID: NSManagedObjectID, coreDataStack: CoreDataStack, dataManager: DataManager, apiService: APIService) {
         self.coreDataStack = coreDataStack
@@ -158,11 +157,6 @@ class PokemonDetailVC: UIViewController {
         .store(in: &subscriptions)
     }
     
-    func reloadPokemon() {
-        pokemon = coreDataStack.mainContext.object(with: pokemonObjectID) as! PokemonMO
-        print("Pokemon object reloaded")
-    }
-    
     func fetchPokemonData(with id: Int) -> AnyPublisher<PokemonData, Error> {
         let pokemonURL = apiService.createURL(for: .pokemon, fromIndex: id)!
         
@@ -185,6 +179,12 @@ class PokemonDetailVC: UIViewController {
         print("Updating UI")
         pokemonNameLabel.text = pokemon.name?.formatPokemonName()
         
+        if let pokemonVarieties = pokemon.varieties {
+            if pokemonVarieties.count > 0 {
+                layoutFormImages()
+            }
+        }
+        
         if let imageID = pokemon.imageID {
             pokemonImageView.image = UIImage(named: imageID)
         }
@@ -206,7 +206,6 @@ class PokemonDetailVC: UIViewController {
         } else {
             pokemonNumberAndGenusLabel.text = "No. \(pokemonIDString) – \(pokemon.genus ?? "Genus Unknown")"
         }
-        
         
         pokemonDescriptionLabel.text = "Error finding Pokemon description."
         
@@ -234,6 +233,62 @@ class PokemonDetailVC: UIViewController {
         
         heightLabel.text = "\(pokemon.height) m"
         weightLabel.text = "\(pokemon.weight) kg"
+    }
+    
+    private func layoutFormImages() {
+//        if let altForms = pokemon.altForm {
+//            if altForms.count > 0 {
+//                let altFormsArray = altForms.array as! [AltFormMO]
+//                formImageArray = [String]()
+//
+//                guard let originalImageID = pokemon.imageID else { return }
+//                formImageArray?.append(originalImageID)
+//
+//                for form in altFormsArray {
+//                    guard let formName = form.formName else { return }
+//                    let imageName = "\(originalImageID)-" + formName
+//
+//                    formImageArray?.append(imageName)
+//                }
+//
+//                print(formImageArray)
+//            }
+//        }
+        
+        pokemonFormsStackView.isHidden = false
+        
+        if let altVarieties = pokemon.varieties {
+            print(altVarieties)
+            if altVarieties.count > 0 {
+                let altVarietiesArray = altVarieties.array as! [PokemonMO]
+                formImageArray = [String]()
+                
+                guard let originalImageID = pokemon.imageID else { return }
+                formImageArray?.append(originalImageID)
+                
+                for form in altVarietiesArray {
+                    guard let formName = form.name else { return }
+                    guard let pokemonBaseName = pokemon.name else { return }
+                    let formattedFormName = formName.replacingOccurrences(of: pokemonBaseName, with: originalImageID)
+                    
+                    formImageArray?.append(formattedFormName)
+                }
+                
+                // Make sure Forms StackView is empty
+                if !pokemonFormsStackView.subviews.isEmpty {
+                    for view in pokemonFormsStackView.subviews {
+                        view.removeFromSuperview()
+                    }
+                }
+                
+                for formImageName in formImageArray! {
+                    let formImageButton = FormImageButton()
+                    formImageButton.backgroundImageName = formImageName
+                    
+                    pokemonFormsStackView.addArrangedSubview(formImageButton)
+                }
+            }
+        }
     }
     
     private func updateStats() {
@@ -297,10 +352,14 @@ class PokemonDetailVC: UIViewController {
         }
     }
     
+    // MARK: - Button Methods
+    
     @IBAction func imageLeftButtonTapped(_ sender: UIButton) {
+        
     }
     
     @IBAction func imageRightButtonTapped(_ sender: UIButton) {
+        
     }
     
     @objc private func abilityButtonTapped(sender: UIButton!) {

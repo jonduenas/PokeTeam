@@ -341,6 +341,8 @@ extension DataManager {
             if let speciesURL = speciesURL {
                 let pokemonVariety = addPokemon(name: variety.pokemon.name, speciesURL: speciesURL, pokemonURL: variety.pokemon.url, id: id)
                 
+                pokemonVariety.isAltVariety = true
+                
                 pokemonVarieties.append(pokemonVariety)
             }
         }

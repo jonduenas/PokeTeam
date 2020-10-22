@@ -67,6 +67,7 @@
         <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="imageID" optional="YES" attributeType="String" defaultValueString=""/>
         <attribute name="isAltForm" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isAltVariety" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="isBaby" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="isLegendary" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="isMega" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
@@ -121,7 +122,7 @@
         <element name="AltForm" positionX="79.828125" positionY="-179.87109375" width="128" height="163"/>
         <element name="Move" positionX="497.80859375" positionY="-285.21484375" width="128" height="148"/>
         <element name="Pokedex" positionX="-165.30078125" positionY="-616.83984375" width="128" height="88"/>
-        <element name="Pokemon" positionX="25.265625" positionY="-793.3671875" width="128" height="433"/>
+        <element name="Pokemon" positionX="25.265625" positionY="-793.3671875" width="128" height="448"/>
         <element name="Team" positionX="-176.80859375" positionY="-266.953125" width="128" height="73"/>
         <element name="Type" positionX="419.37109375" positionY="-512.08984375" width="128" height="118"/>
     </elements>

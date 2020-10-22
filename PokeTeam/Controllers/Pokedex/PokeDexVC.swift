@@ -78,8 +78,13 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
         print("Loading from Core Data")
         if fetchedResultsController == nil {
             let request: NSFetchRequest<PokemonMO> = PokemonMO.fetchRequest()
+            
+            let filter = NSPredicate(format: "isAltVariety == NO")
+            request.predicate = filter
+            
             let sort = NSSortDescriptor(key: "id", ascending: true)
             request.sortDescriptors = [sort]
+            
             request.fetchBatchSize = 20
             
             fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: coreDataStack.mainContext, sectionNameKeyPath: nil, cacheName: nil)

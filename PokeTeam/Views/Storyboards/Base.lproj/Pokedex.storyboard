@@ -3,7 +3,7 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -92,49 +92,22 @@
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="35" translatesAutoresizingMaskIntoConstraints="NO" id="j14-dF-NLD">
                                                 <rect key="frame" x="0.0" y="25" width="414" height="1181"/>
                                                 <subviews>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="2jX-4p-use">
-                                                        <rect key="frame" x="10" y="0.0" width="394" height="200"/>
-                                                        <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="skl-vo-dVZ">
-                                                                <rect key="frame" x="0.0" y="75" width="12.5" height="50"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="height" constant="50" id="0RL-qU-8pI"/>
-                                                                    <constraint firstAttribute="width" constant="12.5" id="Ny2-YC-myr"/>
-                                                                </constraints>
-                                                                <color key="tintColor" systemColor="opaqueSeparatorColor"/>
-                                                                <state key="normal" image="chevron.left" catalog="system">
-                                                                    <color key="titleColor" systemColor="opaqueSeparatorColor"/>
-                                                                </state>
-                                                                <connections>
-                                                                    <action selector="imageLeftButtonTapped:" destination="S8U-rw-TgR" eventType="touchUpInside" id="Z7m-jL-3fA"/>
-                                                                </connections>
-                                                            </button>
-                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="poke_ball" translatesAutoresizingMaskIntoConstraints="NO" id="9KX-Et-yFh">
-                                                                <rect key="frame" x="97" y="0.0" width="200" height="200"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="width" constant="200" id="2FK-Rf-tNA"/>
-                                                                    <constraint firstAttribute="height" constant="200" id="Cr5-ki-pdA"/>
-                                                                </constraints>
-                                                            </imageView>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="74g-Gr-9sd">
-                                                                <rect key="frame" x="381.5" y="75" width="12.5" height="50"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="height" constant="50" id="49T-x2-dJK"/>
-                                                                    <constraint firstAttribute="width" constant="12.5" id="GJX-Yw-XXp"/>
-                                                                </constraints>
-                                                                <color key="tintColor" systemColor="opaqueSeparatorColor"/>
-                                                                <state key="normal" image="chevron.right" catalog="system">
-                                                                    <color key="titleColor" systemColor="opaqueSeparatorColor"/>
-                                                                </state>
-                                                                <connections>
-                                                                    <action selector="imageRightButtonTapped:" destination="S8U-rw-TgR" eventType="touchUpInside" id="Hiw-Dg-vcZ"/>
-                                                                </connections>
-                                                            </button>
-                                                        </subviews>
-                                                    </stackView>
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="poke_ball" translatesAutoresizingMaskIntoConstraints="NO" id="9KX-Et-yFh">
+                                                        <rect key="frame" x="107" y="0.0" width="200" height="200"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="200" id="2FK-Rf-tNA"/>
+                                                            <constraint firstAttribute="height" constant="200" id="Cr5-ki-pdA"/>
+                                                        </constraints>
+                                                    </imageView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="EAE-Jo-5Hf">
                                                         <rect key="frame" x="20" y="235" width="374" height="261"/>
                                                         <subviews>
+                                                            <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="GHt-OG-9XT">
+                                                                <rect key="frame" x="162" y="-50" width="50" height="50"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="50" id="acc-Dc-Q8b"/>
+                                                                </constraints>
+                                                            </stackView>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bulbasaur" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OSh-HH-YdB">
                                                                 <rect key="frame" x="107" y="0.0" width="160" height="41"/>
                                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="34"/>
@@ -372,9 +345,7 @@
                                                     <constraint firstItem="EAE-Jo-5Hf" firstAttribute="leading" secondItem="j14-dF-NLD" secondAttribute="leading" constant="20" id="PHQ-0v-dNF"/>
                                                     <constraint firstItem="CJr-op-7tc" firstAttribute="leading" secondItem="j14-dF-NLD" secondAttribute="leading" constant="25" id="YGu-ip-KPr"/>
                                                     <constraint firstAttribute="trailing" secondItem="EAE-Jo-5Hf" secondAttribute="trailing" constant="20" id="bU2-me-S5A"/>
-                                                    <constraint firstAttribute="trailing" secondItem="2jX-4p-use" secondAttribute="trailing" constant="10" id="k6w-EU-fE3"/>
                                                     <constraint firstAttribute="trailing" secondItem="wEj-kB-aL9" secondAttribute="trailing" constant="25" id="l2n-sV-ars"/>
-                                                    <constraint firstItem="2jX-4p-use" firstAttribute="leading" secondItem="j14-dF-NLD" secondAttribute="leading" constant="10" id="lwj-O8-z05"/>
                                                 </constraints>
                                             </stackView>
                                         </subviews>
@@ -418,9 +389,8 @@
                         <outlet property="detailView" destination="L4e-QI-bFf" id="6hO-ow-OZk"/>
                         <outlet property="heightLabel" destination="dij-Ji-qZW" id="IGl-FQ-1he"/>
                         <outlet property="hpStatView" destination="acx-7F-zyq" id="RKI-9f-1Fe"/>
-                        <outlet property="imageLeftButton" destination="skl-vo-dVZ" id="Q3a-hT-TaM"/>
-                        <outlet property="imageRightButton" destination="74g-Gr-9sd" id="euP-JS-W9b"/>
                         <outlet property="pokemonDescriptionLabel" destination="ss8-Uv-laT" id="onb-dv-Xdt"/>
+                        <outlet property="pokemonFormsStackView" destination="GHt-OG-9XT" id="Jdw-vE-dT9"/>
                         <outlet property="pokemonImageView" destination="9KX-Et-yFh" id="N4l-Wh-jJc"/>
                         <outlet property="pokemonNameLabel" destination="OSh-HH-YdB" id="OkS-bI-S2v"/>
                         <outlet property="pokemonNumberAndGenusLabel" destination="EhZ-Gl-G3x" id="loM-l8-m9V"/>
@@ -567,8 +537,6 @@
     <resources>
         <image name="big-ruler" width="50" height="50"/>
         <image name="book.fill" catalog="system" width="128" height="102"/>
-        <image name="chevron.left" catalog="system" width="96" height="128"/>
-        <image name="chevron.right" catalog="system" width="96" height="128"/>
         <image name="heavy-weight" width="50" height="50"/>
         <image name="poke_ball" width="596" height="595"/>
         <image name="x.circle.fill" catalog="system" width="128" height="121"/>
