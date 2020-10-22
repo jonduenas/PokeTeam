@@ -342,6 +342,7 @@ extension DataManager {
                 let pokemonVariety = addPokemon(name: variety.pokemon.name, speciesURL: speciesURL, pokemonURL: variety.pokemon.url, id: id)
                 
                 pokemonVariety.isAltVariety = true
+                pokemonVariety.imageID = pokemonVariety.name?.replacingOccurrences(of: speciesData.name, with: String(pokemonVariety.id))
                 
                 pokemonVarieties.append(pokemonVariety)
             }
