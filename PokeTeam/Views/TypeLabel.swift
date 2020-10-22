@@ -8,7 +8,7 @@
 
 import UIKit
 
-@IBDesignable
+//@IBDesignable
 class PokemonTypeLabel: UILabel {
     let colorDictionary: [PokemonType: UIColor] = [
         .normal : #colorLiteral(red: 0.6604253054, green: 0.6575222611, blue: 0.4722985029, alpha: 1),

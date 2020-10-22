@@ -12,6 +12,8 @@ import CoreData
 
 class PokemonDetailVC: UIViewController {
     
+    private let reuseIdentifier = "FormCell"
+    
     let largeTitleSize: CGFloat = 34
     let subTitleSize: CGFloat = 25
     let abilityTransitioningDelegate = AbilityTransitioningDelegate()
@@ -30,9 +32,10 @@ class PokemonDetailVC: UIViewController {
     var subscriptions: Set<AnyCancellable> = []
     var indicatorView: UIActivityIndicatorView!
     
+    @IBOutlet weak var formCollectionView: UICollectionView!
+    
     @IBOutlet var detailView: UIView!
     @IBOutlet var pokemonImageView: UIImageView!
-    @IBOutlet weak var pokemonFormsStackView: UIStackView!
     
     @IBOutlet var pokemonNameLabel: UILabel!
     @IBOutlet var pokemonType1Label: PokemonTypeLabel!
@@ -83,6 +86,9 @@ class PokemonDetailVC: UIViewController {
         colorBlockView.topColor = #colorLiteral(red: 0.9764705882, green: 0.4470588235, blue: 0.2823529412, alpha: 1)
         colorBlockView.fillScreen = false
         view.insertSubview(colorBlockView, at: 0)
+        
+        formCollectionView.delegate = self
+        formCollectionView.dataSource = self
         
         if shouldFetchDetails() {
             fetchDetails()
@@ -177,13 +183,40 @@ class PokemonDetailVC: UIViewController {
     
     private func updatePokemonUI() {
         print("Updating UI")
-        pokemonNameLabel.text = pokemon.name?.formatPokemonName()
         
-        if let pokemonVarieties = pokemon.varieties {
-            if pokemonVarieties.count > 0 {
-                layoutFormImages()
+        if let varieties = pokemon.varieties {
+            if varieties.count > 0 {
+                formCollectionView.isHidden = false
+                formCollectionView.reloadData()
+            }
+            
+            switch varieties.count {
+            case 1...6:
+                // Set width to fit amount of cells
+                let collectionViewWidth: CGFloat = 60 * CGFloat(varieties.count)
+                formCollectionView.widthAnchor.constraint(equalToConstant: collectionViewWidth).isActive = true
+            case 7...12:
+                // Adjust height for cells more than 6 to add another row
+                let collectionViewWidth: CGFloat = 360
+                formCollectionView.widthAnchor.constraint(equalToConstant: collectionViewWidth).isActive = true
+                formCollectionView.heightAnchor.constraint(equalToConstant: 120).isActive = true
+            case 13...18:
+                // Adjust height for cells more than 12 to add another row
+                let collectionViewWidth: CGFloat = 360
+                formCollectionView.widthAnchor.constraint(equalToConstant: collectionViewWidth).isActive = true
+                formCollectionView.heightAnchor.constraint(equalToConstant: 180).isActive = true
+            default:
+                formCollectionView.isHidden = true
             }
         }
+        
+        pokemonNameLabel.text = pokemon.name?.formatPokemonName()
+        
+//        if let pokemonVarieties = pokemon.varieties {
+//            if pokemonVarieties.count > 0 {
+//                layoutFormImages()
+//            }
+//        }
         
         if let imageID = pokemon.imageID {
             pokemonImageView.image = UIImage(named: imageID)
@@ -235,7 +268,7 @@ class PokemonDetailVC: UIViewController {
         weightLabel.text = "\(pokemon.weight) kg"
     }
     
-    private func layoutFormImages() {
+//    private func layoutFormImages() {
 //        if let altForms = pokemon.altForm {
 //            if altForms.count > 0 {
 //                let altFormsArray = altForms.array as! [AltFormMO]
@@ -254,42 +287,42 @@ class PokemonDetailVC: UIViewController {
 //                print(formImageArray)
 //            }
 //        }
-        
-        pokemonFormsStackView.isHidden = false
-        
-        if let altVarieties = pokemon.varieties {
-            print(altVarieties)
-            if altVarieties.count > 0 {
-                let altVarietiesArray = altVarieties.array as! [PokemonMO]
-                formImageArray = [String]()
-                
-                guard let originalImageID = pokemon.imageID else { return }
-                formImageArray?.append(originalImageID)
-                
-                for form in altVarietiesArray {
-                    guard let formName = form.name else { return }
-                    guard let pokemonBaseName = pokemon.name else { return }
-                    let formattedFormName = formName.replacingOccurrences(of: pokemonBaseName, with: originalImageID)
-                    
-                    formImageArray?.append(formattedFormName)
-                }
-                
-                // Make sure Forms StackView is empty
-                if !pokemonFormsStackView.subviews.isEmpty {
-                    for view in pokemonFormsStackView.subviews {
-                        view.removeFromSuperview()
-                    }
-                }
-                
-                for formImageName in formImageArray! {
-                    let formImageButton = FormImageButton()
-                    formImageButton.backgroundImageName = formImageName
-                    
-                    pokemonFormsStackView.addArrangedSubview(formImageButton)
-                }
-            }
-        }
-    }
+//
+//        pokemonFormsStackView.isHidden = false
+//
+//        if let altVarieties = pokemon.varieties {
+//            print(altVarieties)
+//            if altVarieties.count > 0 {
+//                let altVarietiesArray = altVarieties.array as! [PokemonMO]
+//                formImageArray = [String]()
+//
+//                guard let originalImageID = pokemon.imageID else { return }
+//                formImageArray?.append(originalImageID)
+//
+//                for form in altVarietiesArray {
+//                    guard let formName = form.name else { return }
+//                    guard let pokemonBaseName = pokemon.name else { return }
+//                    let formattedFormName = formName.replacingOccurrences(of: pokemonBaseName, with: originalImageID)
+//
+//                    formImageArray?.append(formattedFormName)
+//                }
+//
+//                // Make sure Forms StackView is empty
+//                if !pokemonFormsStackView.subviews.isEmpty {
+//                    for view in pokemonFormsStackView.subviews {
+//                        view.removeFromSuperview()
+//                    }
+//                }
+//
+//                for formImageName in formImageArray! {
+//                    let formImageButton = FormImageButton()
+//                    formImageButton.backgroundImageName = formImageName
+//
+//                    pokemonFormsStackView.addArrangedSubview(formImageButton)
+//                }
+//            }
+//        }
+//    }
     
     private func updateStats() {
         let mapping: [(shortName: PokemonStatShortName, fullName: PokemonStatName, statView: StatView)] = [
@@ -442,6 +475,35 @@ class PokemonDetailVC: UIViewController {
             print("Error reloading Pokemon - \(error) - \(error.localizedDescription)")
         }
         return nil
+    }
+}
+
+extension PokemonDetailVC: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        guard let pokemonVarieties = pokemon.varieties else { return 0 }
+        
+        return pokemonVarieties.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = formCollectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! FormCollectionCell
+        
+        // Should not be nil if numberOfItemsInSection isn't 0
+        let pokemonVarieties = pokemon.varieties!
+        
+        if pokemonVarieties.count > 0 {
+            let varietiesArray = pokemonVarieties.array as! [PokemonMO]
+            
+            if let imageName = varietiesArray[indexPath.row].imageID {
+                cell.setImage(to: imageName)
+            }
+        }
+        
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
     }
 }
 

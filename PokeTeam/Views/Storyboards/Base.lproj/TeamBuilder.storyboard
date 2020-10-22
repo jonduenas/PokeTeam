@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="yPk-Cm-fc3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="yPk-Cm-fc3">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -23,7 +25,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="HZ1-kL-0gp">
                         <rect key="frame" x="0.0" y="44" width="414" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <color key="tintColor" systemColor="labelColor"/>
                         <color key="barTintColor" name="navbar"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -45,7 +47,7 @@
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="nAT-sb-hhR">
                                 <rect key="frame" x="0.0" y="88" width="414" height="725"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="mZm-1u-iMr">
                                     <size key="itemSize" width="320" height="95"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -65,7 +67,7 @@
                                                     <subviews>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron.right" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="ugg-69-6Vu">
                                                             <rect key="frame" x="187" y="29.5" width="10" height="16.5"/>
-                                                            <color key="tintColor" systemColor="opaqueSeparatorColor" red="0.77647058820000003" green="0.77647058820000003" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <color key="tintColor" systemColor="opaqueSeparatorColor"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="20" id="2Dd-xk-zSn"/>
                                                                 <constraint firstAttribute="width" constant="10" id="Ktr-aY-KQC"/>
@@ -82,7 +84,7 @@
                                                         </label>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Grass" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cIF-D4-CZy" customClass="PokemonTypeLabel" customModule="PokeTeam" customModuleProvider="target">
                                                             <rect key="frame" x="0.0" y="40" width="80" height="27"/>
-                                                            <color key="backgroundColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <color key="backgroundColor" systemColor="systemGreenColor"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="80" id="1bx-8o-QHE"/>
                                                                 <constraint firstAttribute="height" constant="27" id="5vL-vj-LGZ"/>
@@ -98,7 +100,7 @@
                                                         </label>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Grass" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5kt-qS-RUs" customClass="PokemonTypeLabel" customModule="PokeTeam" customModuleProvider="target">
                                                             <rect key="frame" x="85" y="40" width="80" height="27"/>
-                                                            <color key="backgroundColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <color key="backgroundColor" systemColor="systemGreenColor"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="27" id="1ZB-nV-0Js"/>
                                                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="80" id="3pi-HH-mFU"/>
@@ -158,6 +160,7 @@
                                 </cells>
                             </collectionView>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="oUG-yU-bgg"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="oUG-yU-bgg" firstAttribute="trailing" secondItem="nAT-sb-hhR" secondAttribute="trailing" id="6oe-vl-9sL"/>
@@ -165,7 +168,6 @@
                             <constraint firstItem="oUG-yU-bgg" firstAttribute="bottom" secondItem="nAT-sb-hhR" secondAttribute="bottom" id="fis-oG-bgH"/>
                             <constraint firstItem="nAT-sb-hhR" firstAttribute="leading" secondItem="oUG-yU-bgg" secondAttribute="leading" id="kQl-h2-Bnj"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="oUG-yU-bgg"/>
                     </view>
                     <navigationItem key="navigationItem" id="cS0-HS-3Hj"/>
                     <connections>
@@ -203,7 +205,7 @@
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron.right" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="RAj-Cc-U5Y">
                                                     <rect key="frame" x="187" y="29.5" width="10" height="16.5"/>
-                                                    <color key="tintColor" systemColor="opaqueSeparatorColor" red="0.77647058820000003" green="0.77647058820000003" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="tintColor" systemColor="opaqueSeparatorColor"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="20" id="gpX-R2-ukV"/>
                                                         <constraint firstAttribute="width" constant="10" id="l2T-uJ-J5W"/>
@@ -220,7 +222,7 @@
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Grass" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sOQ-Kl-9nG" customClass="PokemonTypeLabel" customModule="PokeTeam" customModuleProvider="target">
                                                     <rect key="frame" x="0.0" y="40" width="80" height="27"/>
-                                                    <color key="backgroundColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="backgroundColor" systemColor="systemGreenColor"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="80" id="ubZ-Ir-pKy"/>
                                                         <constraint firstAttribute="height" constant="27" id="v8i-ZY-xFG"/>
@@ -236,7 +238,7 @@
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Grass" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gvj-yt-742" customClass="PokemonTypeLabel" customModule="PokeTeam" customModuleProvider="target">
                                                     <rect key="frame" x="85" y="40" width="80" height="27"/>
-                                                    <color key="backgroundColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="backgroundColor" systemColor="systemGreenColor"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="80" id="g6j-PV-LLb"/>
                                                         <constraint firstAttribute="height" constant="27" id="l7z-TN-rwG"/>
@@ -317,19 +319,19 @@
                                 <rect key="frame" x="20" y="338" width="374" height="128"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Coming Soon..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8yP-N5-dAB">
-                                        <rect key="frame" x="113.5" y="10" width="147" height="26.5"/>
+                                        <rect key="frame" x="114.5" y="10" width="145" height="26.5"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pick from available moves, abilities, natures, held items, and set IV and EV spread." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GRd-vu-9kc">
-                                        <rect key="frame" x="20" y="46.5" width="334" height="64.5"/>
+                                        <rect key="frame" x="20" y="46.5" width="334" height="42.5"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstItem="8yP-N5-dAB" firstAttribute="top" secondItem="5Jf-dr-9Mk" secondAttribute="top" constant="10" id="3eo-a7-MI5"/>
                                     <constraint firstItem="GRd-vu-9kc" firstAttribute="leading" secondItem="5Jf-dr-9Mk" secondAttribute="leading" constant="20" id="B9W-4V-OhJ"/>
@@ -340,6 +342,7 @@
                                 </constraints>
                             </view>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="t8D-TB-5Jv"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="5Jf-dr-9Mk" firstAttribute="top" secondItem="Qn0-af-pUH" secondAttribute="bottom" constant="50" id="F8d-SF-63w"/>
@@ -348,7 +351,6 @@
                             <constraint firstItem="Qn0-af-pUH" firstAttribute="top" secondItem="t8D-TB-5Jv" secondAttribute="top" constant="20" id="Xd5-uh-uvd"/>
                             <constraint firstItem="5Jf-dr-9Mk" firstAttribute="leading" secondItem="t8D-TB-5Jv" secondAttribute="leading" constant="20" id="jOl-wD-uel"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="t8D-TB-5Jv"/>
                     </view>
                     <navigationItem key="navigationItem" title="POKEMON" id="mHI-YY-XmH">
                         <barButtonItem key="rightBarButtonItem" systemItem="trash" id="q09-Y6-z8V">
@@ -367,7 +369,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="100" width="475" height="475"/>
+        <image name="100" width="263" height="263"/>
         <image name="chevron.right" catalog="system" width="96" height="128"/>
         <image name="shield.lefthalf.fill" catalog="system" width="128" height="121"/>
         <namedColor name="navbar">
@@ -379,5 +381,17 @@
         <namedColor name="poke-red">
             <color red="0.85100001096725464" green="0.2199999988079071" blue="0.2669999897480011" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="opaqueSeparatorColor">
+            <color red="0.77647058823529413" green="0.77647058823529413" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGreenColor">
+            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>
