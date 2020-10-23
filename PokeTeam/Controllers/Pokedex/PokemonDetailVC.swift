@@ -25,10 +25,8 @@ class PokemonDetailVC: UIViewController {
     var apiService: APIService!
     
     var pokemon: PokemonMO
-    var pokemonDetails: PokemonMO?
+    var pokemonFormsArray = [PokemonMO]()
     var abilityArray: [AbilityMO]?
-    var formIndex = 0
-    var formImageArray: [String]?
     var subscriptions: Set<AnyCancellable> = []
     var indicatorView: UIActivityIndicatorView!
     
@@ -64,6 +62,7 @@ class PokemonDetailVC: UIViewController {
         self.pokemonObjectID = pokemonObjectID
 
         pokemon = coreDataStack.mainContext.object(with: pokemonObjectID) as! PokemonMO
+        pokemonFormsArray.append(pokemon)
         
         super.init(coder: coder)
     }
@@ -95,6 +94,13 @@ class PokemonDetailVC: UIViewController {
         } else {
             showDetails()
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        let selectedIndex = IndexPath(item: 0, section: 0)
+        formCollectionView.selectItem(at: selectedIndex, animated: false, scrollPosition: .top)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -186,14 +192,17 @@ class PokemonDetailVC: UIViewController {
         
         if let varieties = pokemon.varieties {
             if varieties.count > 0 {
+                let varietiesArray = varieties.array as! [PokemonMO]
+                pokemonFormsArray += varietiesArray
+                
                 formCollectionView.isHidden = false
                 formCollectionView.reloadData()
             }
             
-            switch varieties.count {
-            case 1...6:
+            switch pokemonFormsArray.count {
+            case 2...6:
                 // Set width to fit amount of cells
-                let collectionViewWidth: CGFloat = 60 * CGFloat(varieties.count)
+                let collectionViewWidth: CGFloat = 60 * CGFloat(pokemonFormsArray.count)
                 formCollectionView.widthAnchor.constraint(equalToConstant: collectionViewWidth).isActive = true
             case 7...12:
                 // Adjust height for cells more than 6 to add another row
@@ -480,21 +489,14 @@ class PokemonDetailVC: UIViewController {
 
 extension PokemonDetailVC: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard let pokemonVarieties = pokemon.varieties else { return 0 }
-        
-        return pokemonVarieties.count
+        return pokemonFormsArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = formCollectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! FormCollectionCell
         
-        // Should not be nil if numberOfItemsInSection isn't 0
-        let pokemonVarieties = pokemon.varieties!
-        
-        if pokemonVarieties.count > 0 {
-            let varietiesArray = pokemonVarieties.array as! [PokemonMO]
-            
-            if let imageName = varietiesArray[indexPath.row].imageID {
+        if pokemonFormsArray.count > 1 {
+            if let imageName = pokemonFormsArray[indexPath.row].imageID {
                 cell.setImage(to: imageName)
             }
         }
@@ -503,9 +505,7 @@ extension PokemonDetailVC: UICollectionViewDelegate, UICollectionViewDataSource 
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let varieties = pokemon.varieties?.array as? [PokemonMO] else { return }
-        print("Selected \(varieties[indexPath.row].name!)")
-        
+        print("Selected \(pokemonFormsArray[indexPath.row].name!)")
     }
 }
 
