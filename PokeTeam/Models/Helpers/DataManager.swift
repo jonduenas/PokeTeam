@@ -152,17 +152,19 @@ extension DataManager {
                 }
             }
             
-            // Check if varieties is empty or nil already
             if pokemon.varieties?.count == 0 || pokemon.varieties == nil {
-                var varieties = parseVarieties(with: speciesData, speciesURL: pokemon.speciesURL, id: pokemon.id)
-                
-                // Remove variety if it's the same as current Pokemon
-                for (index, varity) in varieties.enumerated() {
-                    if varity.name == pokemon.name {
-                        varieties.remove(at: index)
+                // Skips adding varieties for Pikachu since they're not true alt varieties and are only costumes
+                if pokemon.name != "pikachu" {
+                    var varieties = parseVarieties(with: speciesData, speciesURL: pokemon.speciesURL, id: pokemon.id)
+                    
+                    // Remove variety if it's the same as current Pokemon
+                    for (index, varity) in varieties.enumerated() {
+                        if varity.name == pokemon.name {
+                            varieties.remove(at: index)
+                        }
                     }
+                    pokemon.varieties = NSOrderedSet(array: varieties)
                 }
-                pokemon.varieties = NSOrderedSet(array: varieties)
             }
         }
         coreDataStack.saveContext(managedObjectContext)
