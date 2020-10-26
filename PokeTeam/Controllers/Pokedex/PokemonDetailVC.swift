@@ -327,6 +327,12 @@ class PokemonDetailVC: UIViewController {
             abilityArray = [AbilityMO]()
         }
         
+        // Clear all current buttons and views
+        for view in abilitiesStackView.arrangedSubviews {
+            abilitiesStackView.removeArrangedSubview(view)
+            view.removeFromSuperview()
+        }
+        
         abilityArray = abilitySet.array as? [AbilityMO]
         abilityArray?.sort(by: { $0.slot < $1.slot })
         
@@ -344,11 +350,6 @@ class PokemonDetailVC: UIViewController {
             
             abilitiesStackView.addArrangedSubview(notFoundLabel)
         } else {
-            // Clear all current buttons and views
-            for view in abilitiesStackView.arrangedSubviews {
-                abilitiesStackView.removeArrangedSubview(view)
-            }
-            
             for (index, ability) in abilities.enumerated() {
                 let abilityButton = AbilityButton()
 
