@@ -119,6 +119,9 @@ extension DataManager {
         let pokemon = managedObjectContext.object(with: pokemonManagedObjectID) as! PokemonMO
         
         pokemon.managedObjectContext?.performAndWait {
+            // Species Name
+            pokemon.speciesName = speciesData.name
+            
             // Genus
             pokemon.genus = parseGenus(with: speciesData)
             
@@ -131,20 +134,36 @@ extension DataManager {
             pokemon.isBaby = speciesData.isBaby
             pokemon.isLegendary = speciesData.isLegendary
             pokemon.isMythical = speciesData.isMythical
+            
             if !speciesData.pokedexNumbers.isEmpty {
                 pokemon.nationalPokedexNumber = Int64(speciesData.pokedexNumbers[0].entryNumber)
             }
+            
             if let speciesOrder = speciesData.order {
                 pokemon.order = Int64(speciesOrder)
             }
             
+            // Extract pokemon url from varieties if empty or nil
             if pokemon.pokemonURL == "" || pokemon.pokemonURL == nil {
-                pokemon.pokemonURL = speciesData.varieties[0].pokemon.url
+                for variety in speciesData.varieties {
+                    if variety.pokemon.name == pokemon.name {
+                        pokemon.pokemonURL = variety.pokemon.url
+                    }
+                }
             }
             
-            let varieties = parseVarieties(with: speciesData, speciesURL: pokemon.speciesURL, id: pokemon.id)
-            pokemon.varieties = NSOrderedSet(array: varieties)
-            
+            // Check if varieties is empty or nil already
+            if pokemon.varieties?.count == 0 || pokemon.varieties == nil {
+                var varieties = parseVarieties(with: speciesData, speciesURL: pokemon.speciesURL, id: pokemon.id)
+                
+                // Remove variety if it's the same as current Pokemon
+                for (index, varity) in varieties.enumerated() {
+                    if varity.name == pokemon.name {
+                        varieties.remove(at: index)
+                    }
+                }
+                pokemon.varieties = NSOrderedSet(array: varieties)
+            }
         }
         coreDataStack.saveContext(managedObjectContext)
         return pokemon
@@ -154,7 +173,14 @@ extension DataManager {
         let pokemon = managedObjectContext.object(with: pokemonManagedObjectID) as! PokemonMO
         
         pokemon.managedObjectContext?.performAndWait {
-            pokemon.imageID = String(pokemonData.id)
+            if pokemon.imageID == "" || pokemon.imageID == nil {
+                if let speciesName = pokemon.speciesName {
+                    pokemon.imageID = pokemon.name?.replacingOccurrences(of: speciesName, with: String(pokemon.id))
+                } else {
+                    pokemon.imageID = "substitute"
+                }
+            }
+            
             pokemon.height = pokemonData.height / 10
             pokemon.weight = pokemonData.weight / 10
             
@@ -334,15 +360,12 @@ extension DataManager {
         var pokemonVarieties = [PokemonMO]()
         
         for variety in speciesData.varieties {
-            if variety.isDefault {
-                continue
-            }
-            
             if let speciesURL = speciesURL {
                 let pokemonVariety = addPokemon(name: variety.pokemon.name, speciesURL: speciesURL, pokemonURL: variety.pokemon.url, id: id)
                 
-                pokemonVariety.isAltVariety = true
                 pokemonVariety.imageID = pokemonVariety.name?.replacingOccurrences(of: speciesData.name, with: String(pokemonVariety.id))
+                
+                pokemonVariety.isAltVariety = !variety.isDefault
                 
                 pokemonVarieties.append(pokemonVariety)
             }

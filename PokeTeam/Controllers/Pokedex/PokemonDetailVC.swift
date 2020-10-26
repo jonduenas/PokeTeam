@@ -89,10 +89,10 @@ class PokemonDetailVC: UIViewController {
         formCollectionView.delegate = self
         formCollectionView.dataSource = self
         
-        if shouldFetchDetails() {
-            fetchDetails()
+        if shouldFetchDetails(for: pokemonFormsArray[0]) {
+            fetchDetails(for: pokemonFormsArray[0], isBaseForm: true)
         } else {
-            showDetails()
+            showDetails(with: pokemonFormsArray[0])
         }
     }
     
@@ -109,30 +109,37 @@ class PokemonDetailVC: UIViewController {
         colorBlockView.animateOnShow()
     }
     
-    private func shouldFetchDetails() -> Bool {
-        return pokemon.flavorText?.isEmpty ?? true
+    private func shouldFetchDetails(for pokemonForm: PokemonMO) -> Bool {
+        return pokemonForm.stats?.isEmpty ?? true
     }
     
-    private func showDetails() {
-        updatePokemonUI()
-        updateStats()
-        layoutAbilities()
+    private func showDetails(with pokemonForm: PokemonMO) {
+        updateFormsCollection(with: pokemonForm)
+        updatePokemonUI(with: pokemonForm)
+        updateStats(with: pokemonForm)
+        layoutAbilities(with: pokemonForm)
     }
     
-    private func fetchDetails() {
+    private func changeShownForm(to pokemonForm: PokemonMO) {
+        updatePokemonUI(with: pokemonForm)
+        updateStats(with: pokemonForm)
+        layoutAbilities(with: pokemonForm)
+    }
+    
+    private func fetchDetails(for pokemonForm: PokemonMO, isBaseForm: Bool) {
         setState(loading: true)
         
         print("Fetching Pokemon details from API")
         
         var speciesURL: URL? = nil
-        pokemon.managedObjectContext?.performAndWait {
-            guard let speciesStringURL = pokemon.speciesURL else { return }
+        pokemonForm.managedObjectContext?.performAndWait {
+            guard let speciesStringURL = pokemonForm.speciesURL else { return }
             speciesURL = URL(string: speciesStringURL)
         }
         
         apiService.fetch(type: SpeciesData.self, from: speciesURL!)
             .flatMap { speciesData -> AnyPublisher<PokemonData, Error> in
-                let updatedPokemon = self.backgroundDataManager.updateDetails(for: self.pokemon.objectID, with: speciesData)
+                let updatedPokemon = self.backgroundDataManager.updateDetails(for: pokemonForm.objectID, with: speciesData)
                 let pokemonDataURL = URL(string: updatedPokemon.pokemonURL!)
                 return self.apiService.fetch(type: PokemonData.self, from: pokemonDataURL!)
         }
@@ -144,10 +151,10 @@ class PokemonDetailVC: UIViewController {
                 print("Error updating Pokemon: \(error) - \(error.localizedDescription)")
             }
         }) { pokemonData in
-            self.backgroundDataManager.updateDetails(for: self.pokemon.objectID, with: pokemonData)
+            self.backgroundDataManager.updateDetails(for: pokemonForm.objectID, with: pokemonData)
             self.coreDataStack.saveContext(self.backgroundDataManager.managedObjectContext)
             
-            guard let pokemonName = self.pokemon.name else {
+            guard let pokemonName = pokemonForm.name else {
                 print("Pokemon name was nil")
                 return
             }
@@ -155,16 +162,28 @@ class PokemonDetailVC: UIViewController {
             if let updatedPokemon = self.backgroundDataManager.getFromCoreData(entity: PokemonMO.self, predicate: NSPredicate(format: "name == %@", pokemonName)) as? [PokemonMO] {
                 if updatedPokemon.count > 0 {
                     self.pokemon = updatedPokemon[0]
+                    DispatchQueue.main.async { [weak self] in
+                        if isBaseForm {
+                            self?.showDetails(with: updatedPokemon[0])
+                        } else {
+                            self?.changeShownForm(to: updatedPokemon[0])
+                        }
+                        
+                        self?.setState(loading: false)
+                    }
                 } else {
                     print("Error finding Pokemon to load from Core Data")
+                    DispatchQueue.main.async { [weak self] in
+                        self?.setState(loading: false)
+                    }
                 }
             } else {
                 print("Error reloading pokemon")
+                DispatchQueue.main.async { [weak self] in
+                    self?.setState(loading: false)
+                }
             }
-            DispatchQueue.main.async { [weak self] in
-                self?.showDetails()
-                self?.setState(loading: false)
-            }
+            
         }
         .store(in: &subscriptions)
     }
@@ -187,16 +206,17 @@ class PokemonDetailVC: UIViewController {
         return apiService.fetch(type: FormData.self, from: formURL)
     }
     
-    private func updatePokemonUI() {
-        print("Updating UI")
-        
-        if let varieties = pokemon.varieties {
+    private func updateFormsCollection(with baseForm: PokemonMO) {
+        if let varieties = baseForm.varieties {
             if varieties.count > 0 {
+                print("Found \(varieties.count) varieties")
                 let varietiesArray = varieties.array as! [PokemonMO]
                 pokemonFormsArray += varietiesArray
                 
                 formCollectionView.isHidden = false
                 formCollectionView.reloadData()
+            } else {
+                print("No varieties found")
             }
             
             switch pokemonFormsArray.count {
@@ -218,21 +238,19 @@ class PokemonDetailVC: UIViewController {
                 formCollectionView.isHidden = true
             }
         }
+    }
+    
+    private func updatePokemonUI(with pokemonForm: PokemonMO) {
+        print("Updating UI")
         
-        pokemonNameLabel.text = pokemon.name?.formatPokemonName()
+        pokemonNameLabel.text = pokemonForm.name?.formatPokemonName()
         
-//        if let pokemonVarieties = pokemon.varieties {
-//            if pokemonVarieties.count > 0 {
-//                layoutFormImages()
-//            }
-//        }
-        
-        if let imageID = pokemon.imageID {
+        if let imageID = pokemonForm.imageID {
             pokemonImageView.image = UIImage(named: imageID)
         }
         
         // Update Pokemon types
-        if let pokemonType = pokemon.type {
+        if let pokemonType = pokemonForm.type {
             if pokemonType.count > 1 {
                 pokemonType1Label.setType(for: pokemonType[0])
                 pokemonType2Label.setType(for: pokemonType[1])
@@ -242,98 +260,41 @@ class PokemonDetailVC: UIViewController {
             }
         }
         
-        let pokemonIDString = String(withInt: Int(pokemon.id), leadingZeros: 3)
-        if pokemon.genus == "" {
+        let pokemonIDString = String(withInt: Int(pokemonForm.id), leadingZeros: 3)
+        if pokemonForm.genus == "" {
             pokemonNumberAndGenusLabel.text = "No. \(pokemonIDString) – Genus Unknown"
         } else {
-            pokemonNumberAndGenusLabel.text = "No. \(pokemonIDString) – \(pokemon.genus ?? "Genus Unknown")"
+            pokemonNumberAndGenusLabel.text = "No. \(pokemonIDString) – \(pokemonForm.genus ?? "Genus Unknown")"
         }
         
         pokemonDescriptionLabel.text = "Error finding Pokemon description."
         
-        // TODO: Allow selection of specific flavor text
-        switch pokemon.generation {
+        switch pokemonForm.generation {
         case "generation-viii":
             // Use Sword flavor text for Gen 8 only since not every pokemon is in Sword/Shield
-            if let flavorText = pokemon.flavorText?["sword"] {
+            if let flavorText = pokemonForm.flavorText?["sword"] {
                 print(flavorText[0])
                 pokemonDescriptionLabel.text = flavorText[0]
             }
         case "generation-vii":
             // Use Ultra-Sun flavor text for anything Gen 7
-            if let flavorText = pokemon.flavorText?["ultra-sun"] {
+            if let flavorText = pokemonForm.flavorText?["ultra-sun"] {
                 print(flavorText[0])
                 pokemonDescriptionLabel.text = flavorText[0]
             }
         default:
             // Default for all other Pokemon is Pokemon X flavor text
-            if let flavorText = pokemon.flavorText?["x"] {
+            if let flavorText = pokemonForm.flavorText?["x"] {
                 print(flavorText[0])
                 pokemonDescriptionLabel.text = flavorText[0]
             }
         }
         
-        heightLabel.text = "\(pokemon.height) m"
-        weightLabel.text = "\(pokemon.weight) kg"
+        heightLabel.text = "\(pokemonForm.height) m"
+        weightLabel.text = "\(pokemonForm.weight) kg"
     }
     
-//    private func layoutFormImages() {
-//        if let altForms = pokemon.altForm {
-//            if altForms.count > 0 {
-//                let altFormsArray = altForms.array as! [AltFormMO]
-//                formImageArray = [String]()
-//
-//                guard let originalImageID = pokemon.imageID else { return }
-//                formImageArray?.append(originalImageID)
-//
-//                for form in altFormsArray {
-//                    guard let formName = form.formName else { return }
-//                    let imageName = "\(originalImageID)-" + formName
-//
-//                    formImageArray?.append(imageName)
-//                }
-//
-//                print(formImageArray)
-//            }
-//        }
-//
-//        pokemonFormsStackView.isHidden = false
-//
-//        if let altVarieties = pokemon.varieties {
-//            print(altVarieties)
-//            if altVarieties.count > 0 {
-//                let altVarietiesArray = altVarieties.array as! [PokemonMO]
-//                formImageArray = [String]()
-//
-//                guard let originalImageID = pokemon.imageID else { return }
-//                formImageArray?.append(originalImageID)
-//
-//                for form in altVarietiesArray {
-//                    guard let formName = form.name else { return }
-//                    guard let pokemonBaseName = pokemon.name else { return }
-//                    let formattedFormName = formName.replacingOccurrences(of: pokemonBaseName, with: originalImageID)
-//
-//                    formImageArray?.append(formattedFormName)
-//                }
-//
-//                // Make sure Forms StackView is empty
-//                if !pokemonFormsStackView.subviews.isEmpty {
-//                    for view in pokemonFormsStackView.subviews {
-//                        view.removeFromSuperview()
-//                    }
-//                }
-//
-//                for formImageName in formImageArray! {
-//                    let formImageButton = FormImageButton()
-//                    formImageButton.backgroundImageName = formImageName
-//
-//                    pokemonFormsStackView.addArrangedSubview(formImageButton)
-//                }
-//            }
-//        }
-//    }
-    
-    private func updateStats() {
+    private func updateStats(with pokemonForm: PokemonMO) {
         let mapping: [(shortName: PokemonStatShortName, fullName: PokemonStatName, statView: StatView)] = [
             (PokemonStatShortName.hp, PokemonStatName.hp, hpStatView),
             (PokemonStatShortName.attack, PokemonStatName.attack, attackStatView),
@@ -343,7 +304,7 @@ class PokemonDetailVC: UIViewController {
             (PokemonStatShortName.speed, PokemonStatName.speed, speedStatView)
         ]
         
-        if let pokemonStats = pokemon.stats {
+        if let pokemonStats = pokemonForm.stats {
             for stat in mapping {
                 stat.statView.setUp(name: stat.shortName.rawValue, value: pokemonStats[stat.fullName.rawValue]!)
             }
@@ -358,8 +319,13 @@ class PokemonDetailVC: UIViewController {
         }
     }
     
-    private func layoutAbilities() {
-        guard let abilitySet = pokemon.abilities else { return }
+    private func layoutAbilities(with pokemonForm: PokemonMO) {
+        guard let abilitySet = pokemonForm.abilities else { return }
+        
+        // Set abilityArray to an empty array if it's not currently
+        if !(abilityArray?.isEmpty ?? false) {
+            abilityArray = [AbilityMO]()
+        }
         
         abilityArray = abilitySet.array as? [AbilityMO]
         abilityArray?.sort(by: { $0.slot < $1.slot })
@@ -370,7 +336,7 @@ class PokemonDetailVC: UIViewController {
             // If the API has no abilities listed, e.g. currently all of Gen 8
             let notFoundLabel = UILabel()
             
-            if pokemon.generation == "generation-viii" {
+            if pokemonForm.generation == "generation-viii" {
                 notFoundLabel.text = "Abilities currently unknown"
             } else {
                 notFoundLabel.text = "Error loading abilities"
@@ -378,6 +344,11 @@ class PokemonDetailVC: UIViewController {
             
             abilitiesStackView.addArrangedSubview(notFoundLabel)
         } else {
+            // Clear all current buttons and views
+            for view in abilitiesStackView.arrangedSubviews {
+                abilitiesStackView.removeArrangedSubview(view)
+            }
+            
             for (index, ability) in abilities.enumerated() {
                 let abilityButton = AbilityButton()
 
@@ -395,14 +366,6 @@ class PokemonDetailVC: UIViewController {
     }
     
     // MARK: - Button Methods
-    
-    @IBAction func imageLeftButtonTapped(_ sender: UIButton) {
-        
-    }
-    
-    @IBAction func imageRightButtonTapped(_ sender: UIButton) {
-        
-    }
     
     @objc private func abilityButtonTapped(sender: UIButton!) {
         print(sender.tag)
@@ -506,6 +469,12 @@ extension PokemonDetailVC: UICollectionViewDelegate, UICollectionViewDataSource 
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("Selected \(pokemonFormsArray[indexPath.row].name!)")
+        let selectedForm = pokemonFormsArray[indexPath.row]
+        if shouldFetchDetails(for: selectedForm) {
+            fetchDetails(for: selectedForm, isBaseForm: false)
+        } else {
+            changeShownForm(to: selectedForm)
+        }
     }
 }
 
