@@ -48,26 +48,30 @@ open class CoreDataStack {
         }
         
         context.performAndWait {
-            do {
-                try context.save()
-                print("Core Data main context saved.")
-            } catch {
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            if context.hasChanges {
+                do {
+                    try context.save()
+                    print("Core Data main context saved.")
+                } catch {
+                    let nserror = error as NSError
+                    fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                }
             }
         }
     }
     
     public func saveDerivedContext(_ context: NSManagedObjectContext) {
         context.performAndWait {
-            do {
-                try context.save()
-                print("Core Data derived context saved.")
-            } catch {
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            if context.hasChanges {
+                do {
+                    try context.save()
+                    print("Core Data derived context saved.")
+                } catch {
+                    let nserror = error as NSError
+                    fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                }
+                self.saveContext(self.mainContext)
             }
-            self.saveContext(self.mainContext)
         }
     }
 }
