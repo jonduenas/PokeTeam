@@ -390,6 +390,11 @@ extension DataManager {
         var pokemonVarieties = [PokemonMO]()
         
         for variety in speciesData.varieties {
+            // Filter out totem varieties
+            if variety.pokemon.name.hasSuffix("totem") || variety.pokemon.name.hasSuffix("totem-alola") {
+                continue
+            }
+            
             if let varietyID = getID(from: variety.pokemon.url) {
                 
                 let pokemonVariety = addPokemon(name: speciesData.name, varietyName: variety.pokemon.name, speciesURL: speciesURL, pokemonURL: variety.pokemon.url, id: Int64(varietyID))
