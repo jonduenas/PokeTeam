@@ -23,11 +23,16 @@ public final class DataManager {
 
 extension DataManager {
     
-    @discardableResult public func addPokemon(name: String, speciesURL: String, pokemonURL: String? = nil, id: Int64) -> PokemonMO {
+    @discardableResult public func addPokemon(name: String, varietyName: String? = nil, speciesURL: String, pokemonURL: String? = nil, id: Int64) -> PokemonMO {
         let pokemonMO = PokemonMO(context: managedObjectContext)
-        pokemonMO.name = name
+        
         pokemonMO.speciesURL = speciesURL
         pokemonMO.id = id
+        pokemonMO.name = name
+        
+        if varietyName != nil {
+            pokemonMO.varietyName = varietyName
+        }
         
         if let pokemonURL = pokemonURL {
             pokemonMO.pokemonURL = pokemonURL
@@ -85,9 +90,24 @@ extension DataManager {
     }
     
     private func getID(from url: String) -> Int? {
-        let baseURL = "https://pokeapi.co/api/v2/pokemon-species/"
-        if let returnInt = Int(url.dropFirst(baseURL.count).dropLast()) {
-            return returnInt
+        let baseURL = "https://pokeapi.co/api/v2/"
+        let speciesEndpoint = "pokemon-species/"
+        let pokemonEndpoint = "pokemon/"
+        
+        if url.contains(speciesEndpoint) {
+            if let returnInt = Int(url.dropFirst(baseURL.count + speciesEndpoint.count).dropLast()) {
+                return returnInt
+            } else {
+                print("Error getting ID from URL")
+                return nil
+            }
+        } else if url.contains(pokemonEndpoint) {
+            if let returnInt = Int(url.dropFirst(baseURL.count + pokemonEndpoint.count).dropLast()) {
+                return returnInt
+            } else {
+                print("Error getting ID from URL")
+                return nil
+            }
         } else {
             print("Error getting ID from URL")
             return nil
@@ -119,9 +139,6 @@ extension DataManager {
         let pokemon = managedObjectContext.object(with: pokemonManagedObjectID) as! PokemonMO
         
         pokemon.managedObjectContext?.performAndWait {
-            // Species Name
-            pokemon.speciesName = speciesData.name
-            
             // Genus
             pokemon.genus = parseGenus(with: speciesData)
             
@@ -144,22 +161,31 @@ extension DataManager {
             }
             
             // Extract pokemon url from varieties if empty or nil
-            if pokemon.pokemonURL == "" || pokemon.pokemonURL == nil {
+            if pokemon.pokemonURL == "" {
                 for variety in speciesData.varieties {
                     if variety.pokemon.name == pokemon.name {
                         pokemon.pokemonURL = variety.pokemon.url
                     }
+                    
+                    if variety.isDefault {
+                        pokemon.defaultVarietyURL = variety.pokemon.url
+                    }
                 }
+            }
+            
+            if pokemon.pokemonURL == "" {
+                // Covers rare occasions where default form name is different from species name, i.e. aegislash vs aegislash-shield, and the above loop can't find a match
+                pokemon.pokemonURL = pokemon.defaultVarietyURL
             }
             
             if pokemon.varieties?.count == 0 || pokemon.varieties == nil {
                 // Skips adding varieties for Pikachu since they're not true alt varieties and are only costumes
                 if pokemon.name != "pikachu" {
-                    var varieties = parseVarieties(with: speciesData, speciesURL: pokemon.speciesURL, id: pokemon.id)
+                    var varieties = parseVarieties(with: speciesData, speciesURL: pokemon.speciesURL!)
                     
                     // Remove variety if it's the same as current Pokemon
-                    for (index, varity) in varieties.enumerated() {
-                        if varity.name == pokemon.name {
+                    for (index, variety) in varieties.enumerated() {
+                        if variety.pokemonURL == pokemon.pokemonURL {
                             varieties.remove(at: index)
                         }
                     }
@@ -175,9 +201,11 @@ extension DataManager {
         let pokemon = managedObjectContext.object(with: pokemonManagedObjectID) as! PokemonMO
         
         pokemon.managedObjectContext?.performAndWait {
+            pokemon.varietyName = pokemonData.name
+            
             if pokemon.imageID == "" || pokemon.imageID == nil {
-                if let speciesName = pokemon.speciesName {
-                    pokemon.imageID = pokemon.name?.replacingOccurrences(of: speciesName, with: String(pokemon.id))
+                if let speciesName = pokemon.name {
+                    pokemon.imageID = pokemon.name?.replacingOccurrences(of: speciesName, with: String(pokemon.nationalPokedexNumber))
                 } else {
                     pokemon.imageID = "substitute"
                 }
@@ -358,14 +386,15 @@ extension DataManager {
         return altFormsArray
     }
     
-    private func parseVarieties(with speciesData: SpeciesData, speciesURL: String?, id: Int64) -> [PokemonMO] {
+    private func parseVarieties(with speciesData: SpeciesData, speciesURL: String) -> [PokemonMO] {
         var pokemonVarieties = [PokemonMO]()
         
         for variety in speciesData.varieties {
-            if let speciesURL = speciesURL {
-                let pokemonVariety = addPokemon(name: variety.pokemon.name, speciesURL: speciesURL, pokemonURL: variety.pokemon.url, id: id)
+            if let varietyID = getID(from: variety.pokemon.url) {
                 
-                pokemonVariety.imageID = pokemonVariety.name?.replacingOccurrences(of: speciesData.name, with: String(pokemonVariety.id))
+                let pokemonVariety = addPokemon(name: speciesData.name, varietyName: variety.pokemon.name, speciesURL: speciesURL, pokemonURL: variety.pokemon.url, id: Int64(varietyID))
+                
+                pokemonVariety.imageID = pokemonVariety.varietyName?.replacingOccurrences(of: speciesData.name, with: String(speciesData.pokedexNumbers[0].entryNumber))
                 
                 pokemonVariety.isAltVariety = !variety.isDefault
                 

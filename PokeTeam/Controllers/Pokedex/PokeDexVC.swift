@@ -62,6 +62,12 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
         fetchPokedex()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tableView.reloadData()
+    }
+    
     private func initializeIndicatorView() {
         indicatorView = view.activityIndicator(style: .large, center: self.view.center)
         navigationController?.view.insertSubview(indicatorView, at: 1)
