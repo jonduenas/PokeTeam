@@ -258,7 +258,7 @@ class PokemonDetailVC: UIViewController {
     
     private func updatePokemonUI(with pokemonForm: PokemonMO) {
         print("Updating UI")
-        
+        print(pokemonForm.varietyName)
         pokemonNameLabel.text = pokemonForm.varietyName?.formatPokemonName()
         
         if let imageID = pokemonForm.imageID {

@@ -201,7 +201,12 @@ extension DataManager {
         let pokemon = managedObjectContext.object(with: pokemonManagedObjectID) as! PokemonMO
         
         pokemon.managedObjectContext?.performAndWait {
-            pokemon.varietyName = pokemonData.name
+            // Fix Zygarde default variety name
+            if pokemonData.name == "zygarde" {
+                pokemon.varietyName = "zygarde-50"
+            } else {
+                pokemon.varietyName = pokemonData.name
+            }
             
             if pokemon.imageID == "" || pokemon.imageID == nil {
                 if let speciesName = pokemon.name {
@@ -350,6 +355,37 @@ extension DataManager {
             abilitiesArray.append(abilityMO)
         }
         
+        // Fixes issues specific to Zygarde entries
+        if pokemonData.name == "zygarde" {
+            let abilityName = "power-construct"
+            let abilityMO = AbilityMO(context: managedObjectContext)
+            abilityMO.name = "\(pokemonData.name)-\(abilityName)"
+            abilityMO.isHidden = false
+            abilityMO.slot = Int64(3)
+            
+            let abilityDetails = AbilityDetails(context: managedObjectContext)
+            abilityDetails.urlString = "https://pokeapi.co/api/v2/ability/211/"
+            abilityDetails.name = abilityName
+            
+            abilityMO.abilityDetails = abilityDetails
+            
+            abilitiesArray.append(abilityMO)
+        } else if pokemonData.name == "zygarde-10" {
+            let abilityName = "aura-break"
+            let abilityMO = AbilityMO(context: managedObjectContext)
+            abilityMO.name = "\(pokemonData.name)-\(abilityName)"
+            abilityMO.isHidden = false
+            abilityMO.slot = Int64(0)
+            
+            let abilityDetails = AbilityDetails(context: managedObjectContext)
+            abilityDetails.urlString = "https://pokeapi.co/api/v2/ability/188/"
+            abilityDetails.name = abilityName
+            
+            abilityMO.abilityDetails = abilityDetails
+            
+            abilitiesArray.append(abilityMO)
+        }
+        
         return abilitiesArray
     }
     
@@ -393,10 +429,15 @@ extension DataManager {
             // Filter out totem varieties
             if variety.pokemon.name.hasSuffix("totem") || variety.pokemon.name.hasSuffix("totem-alola") {
                 continue
+            } else if variety.pokemon.name == "zygarde-50" {
+                // Skips Zygarde 50% form since it is essentially a duplicate of the default form
+                continue
+            } else if variety.pokemon.name == "greninja-battle-bond" {
+                // Skips Greninja with Battle Bond since Ash Greninja entry suffices
+                continue
             }
             
             if let varietyID = getID(from: variety.pokemon.url) {
-                
                 let pokemonVariety = addPokemon(name: speciesData.name, varietyName: variety.pokemon.name, speciesURL: speciesURL, pokemonURL: variety.pokemon.url, id: Int64(varietyID))
                 
                 pokemonVariety.imageID = pokemonVariety.varietyName?.replacingOccurrences(of: speciesData.name, with: String(speciesData.pokedexNumbers[0].entryNumber))
