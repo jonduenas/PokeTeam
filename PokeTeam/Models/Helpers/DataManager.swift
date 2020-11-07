@@ -180,7 +180,8 @@ extension DataManager {
             
             if pokemon.varieties?.count == 0 || pokemon.varieties == nil {
                 // Skips adding varieties for Pikachu since they're not true alt varieties and are only costumes
-                if pokemon.name != "pikachu" {
+                // SKips adding varieties for Mimikyu since they're "disguised" and "busted" forms and totem forms, none of which need their own varieties
+                if pokemon.name != "pikachu" && pokemon.name != "mimikyu"  {
                     var varieties = parseVarieties(with: speciesData, speciesURL: pokemon.speciesURL!)
                     
                     // Remove variety if it's the same as current Pokemon
@@ -201,9 +202,11 @@ extension DataManager {
         let pokemon = managedObjectContext.object(with: pokemonManagedObjectID) as! PokemonMO
         
         pokemon.managedObjectContext?.performAndWait {
-            // Fix Zygarde default variety name
+            // Fix Zygarde and Mimikyu default variety name
             if pokemonData.name == "zygarde" {
                 pokemon.varietyName = "zygarde-50"
+            } else if pokemonData.name == "mimikyu-disguised" {
+                pokemon.varietyName = pokemon.name
             } else {
                 pokemon.varietyName = pokemonData.name
             }
@@ -425,26 +428,55 @@ extension DataManager {
     private func parseVarieties(with speciesData: SpeciesData, speciesURL: String) -> [PokemonMO] {
         var pokemonVarieties = [PokemonMO]()
         
-        for variety in speciesData.varieties {
-            // Filter out totem varieties
-            if variety.pokemon.name.hasSuffix("totem") || variety.pokemon.name.hasSuffix("totem-alola") {
-                continue
-            } else if variety.pokemon.name == "zygarde-50" {
-                // Skips Zygarde 50% form since it is essentially a duplicate of the default form
-                continue
-            } else if variety.pokemon.name == "greninja-battle-bond" {
-                // Skips Greninja with Battle Bond since Ash Greninja entry suffices
-                continue
+        // Seperate loop for Minior to filter out unnecessary versions
+        if speciesData.name == "minior" {
+            for variety in speciesData.varieties {
+                if variety.pokemon.name == "minior-red-meteor" {
+                    if let varietyID = getID(from: variety.pokemon.url) {
+                        let pokemonVariety = addPokemon(name: speciesData.name, varietyName: "minior-meteor", speciesURL: speciesURL, pokemonURL: variety.pokemon.url, id: Int64(varietyID))
+                        
+                        pokemonVariety.imageID = pokemonVariety.varietyName?.replacingOccurrences(of: speciesData.name, with: String(speciesData.pokedexNumbers[0].entryNumber))
+                        
+                        pokemonVariety.isAltVariety = !variety.isDefault
+                        
+                        pokemonVarieties.append(pokemonVariety)
+                    }
+                } else if variety.pokemon.name == "minior-red" {
+                    if let varietyID = getID(from: variety.pokemon.url) {
+                        let pokemonVariety = addPokemon(name: speciesData.name, varietyName: "minior-core", speciesURL: speciesURL, pokemonURL: variety.pokemon.url, id: Int64(varietyID))
+                        
+                        pokemonVariety.imageID = pokemonVariety.varietyName?.replacingOccurrences(of: speciesData.name, with: String(speciesData.pokedexNumbers[0].entryNumber))
+                        
+                        pokemonVariety.isAltVariety = !variety.isDefault
+                        
+                        pokemonVarieties.append(pokemonVariety)
+                    }
+                } else {
+                    continue
+                }
             }
-            
-            if let varietyID = getID(from: variety.pokemon.url) {
-                let pokemonVariety = addPokemon(name: speciesData.name, varietyName: variety.pokemon.name, speciesURL: speciesURL, pokemonURL: variety.pokemon.url, id: Int64(varietyID))
+        } else {
+            for variety in speciesData.varieties {
+                if variety.pokemon.name.hasSuffix("totem") || variety.pokemon.name.hasSuffix("totem-alola") {
+                    // Filter out totem varieties
+                    continue
+                } else if variety.pokemon.name == "zygarde-50" {
+                    // Skips Zygarde 50% form since it is essentially a duplicate of the default form
+                    continue
+                } else if variety.pokemon.name == "greninja-battle-bond" {
+                    // Skips Greninja with Battle Bond since Ash Greninja entry suffices
+                    continue
+                }
                 
-                pokemonVariety.imageID = pokemonVariety.varietyName?.replacingOccurrences(of: speciesData.name, with: String(speciesData.pokedexNumbers[0].entryNumber))
-                
-                pokemonVariety.isAltVariety = !variety.isDefault
-                
-                pokemonVarieties.append(pokemonVariety)
+                if let varietyID = getID(from: variety.pokemon.url) {
+                    let pokemonVariety = addPokemon(name: speciesData.name, varietyName: variety.pokemon.name, speciesURL: speciesURL, pokemonURL: variety.pokemon.url, id: Int64(varietyID))
+                    
+                    pokemonVariety.imageID = pokemonVariety.varietyName?.replacingOccurrences(of: speciesData.name, with: String(speciesData.pokedexNumbers[0].entryNumber))
+                    
+                    pokemonVariety.isAltVariety = !variety.isDefault
+                    
+                    pokemonVarieties.append(pokemonVariety)
+                }
             }
         }
         return pokemonVarieties
