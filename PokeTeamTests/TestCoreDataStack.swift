@@ -19,6 +19,8 @@ class TestCoreDataStack: CoreDataStack {
         
         let container = NSPersistentContainer(name: CoreDataStack.modelName)
         container.persistentStoreDescriptions = [persistentStoreDescription]
+        container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        container.viewContext.automaticallyMergesChangesFromParent = true
         
         container.loadPersistentStores { _, error in
             if let error = error as NSError? {

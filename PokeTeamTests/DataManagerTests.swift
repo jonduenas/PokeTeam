@@ -89,7 +89,10 @@ class DataManagerTests: XCTestCase {
     
     func testUpdateDetails_SpeciesData() {
         // Create test Pokemon MO
-        let pokemon = sut.addPokemon(name: "mewtwo", speciesURL: "http://testurl.com", id: 150)
+        let pokemon = sut.addPokemon(name: "mewtwo", varietyName: "mewtwo", speciesURL: "https://pokeapi.co/api/v2/pokemon-species/150/", pokemonURL: "https://pokeapi.co/api/v2/pokemon/150/", id: 150)
+        
+        sut.coreDataStack.saveContext(sut.managedObjectContext)
+        
         let managedObjectID = pokemon.objectID
         
         // Inject test JSON file and decode to SpeciesData

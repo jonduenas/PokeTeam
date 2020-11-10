@@ -23,11 +23,11 @@ public final class DataManager {
 
 extension DataManager {
     
-    @discardableResult public func addPokemon(name: String, varietyName: String? = nil, speciesURL: String, pokemonURL: String? = nil, id: Int64) -> PokemonMO {
+    @discardableResult public func addPokemon(name: String, varietyName: String? = nil, speciesURL: String, pokemonURL: String? = nil, id: Int) -> PokemonMO {
         let pokemonMO = PokemonMO(context: managedObjectContext)
         
         pokemonMO.speciesURL = speciesURL
-        pokemonMO.id = id
+        pokemonMO.id = Int64(id)
         pokemonMO.name = name
         
         if varietyName != nil {
@@ -80,7 +80,7 @@ extension DataManager {
                     // No Pokemon with that name is found - create a new one
                     guard let id = getID(from: pokemon.url) else { continue }
                     
-                    let newPokemon = addPokemon(name: pokemon.name, speciesURL: pokemon.url, id: Int64(id))
+                    let newPokemon = addPokemon(name: pokemon.name, speciesURL: pokemon.url, id: id)
                     newPokemonArray.append(newPokemon)
                 }
             }
@@ -433,7 +433,7 @@ extension DataManager {
                 guard let varietyName = name else { continue }
                 guard let varietyID = getID(from: variety.pokemon.url) else { continue }
                 
-                let pokemonVariety = addPokemon(name: speciesData.name, varietyName: varietyName, speciesURL: speciesURL, pokemonURL: variety.pokemon.url, id: Int64(varietyID))
+                let pokemonVariety = addPokemon(name: speciesData.name, varietyName: varietyName, speciesURL: speciesURL, pokemonURL: variety.pokemon.url, id: varietyID)
                 
                 pokemonVariety.imageID = varietyName.replacingOccurrences(of: speciesData.name, with: String(speciesData.pokedexNumbers[0].entryNumber))
                 
