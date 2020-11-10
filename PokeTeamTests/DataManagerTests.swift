@@ -36,6 +36,21 @@ class DataManagerTests: XCTestCase {
         XCTAssertTrue(pokemon.id == 4)
     }
     
+    func testAddAbility_AddAbilityDetails() {
+        let abilityDetails = sut.addAbilityDetails(abilityName: "imposter", url: "http://testurl.com")
+        
+        let ability = sut.addAbility(abilityName: "imposter", pokemonName: "ditto", isHidden: false, slot: 0, abilityDetails: abilityDetails)
+        
+        XCTAssertNotNil(ability)
+        XCTAssertNotNil(abilityDetails)
+        XCTAssertEqual(abilityDetails.name, "imposter")
+        XCTAssertEqual(abilityDetails.urlString, "http://testurl.com")
+        XCTAssertEqual(ability.name, "ditto-imposter")
+        XCTAssertEqual(ability.isHidden, false)
+        XCTAssertEqual(ability.slot, 0)
+        XCTAssertEqual(ability.abilityDetails, abilityDetails)
+    }
+    
     func testAddTeam() {
         let newTeam = sut.addTeam()
         

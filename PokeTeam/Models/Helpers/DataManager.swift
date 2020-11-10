@@ -41,6 +41,24 @@ extension DataManager {
         return pokemonMO
     }
     
+    @discardableResult public func addAbility(abilityName: String, pokemonName: String, isHidden: Bool, slot: Int, abilityDetails: AbilityDetails) -> AbilityMO {
+        let abilityMO = AbilityMO(context: managedObjectContext)
+        abilityMO.name = "\(pokemonName)-\(abilityName)"
+        abilityMO.isHidden = isHidden
+        abilityMO.slot = Int64(slot)
+        abilityMO.abilityDetails = abilityDetails
+        
+        return abilityMO
+    }
+    
+    @discardableResult public func addAbilityDetails(abilityName: String, url: String) -> AbilityDetails {
+        let abilityDetails = AbilityDetails(context: managedObjectContext)
+        abilityDetails.urlString = url
+        abilityDetails.name = abilityName
+        
+        return abilityDetails
+    }
+    
     @discardableResult public func addTeam() -> TeamMO {
         let team = TeamMO(context: managedObjectContext)
         
@@ -203,13 +221,7 @@ extension DataManager {
         
         pokemon.managedObjectContext?.performAndWait {
             // Fix Zygarde and Mimikyu default variety name
-            if pokemonData.name == "zygarde" {
-                pokemon.varietyName = "zygarde-50"
-            } else if pokemonData.name == "mimikyu-disguised" {
-                pokemon.varietyName = pokemon.name
-            } else {
-                pokemon.varietyName = pokemonData.name
-            }
+            pokemon.varietyName = pokemonData.name.replaceSpecialNames()
             
             if pokemon.imageID == "" || pokemon.imageID == nil {
                 if let speciesName = pokemon.name {
@@ -344,16 +356,9 @@ extension DataManager {
         var abilitiesArray = [AbilityMO]()
         
         for ability in pokemonData.abilities {
-            let abilityMO = AbilityMO(context: managedObjectContext)
-            abilityMO.name = "\(pokemonData.name)-\(ability.name)"
-            abilityMO.isHidden = ability.isHidden
-            abilityMO.slot = Int64(ability.slot)
+            let abilityDetails = addAbilityDetails(abilityName: ability.name, url: ability.url)
             
-            let abilityDetails = AbilityDetails(context: managedObjectContext)
-            abilityDetails.urlString = ability.url
-            abilityDetails.name = ability.name
-            
-            abilityMO.abilityDetails = abilityDetails
+            let abilityMO = addAbility(abilityName: ability.name, pokemonName: pokemonData.name, isHidden: ability.isHidden, slot: ability.slot, abilityDetails: abilityDetails)
             
             abilitiesArray.append(abilityMO)
         }
@@ -361,30 +366,20 @@ extension DataManager {
         // Fixes issues specific to Zygarde entries
         if pokemonData.name == "zygarde" {
             let abilityName = "power-construct"
-            let abilityMO = AbilityMO(context: managedObjectContext)
-            abilityMO.name = "\(pokemonData.name)-\(abilityName)"
-            abilityMO.isHidden = false
-            abilityMO.slot = Int64(3)
+            let abilityURL = "https://pokeapi.co/api/v2/ability/211/"
             
-            let abilityDetails = AbilityDetails(context: managedObjectContext)
-            abilityDetails.urlString = "https://pokeapi.co/api/v2/ability/211/"
-            abilityDetails.name = abilityName
+            let abilityDetails = addAbilityDetails(abilityName: abilityName, url: abilityURL)
             
-            abilityMO.abilityDetails = abilityDetails
+            let abilityMO = addAbility(abilityName: abilityName, pokemonName: pokemonData.name, isHidden: false, slot: 3, abilityDetails: abilityDetails)
             
             abilitiesArray.append(abilityMO)
         } else if pokemonData.name == "zygarde-10" {
             let abilityName = "aura-break"
-            let abilityMO = AbilityMO(context: managedObjectContext)
-            abilityMO.name = "\(pokemonData.name)-\(abilityName)"
-            abilityMO.isHidden = false
-            abilityMO.slot = Int64(0)
+            let abilityURL = "https://pokeapi.co/api/v2/ability/188/"
             
-            let abilityDetails = AbilityDetails(context: managedObjectContext)
-            abilityDetails.urlString = "https://pokeapi.co/api/v2/ability/188/"
-            abilityDetails.name = abilityName
+            let abilityDetails = addAbilityDetails(abilityName: abilityName, url: abilityURL)
             
-            abilityMO.abilityDetails = abilityDetails
+            let abilityMO = addAbility(abilityName: abilityName, pokemonName: pokemonData.name, isHidden: false, slot: 0, abilityDetails: abilityDetails)
             
             abilitiesArray.append(abilityMO)
         }
@@ -428,55 +423,23 @@ extension DataManager {
     private func parseVarieties(with speciesData: SpeciesData, speciesURL: String) -> [PokemonMO] {
         var pokemonVarieties = [PokemonMO]()
         
-        // Seperate loop for Minior to filter out unnecessary versions
-        if speciesData.name == "minior" {
-            for variety in speciesData.varieties {
-                if variety.pokemon.name == "minior-red-meteor" {
-                    if let varietyID = getID(from: variety.pokemon.url) {
-                        let pokemonVariety = addPokemon(name: speciesData.name, varietyName: "minior-meteor", speciesURL: speciesURL, pokemonURL: variety.pokemon.url, id: Int64(varietyID))
-                        
-                        pokemonVariety.imageID = pokemonVariety.varietyName?.replacingOccurrences(of: speciesData.name, with: String(speciesData.pokedexNumbers[0].entryNumber))
-                        
-                        pokemonVariety.isAltVariety = !variety.isDefault
-                        
-                        pokemonVarieties.append(pokemonVariety)
-                    }
-                } else if variety.pokemon.name == "minior-red" {
-                    if let varietyID = getID(from: variety.pokemon.url) {
-                        let pokemonVariety = addPokemon(name: speciesData.name, varietyName: "minior-core", speciesURL: speciesURL, pokemonURL: variety.pokemon.url, id: Int64(varietyID))
-                        
-                        pokemonVariety.imageID = pokemonVariety.varietyName?.replacingOccurrences(of: speciesData.name, with: String(speciesData.pokedexNumbers[0].entryNumber))
-                        
-                        pokemonVariety.isAltVariety = !variety.isDefault
-                        
-                        pokemonVarieties.append(pokemonVariety)
-                    }
-                } else {
-                    continue
-                }
-            }
-        } else {
-            for variety in speciesData.varieties {
-                if variety.pokemon.name.hasSuffix("totem") || variety.pokemon.name.hasSuffix("totem-alola") {
-                    // Filter out totem varieties
-                    continue
-                } else if variety.pokemon.name == "zygarde-50" {
-                    // Skips Zygarde 50% form since it is essentially a duplicate of the default form
-                    continue
-                } else if variety.pokemon.name == "greninja-battle-bond" {
-                    // Skips Greninja with Battle Bond since Ash Greninja entry suffices
-                    continue
-                }
+        for variety in speciesData.varieties {
+            let (isSpecialVariety, name) = variety.pokemon.name.isSpecialVariety()
+            
+            if isSpecialVariety && name == nil {
+                // If both are true, variety should be skipped entirely
+                continue
+            } else {
+                guard let varietyName = name else { continue }
+                guard let varietyID = getID(from: variety.pokemon.url) else { continue }
                 
-                if let varietyID = getID(from: variety.pokemon.url) {
-                    let pokemonVariety = addPokemon(name: speciesData.name, varietyName: variety.pokemon.name, speciesURL: speciesURL, pokemonURL: variety.pokemon.url, id: Int64(varietyID))
-                    
-                    pokemonVariety.imageID = pokemonVariety.varietyName?.replacingOccurrences(of: speciesData.name, with: String(speciesData.pokedexNumbers[0].entryNumber))
-                    
-                    pokemonVariety.isAltVariety = !variety.isDefault
-                    
-                    pokemonVarieties.append(pokemonVariety)
-                }
+                let pokemonVariety = addPokemon(name: speciesData.name, varietyName: varietyName, speciesURL: speciesURL, pokemonURL: variety.pokemon.url, id: Int64(varietyID))
+                
+                pokemonVariety.imageID = varietyName.replacingOccurrences(of: speciesData.name, with: String(speciesData.pokedexNumbers[0].entryNumber))
+                
+                pokemonVariety.isAltVariety = !variety.isDefault
+                
+                pokemonVarieties.append(pokemonVariety)
             }
         }
         return pokemonVarieties

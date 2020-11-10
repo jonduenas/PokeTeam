@@ -55,4 +55,40 @@ extension String {
             return self.capitalized
         }
     }
+    
+    func isSpecialVariety() -> (Bool, String?) {
+        switch self {
+        case "minior-red-meteor":
+            return (true, "minior-meteor")
+        case "minior-red":
+            return (true, "minior-core")
+        case self where self.hasPrefix("minior"):
+            return (true, nil)
+        case self where self.hasSuffix("totem"):
+            return (true, nil)
+        case self where self.hasSuffix("totem-alola"):
+            return (true, nil)
+        case "zygarde-50":
+            return (true, nil)
+        case "greninja-battle-bond":
+            return (true, nil)
+        default:
+            return (false, self)
+        }
+    }
+    
+    func replaceSpecialNames() -> String {
+        switch self {
+        case "zygarde":
+            return "zygarde-50"
+        case "mimikyu-disguised":
+            return "mimikyu"
+        case "minior-red-meteor":
+            return "minior-meteor"
+        case "minior-red":
+            return "minior-core"
+        default:
+            return self
+        }
+    }
 }
