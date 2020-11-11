@@ -143,12 +143,23 @@
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="EAE-Jo-5Hf">
                                                         <rect key="frame" x="20" y="320" width="374" height="261"/>
                                                         <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bulbasaur" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OSh-HH-YdB">
+                                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="tnZ-j7-8uj">
                                                                 <rect key="frame" x="107" y="0.0" width="160" height="41"/>
-                                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="34"/>
-                                                                <nil key="textColor"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
+                                                                <subviews>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bulbasaur" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OSh-HH-YdB">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="160" height="41"/>
+                                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="34"/>
+                                                                        <nil key="textColor"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mega" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4p1-MG-SzU">
+                                                                        <rect key="frame" x="58.5" y="0.0" width="43" height="0.0"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                        <nil key="textColor"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                </subviews>
+                                                            </stackView>
                                                             <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="dNt-42-tAd">
                                                                 <rect key="frame" x="104.5" y="56" width="165" height="27"/>
                                                                 <subviews>
@@ -434,6 +445,7 @@
                         <outlet property="pokemonNumberAndGenusLabel" destination="EhZ-Gl-G3x" id="loM-l8-m9V"/>
                         <outlet property="pokemonType1Label" destination="Gyk-pZ-ujZ" id="1eC-M9-ROM"/>
                         <outlet property="pokemonType2Label" destination="GJh-9N-qMj" id="PKf-6t-xdw"/>
+                        <outlet property="pokemonVarietyNameLabel" destination="4p1-MG-SzU" id="AxC-ZC-Mly"/>
                         <outlet property="specialAttackStatView" destination="21v-tu-KMI" id="eUH-Xm-Lmr"/>
                         <outlet property="specialDefenseStatView" destination="RJ7-de-jzL" id="BAg-of-VGK"/>
                         <outlet property="speedStatView" destination="eA7-1a-cSF" id="c1S-iB-IHV"/>

@@ -170,9 +170,7 @@ extension DataManager {
             pokemon.isLegendary = speciesData.isLegendary
             pokemon.isMythical = speciesData.isMythical
             
-            if !speciesData.pokedexNumbers.isEmpty {
-                pokemon.nationalPokedexNumber = Int64(speciesData.pokedexNumbers[0].entryNumber)
-            }
+            pokemon.nationalPokedexNumber = speciesData.pokedexNumbers.isEmpty ? pokemon.id : Int64(speciesData.pokedexNumbers[0].entryNumber)
             
             if let speciesOrder = speciesData.order {
                 pokemon.order = Int64(speciesOrder)
@@ -196,7 +194,7 @@ extension DataManager {
                 pokemon.pokemonURL = pokemon.defaultVarietyURL
             }
             
-            if pokemon.varieties?.count == 0 || pokemon.varieties == nil {
+            if speciesData.varieties.count > 1 {
                 // Skips adding varieties for Pikachu since they're not true alt varieties and are only costumes
                 // SKips adding varieties for Mimikyu since they're "disguised" and "busted" forms and totem forms, none of which need their own varieties
                 if pokemon.name != "pikachu" && pokemon.name != "mimikyu"  {

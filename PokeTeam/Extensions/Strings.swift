@@ -21,6 +21,11 @@ extension String {
         return ""
     }
     
+    func replacingFirstOccurrence(of target: String, with replacement: String) -> String {
+        guard let range = self.range(of: target) else { return self }
+        return self.replacingCharacters(in: range, with: replacement)
+    }
+    
     func formatAbilityName() -> String {
         if self == "soul-heart" {
             return self.capitalized
@@ -51,8 +56,48 @@ extension String {
             return "Tapu Bulu"
         case "tapu-fini":
             return "Tapu Fini"
+        case "ho-oh":
+            return "Ho-Oh"
         default:
             return self.capitalized
+        }
+    }
+    
+    func formatVarietyName(speciesName: String) -> String {
+        let megaString = "mega"
+        let primalString = "primal"
+        let basculinString = "striped"
+        let zygardeString = "zygarde"
+        let miniorString = "minior"
+        let necrozmaString = "necrozma"
+        
+        if self.contains(megaString) {
+            let name = megaString + " " + self.replacingOccurrences(of: megaString, with: "").replacingOccurrences(of: "--", with: " ").replacingOccurrences(of: "-", with: "")
+            
+            return name.capitalized
+        } else if self.contains("primal") {
+            let name = primalString + " " + self.replacingOccurrences(of: primalString, with: "").replacingOccurrences(of: "-", with: "")
+            
+            return name.capitalized
+        } else if self.contains(basculinString) {
+            let name = self.replacingOccurrences(of: speciesName, with: "").replacingFirstOccurrence(of: "-", with: "")
+            return name.capitalized
+        } else {
+            var name = self.replacingOccurrences(of: speciesName, with: "").replacingOccurrences(of: "--", with: " ").replacingOccurrences(of: "-", with: "")
+            if speciesName == zygardeString && (name == "10" || name == "50") {
+                name += "%"
+            } else if speciesName == miniorString {
+                name = (name == "red" ? "core" : "meteor")
+            } else if speciesName == necrozmaString {
+                if name == "dusk" {
+                    name += " mane"
+                } else if name == "dawn" {
+                    name += " wings"
+                } else if name == "ultra" {
+                    name = name + " " + speciesName
+                }
+            }
+            return name.capitalized
         }
     }
     

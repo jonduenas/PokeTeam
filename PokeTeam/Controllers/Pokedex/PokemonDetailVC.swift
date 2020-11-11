@@ -36,6 +36,7 @@ class PokemonDetailVC: UIViewController {
     @IBOutlet var pokemonImageView: UIImageView!
     
     @IBOutlet var pokemonNameLabel: UILabel!
+    @IBOutlet weak var pokemonVarietyNameLabel: UILabel!
     @IBOutlet var pokemonType1Label: PokemonTypeLabel!
     @IBOutlet var pokemonType2Label: PokemonTypeLabel!
     @IBOutlet var pokemonNumberAndGenusLabel: UILabel!
@@ -258,8 +259,21 @@ class PokemonDetailVC: UIViewController {
     
     private func updatePokemonUI(with pokemonForm: PokemonMO) {
         print("Updating UI")
-        print(pokemonForm.varietyName)
-        pokemonNameLabel.text = pokemonForm.varietyName?.formatPokemonName()
+        
+        var pokemonName = "Pokemon"
+        
+        if let name = pokemonForm.name {
+            pokemonName = name
+        }
+        
+        pokemonNameLabel.text = pokemonName.formatPokemonName()
+    
+        if pokemonForm.name != pokemonForm.varietyName {
+            pokemonVarietyNameLabel.isHidden = false
+            pokemonVarietyNameLabel.text = pokemonForm.varietyName?.formatVarietyName(speciesName: pokemonName)
+        } else {
+            pokemonVarietyNameLabel.isHidden = true
+        }
         
         if let imageID = pokemonForm.imageID {
             pokemonImageView.image = UIImage(named: imageID)
