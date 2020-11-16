@@ -106,11 +106,26 @@ class DataManagerTests: XCTestCase {
         let testPokedex = NationalPokedex(count: 4, results: [pokemon1, pokemon2, pokemon3, pokemon4])
         
         // when
-        let testPokemonArray = sut.updatePokedex(pokedex: testPokedex)
+        let testPokemonArray = sut.updatePokedex(testPokedex)
         
         // then
         XCTAssertEqual(testPokemonArray.count, 4, "testPokemonArray count should be 4")
         XCTAssertEqual(testPokemonArray[1].id, 2, "ID should be 2")
+    }
+    
+    func testUpdatePokedexWithExistingPokemon() {
+        // If pokemon already exists in storage, the updatePokedex(_:) should return empty array
+        let pokemon = sut.addPokemon(name: "swampert", speciesURL: "test", id: 260)
+        
+        XCTAssertNotNil(pokemon)
+        
+        let duplicatePokemon = NameAndURL(name: "swampert", url: "test")
+        
+        let testPokedex = NationalPokedex(count: 1, results: [duplicatePokemon])
+        
+        let testPokemonArray = sut.updatePokedex(testPokedex)
+        
+        XCTAssertEqual(testPokemonArray.count, 0)
     }
     
     func testGetFromCoreData() {
@@ -247,9 +262,5 @@ class DataManagerTests: XCTestCase {
         
         XCTAssertNotEqual(updatedAbility.abilityDescription, "")
         XCTAssertNotEqual(updatedAbility.id, 0)
-    }
-    
-    func testAddPokemonVariety() {
-        
     }
 }

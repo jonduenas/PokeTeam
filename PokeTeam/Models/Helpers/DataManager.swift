@@ -65,7 +65,7 @@ extension DataManager {
         return team
     }
     
-    @discardableResult public func updatePokedex(pokedex: NationalPokedex) -> [PokemonMO] {
+    @discardableResult public func updatePokedex(_ pokedex: NationalPokedex) -> [PokemonMO] {
         var newPokemonArray = [PokemonMO]()
         
         managedObjectContext.performAndWait {

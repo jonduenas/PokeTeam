@@ -121,7 +121,7 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
                     let difference = pokedex.count - managedObjects.count
                     print("Found \(difference) more Pokemon on the API - Should update.")
                     
-                    self?.backgroundDataManager.updatePokedex(pokedex: pokedex)
+                    self?.backgroundDataManager.updatePokedex(pokedex)
                     self?.loadSavedData()
                 } else {
                     print("Stored Pokemon count matches API - Should skip update")
