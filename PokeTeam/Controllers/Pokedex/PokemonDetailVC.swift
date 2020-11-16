@@ -444,12 +444,12 @@ class PokemonDetailVC: UIViewController {
             if let existingTeam = team {
                 existingTeam.addToMembers(self.pokemon)
                 print("Adding \(self.pokemon.name!) to existing team.")
-                self.coreDataStack.saveContext()
+                self.coreDataStack.saveContext(self.backgroundDataManager.managedObjectContext)
             } else {
                 let newTeam = self.backgroundDataManager.addTeam()
                 newTeam.addToMembers(self.pokemon)
                 print("Adding \(self.pokemon.name!) to new team.")
-                self.coreDataStack.saveContext()
+                self.coreDataStack.saveContext(self.backgroundDataManager.managedObjectContext)
             }
         }))
         present(alertController, animated: true)
