@@ -19,9 +19,9 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
     var searchController: UISearchController!
     var colorBlockView: ColorBlockView!
     var indicatorView: UIActivityIndicatorView!
-    var apiService: APIService!
-    var coreDataStack: CoreDataStack!
-    var backgroundDataManager: DataManager!
+    private lazy var apiService = APIService()
+    private lazy var coreDataStack = CoreDataStack()
+    private lazy var backgroundDataManager = DataManager(managedObjectContext: coreDataStack.newDerivedContext(), coreDataStack: coreDataStack)
     
     var fetchedResultsController: NSFetchedResultsController<PokemonMO>!
     //var pokemonArray = [PokemonMO]()
@@ -40,14 +40,7 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
         
         initializeNavigationBar()
         tableView.backgroundColor = .clear
-        
-        apiService = APIService()
-        
-        coreDataStack = CoreDataStack()
-        let backgroundContext = coreDataStack.newDerivedContext()
-        
-        backgroundDataManager = DataManager(managedObjectContext: backgroundContext, coreDataStack: coreDataStack)
-        
+
         let teamBuilderNav = tabBarController?.viewControllers?[1] as! CustomNavVC
         let teamBuilderTab = teamBuilderNav.viewControllers[0] as! TeamBuilderViewController
         teamBuilderTab.coreDataStack = coreDataStack

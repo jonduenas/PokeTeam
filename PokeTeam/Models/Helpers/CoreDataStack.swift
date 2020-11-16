@@ -12,6 +12,11 @@ import CoreData
 open class CoreDataStack {
     public static let modelName = "PokeTeam"
     
+    public static let managedObjectModel: NSManagedObjectModel = {
+        let bundle = Bundle(for: CoreDataStack.self)
+        return NSManagedObjectModel.mergedModel(from: [bundle])!
+    }()
+    
     public init() {}
     
     public lazy var mainContext: NSManagedObjectContext = {
@@ -19,7 +24,7 @@ open class CoreDataStack {
     }()
     
     public lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: CoreDataStack.modelName)
+        let container = NSPersistentContainer(name: CoreDataStack.modelName, managedObjectModel: CoreDataStack.managedObjectModel)
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
             container.viewContext.automaticallyMergesChangesFromParent = true
@@ -48,30 +53,26 @@ open class CoreDataStack {
         }
         
         context.performAndWait {
-            if context.hasChanges {
-                do {
-                    try context.save()
-                    print("Core Data main context saved.")
-                } catch {
-                    let nserror = error as NSError
-                    fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-                }
+            do {
+                try context.save()
+                print("Core Data main context saved.")
+            } catch {
+                let nserror = error as NSError
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
     }
     
     public func saveDerivedContext(_ context: NSManagedObjectContext) {
         context.performAndWait {
-            if context.hasChanges {
-                do {
-                    try context.save()
-                    print("Core Data derived context saved.")
-                } catch {
-                    let nserror = error as NSError
-                    fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-                }
-                self.saveContext(self.mainContext)
+            do {
+                try context.save()
+                print("Core Data derived context saved.")
+            } catch {
+                let nserror = error as NSError
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
+            self.saveContext(self.mainContext)
         }
     }
 }

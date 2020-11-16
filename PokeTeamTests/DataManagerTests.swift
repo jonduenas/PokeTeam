@@ -36,6 +36,45 @@ class DataManagerTests: XCTestCase {
         XCTAssertTrue(pokemon.id == 4)
     }
     
+    func testCoreDataSave() {
+        expectation(forNotification: .NSManagedObjectContextDidSave, object: coreDataStack.mainContext) { _ in
+            return true
+        }
+        
+        sut.managedObjectContext.perform {
+            let pokemon = self.sut.addPokemon(name: "bulbasaur", speciesURL: "testurl", id: 1)
+            
+            XCTAssertNotNil(pokemon)
+            
+            self.coreDataStack.saveContext(self.sut.managedObjectContext)
+        }
+        
+        waitForExpectations(timeout: 2.0) { error in
+            XCTAssertNil(error, "Save did not occur")
+        }
+    }
+    
+    func testRootContextIsSaved() {
+        let derivedContext = coreDataStack.newDerivedContext()
+        let derivedSut = DataManager(managedObjectContext: derivedContext, coreDataStack: coreDataStack)
+        
+        expectation(forNotification: .NSManagedObjectContextDidSave, object: coreDataStack.mainContext) { _ in
+            return true
+        }
+        
+        derivedSut.managedObjectContext.perform {
+            let pokemon = derivedSut.addPokemon(name: "squirtle", speciesURL: "http://testurl.com", id: 7)
+            
+            XCTAssertNotNil(pokemon)
+            
+            self.coreDataStack.saveContext(derivedContext)
+        }
+        
+        waitForExpectations(timeout: 2.0) { error in
+            XCTAssertNil(error, "Save did not occur")
+        }
+    }
+    
     func testAddAbility_AddAbilityDetails() {
         let abilityDetails = sut.addAbilityDetails(abilityName: "imposter", url: "http://testurl.com")
         
@@ -75,10 +114,10 @@ class DataManagerTests: XCTestCase {
     }
     
     func testGetFromCoreData() {
-        sut.addPokemon(name: "pikachu", speciesURL: "testurl", id: 1)
-        sut.addPokemon(name: "bulbasaur", speciesURL: "testurl", id: 2)
-        sut.addPokemon(name: "squirtle", speciesURL: "testurl", id: 3)
-        sut.addPokemon(name: "charmander", speciesURL: "testurl", id: 4)
+        sut.addPokemon(name: "pikachu", speciesURL: "testurl", id: 10)
+        sut.addPokemon(name: "bulbasaur", speciesURL: "testurl", id: 20)
+        sut.addPokemon(name: "squirtle", speciesURL: "testurl", id: 30)
+        sut.addPokemon(name: "charmander", speciesURL: "testurl", id: 40)
         
         let allPokemon = sut.getFromCoreData(entity: PokemonMO.self, sortBy: "id", isAscending: true) as? [PokemonMO]
         
