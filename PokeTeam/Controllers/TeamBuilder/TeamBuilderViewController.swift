@@ -25,51 +25,12 @@ class TeamBuilderViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.delegate = self
-        setupCustomNavController()
-        
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.backgroundColor = .clear
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        loadSavedTeam()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
-    
-    func setupCustomNavController() {
-        let customNavVC = navigationController as! CustomNavVC
-        navigationItem.title = "TEAM BUILDER"
-        
-        customNavVC.setupColorBlock(bottomColor: #colorLiteral(red: 0.768627451, green: 0.1568627451, blue: 0.2078431373, alpha: 1), topColor: #colorLiteral(red: 0.8509803922, green: 0.2196078431, blue: 0.2666666667, alpha: 1), fillScreen: true)
-    }
 
-    private func loadSavedTeam() {
-        print("attempting load of team")
-        
-        let request: NSFetchRequest<TeamMO> = TeamMO.fetchRequest()
-        
-        do {
-            teamsArray = try coreDataStack.mainContext.fetch(request)
-            if teamsArray.count > 0 {
-                print("Found \(teamsArray.count) stored teams")
-                let firstTeam = teamsArray[0]
-                let teamSet = firstTeam.members
-                team = teamSet?.array as! [PokemonMO]
-            }
-        } catch {
-            print("Team fetch failed: \(error)")
-        }
-        DispatchQueue.main.async {
-            self.collectionView.reloadData()
-        }
-    }
+    
     
     // MARK: - Navigation
 

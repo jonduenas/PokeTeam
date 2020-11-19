@@ -42,7 +42,7 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
         tableView.backgroundColor = .clear
 
         let teamBuilderNav = tabBarController?.viewControllers?[1] as! CustomNavVC
-        let teamBuilderTab = teamBuilderNav.viewControllers[0] as! TeamBuilderViewController
+        let teamBuilderTab = teamBuilderNav.viewControllers[0] as! TeamSelectorVC
         teamBuilderTab.coreDataStack = coreDataStack
         teamBuilderTab.dataManager = backgroundDataManager
         
