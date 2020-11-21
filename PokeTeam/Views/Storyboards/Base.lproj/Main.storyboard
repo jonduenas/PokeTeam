@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="AQF-xv-9bS">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="AQF-xv-9bS">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -21,6 +21,7 @@
                     <connections>
                         <segue destination="Psu-3T-FJ1" kind="relationship" relationship="viewControllers" id="EQu-kx-Rlh"/>
                         <segue destination="S9k-rt-MIu" kind="relationship" relationship="viewControllers" id="8YN-we-27Z"/>
+                        <segue destination="L7M-Wm-ZXb" kind="relationship" relationship="viewControllers" id="yDG-OQ-qmh"/>
                         <segue destination="lEz-lC-Xtl" kind="relationship" relationship="viewControllers" id="bds-y7-mft"/>
                     </connections>
                 </tabBarController>
@@ -36,7 +37,7 @@
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2Og-4l-jGt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1943" y="313"/>
+            <point key="canvasLocation" x="1942" y="162"/>
         </scene>
         <!--TeamBuilder-->
         <scene sceneID="vl0-hd-gdh">
@@ -46,7 +47,7 @@
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xcn-Sh-n7V" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1961" y="511"/>
+            <point key="canvasLocation" x="1942" y="314"/>
         </scene>
         <!--Settings-->
         <scene sceneID="Bpl-oO-JkR">
@@ -57,6 +58,16 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6ce-qA-tua" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1943" y="714"/>
+        </scene>
+        <!--TypeChecker-->
+        <scene sceneID="zZm-DN-0Mx">
+            <objects>
+                <viewControllerPlaceholder storyboardName="TypeChecker" id="L7M-Wm-ZXb" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="Sbz-w1-m75"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="142-A3-x5Z" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1922" y="559"/>
         </scene>
     </scenes>
     <color key="tintColor" name="poke-blue"/>

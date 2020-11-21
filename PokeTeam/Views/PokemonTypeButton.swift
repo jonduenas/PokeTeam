@@ -1,16 +1,15 @@
 //
-//  TypeLabel.swift
+//  PokemonTypeButton.swift
 //  PokeTeam
 //
-//  Created by Jon Duenas on 8/8/20.
+//  Created by Jon Duenas on 11/20/20.
 //  Copyright © 2020 Jon Duenas. All rights reserved.
 //
 
 import UIKit
 
-//@IBDesignable
-class PokemonTypeLabel: UILabel {
-    
+class PokemonTypeButton: UIButton {
+
     // TODO: - Replace with Enum
     let colorDictionary: [PokemonType: UIColor] = [
         .normal : #colorLiteral(red: 0.6604253054, green: 0.6575222611, blue: 0.4722985029, alpha: 1),
@@ -33,37 +32,41 @@ class PokemonTypeLabel: UILabel {
         .fairy: #colorLiteral(red: 0.9356001616, green: 0.5982843041, blue: 0.6742190719, alpha: 1),
         .none: UIColor.black
     ]
+
+    private let cornerRadius: CGFloat = 10
     
-    @IBInspectable var cornerRadius: CGFloat = 5 {
+    var pokemonType: PokemonType = .none {
         didSet {
-            refreshCorners(value: cornerRadius)
+            setBackgroundAndTitle()
         }
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        createLabel()
+        
+        commonInit()
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        createLabel()
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        
+        commonInit()
     }
     
-    override func prepareForInterfaceBuilder() {
-        createLabel()
+    private func commonInit() {
+        setBackgroundAndTitle()
+        layer.cornerRadius = cornerRadius
+//        clipsToBounds = false
+//
+//        // Shadow
+//        layer.shadowColor = UIColor.black.cgColor
+//        layer.shadowOpacity = 0.4
+//        layer.shadowOffset = CGSize(width: 0, height: 2.5)
+//        layer.shadowRadius = 2
     }
     
-    private func createLabel() {
-        refreshCorners(value: cornerRadius)
-    }
-    
-    private func refreshCorners(value: CGFloat) {
-        layer.cornerRadius = value
-    }
-    
-    func setType(for type: String) {
-        self.text = type.capitalized
-        self.backgroundColor = colorDictionary[PokemonType(rawValue: type) ?? .none]
+    private func setBackgroundAndTitle() {
+        backgroundColor = colorDictionary[pokemonType]
+        setTitle(pokemonType.rawValue.capitalized, for: .normal)
     }
 }
