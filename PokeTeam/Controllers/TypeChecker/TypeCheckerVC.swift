@@ -40,6 +40,8 @@ class TypeCheckerVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationController?.navigationBar.setNavigationBarColor(to: UIColor.clear, backgroundEffect: UIBlurEffect(style: .systemUltraThinMaterial))
+        
         collectionView.delegate = self
         collectionView.dataSource = self
         
