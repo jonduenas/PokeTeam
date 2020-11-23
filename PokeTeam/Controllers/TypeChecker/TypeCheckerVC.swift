@@ -7,10 +7,14 @@
 //
 
 import UIKit
+import Combine
 
 class TypeCheckerVC: UIViewController {
 
     let reuseIdentifier = "TypeChartCell"
+    private lazy var apiService = APIService()
+    var coreDataStack: CoreDataStack!
+    var dataManager: DataManager!
     
     var type1: PokemonType = .none {
         didSet {
@@ -23,6 +27,8 @@ class TypeCheckerVC: UIViewController {
             // TODO: - Calculate weaknesses and strengths and update type arrays
         }
     }
+    
+    var subscriptions: Set<AnyCancellable> = []
     
     var typeSuperWeak = [PokemonType]()
     var typeWeak = [PokemonType]()
@@ -48,12 +54,41 @@ class TypeCheckerVC: UIViewController {
         initializeButtons()
         
         typeSections = [typeSuperWeak, typeWeak, typeNeutral, typeResistant, typeSuperResistant, typeImmune]
+        
+        if shouldFetchTypeDetails() {
+            fetchTypeDetails()
+        }
     }
     
     private func initializeButtons() {
         type1Button.pokemonType = PokemonType.grass
         type2Button.pokemonType = PokemonType.steel
     }
+    
+    private func shouldFetchTypeDetails() -> Bool {
+        return true
+    }
+    
+    private func fetchTypeDetails() {
+        let typeManager = TypeManager()
+            
+        typeManager.fetchAllTypeData()
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    print("Finished fetching all TypeData from API")
+                case .failure(let error):
+                    print("Error fetching all TypeData from API: \(error) - \(error.localizedDescription)")
+                }
+            } receiveValue: { allTypeData in
+                self.dataManager.parseTypeDataIntoCoreData(typeDataArray: allTypeData)
+                let allTypeObjects = self.dataManager.getFromCoreData(entity: TypeMO.self) as? [TypeMO]
+                print(allTypeObjects?[5].name)
+                print(allTypeObjects?[5].doubleDamageFrom)
+            }
+            .store(in: &subscriptions)
+    }
+
     
     @IBAction func type1ButtonTapped(_ sender: Any) {
         print("Type 1 Tapped")
@@ -85,7 +120,7 @@ extension TypeCheckerVC: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return typeSuperWeak.count
+            return 40 // typeSuperWeak.count
         case 1:
             return typeWeak.count
         case 2:

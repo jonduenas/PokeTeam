@@ -103,7 +103,7 @@ class DataManagerTests: XCTestCase {
         let pokemon3 = NameAndURL(name: "Squirtle", url: "https://pokeapi.co/api/v2/pokemon-species/3/")
         let pokemon4 = NameAndURL(name: "Charmander", url: "https://pokeapi.co/api/v2/pokemon-species/4/")
         
-        let testPokedex = NationalPokedex(count: 4, results: [pokemon1, pokemon2, pokemon3, pokemon4])
+        let testPokedex = ResourceList(count: 4, results: [pokemon1, pokemon2, pokemon3, pokemon4])
         
         // when
         let testPokemonArray = sut.updatePokedex(pokedex: testPokedex)

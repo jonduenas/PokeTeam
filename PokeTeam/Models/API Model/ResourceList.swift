@@ -1,5 +1,5 @@
 //
-//  NationalPokedex.swift
+//  ResourceList.swift
 //  PokeTeam
 //
 //  Created by Jon Duenas on 8/27/20.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct NationalPokedex: Codable {
+public struct ResourceList: Codable {
     let count: Int
     let results: [NameAndURL]
 }

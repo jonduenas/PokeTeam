@@ -65,7 +65,7 @@ extension DataManager {
         return team
     }
     
-    @discardableResult public func updatePokedex(pokedex: NationalPokedex) -> [PokemonMO] {
+    @discardableResult public func updatePokedex(pokedex: ResourceList) -> [PokemonMO] {
         var newPokemonArray = [PokemonMO]()
         
         managedObjectContext.performAndWait {
@@ -299,6 +299,88 @@ extension DataManager {
         }
         coreDataStack.saveContext(managedObjectContext)
         return ability
+    }
+    
+    // MARK: - Pokemon Types Methods
+    
+    @discardableResult public func addPokemonType(name: String, id: Int) -> TypeMO {
+        let typeDetails = TypeMO(context: managedObjectContext)
+        
+        typeDetails.name = name
+        typeDetails.id = Int64(id)
+        
+        return typeDetails
+    }
+    
+    func parseTypeDataIntoCoreData(typeDataArray: [TypeData]) {
+        var typeArray = [(TypeData, TypeMO)]()
+        var typeObjectArray = [TypeMO]()
+        
+        // Loop once to create type objects
+        for type in typeDataArray {
+            if type.name == "shadow" || type.name == "unknown" {
+                continue
+            }
+            
+            let typeObject = addPokemonType(name: type.name, id: type.id)
+            let typeDataMatch = (type, typeObject)
+            typeArray.append(typeDataMatch)
+            typeObjectArray.append(typeObject)
+        }
+        
+        // Loop second time to create relations
+        for typeDataMatch in typeArray {
+            let typeData = typeDataMatch.0
+            let typeObject = typeDataMatch.1
+            
+            for doubleDamageFromType in typeData.damageRelations.doubleDamageFrom {
+                for type in typeObjectArray {
+                    if type.name == doubleDamageFromType.name {
+                        typeObject.addToDoubleDamageFrom(type)
+                    }
+                }
+            }
+            
+            for doubleDamageToType in typeData.damageRelations.doubleDamageTo {
+                for type in typeObjectArray {
+                    if type.name == doubleDamageToType.name {
+                        typeObject.addToDoubleDamageTo(type)
+                    }
+                }
+            }
+            
+            for halfDamageFromType in typeData.damageRelations.halfDamageFrom {
+                for type in typeObjectArray {
+                    if type.name == halfDamageFromType.name {
+                        typeObject.addToHalfDamageFrom(type)
+                    }
+                }
+            }
+            
+            for halfDamageToType in typeData.damageRelations.halfDamageTo {
+                for type in typeObjectArray {
+                    if type.name == halfDamageToType.name {
+                        typeObject.addToHalfDamageTo(type)
+                    }
+                }
+            }
+            
+            for noDamageFromType in typeData.damageRelations.noDamageFrom {
+                for type in typeObjectArray {
+                    if type.name == noDamageFromType.name {
+                        typeObject.addToNoDamageFrom(type)
+                    }
+                }
+            }
+            
+            for noDamageToType in typeData.damageRelations.noDamageTo {
+                for type in typeObjectArray {
+                    if type.name == noDamageToType.name {
+                        typeObject.addToNoDamageTo(type)
+                    }
+                }
+            }
+        }
     }
     
     // MARK: Private parsing methods

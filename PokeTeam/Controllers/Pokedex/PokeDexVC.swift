@@ -46,6 +46,11 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
         teamBuilderTab.coreDataStack = coreDataStack
         teamBuilderTab.dataManager = backgroundDataManager
         
+        let typeCheckerNav = (tabBarController?.viewControllers?[2]) as! CustomNavVC
+        let typeCheckerTab = typeCheckerNav.viewControllers[0] as! TypeCheckerVC
+        typeCheckerTab.coreDataStack = coreDataStack
+        typeCheckerTab.dataManager = backgroundDataManager
+        
         initializeIndicatorView()
         initializeSearchBar()
         
@@ -105,7 +110,7 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
         }
         
         // Downloads list of all Pokemon names and URLs
-        apiService.fetch(type: NationalPokedex.self, from: url)
+        apiService.fetch(type: ResourceList.self, from: url)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
@@ -132,7 +137,7 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
         .store(in: &subscriptions)
     }
     
-    private func shouldUpdateWithAPI(pokedex: NationalPokedex, managedObjects: [NSManagedObject]) -> Bool {
+    private func shouldUpdateWithAPI(pokedex: ResourceList, managedObjects: [NSManagedObject]) -> Bool {
         // If the count from the API is different from the count in Core Data OR if the Core Data count is 0 - return true
         return pokedex.count != managedObjects.count || managedObjects.isEmpty
     }

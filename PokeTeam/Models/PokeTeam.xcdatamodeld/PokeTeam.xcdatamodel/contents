@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="19H2" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17511" systemVersion="20B29" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Ability" representedClassName="AbilityMO" syncable="YES" codeGenerationType="class">
         <attribute name="isHidden" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
@@ -107,11 +107,16 @@
         </uniquenessConstraints>
     </entity>
     <entity name="Type" representedClassName="TypeMO" syncable="YES" codeGenerationType="class">
+        <attribute name="color" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String" defaultValueString=""/>
         <attribute name="stringURL" optional="YES" attributeType="String"/>
-        <relationship name="noEffect" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Type" inverseName="noEffect" inverseEntity="Type"/>
-        <relationship name="notVeryEffective" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Type" inverseName="notVeryEffective" inverseEntity="Type"/>
-        <relationship name="superEffective" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Type" inverseName="superEffective" inverseEntity="Type"/>
+        <relationship name="doubleDamageFrom" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Type" inverseName="doubleDamageTo" inverseEntity="Type"/>
+        <relationship name="doubleDamageTo" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Type" inverseName="doubleDamageFrom" inverseEntity="Type"/>
+        <relationship name="halfDamageFrom" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Type" inverseName="halfDamageTo" inverseEntity="Type"/>
+        <relationship name="halfDamageTo" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Type" inverseName="halfDamageFrom" inverseEntity="Type"/>
+        <relationship name="noDamageFrom" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Type" inverseName="noDamageTo" inverseEntity="Type"/>
+        <relationship name="noDamageTo" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Type" inverseName="noDamageFrom" inverseEntity="Type"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="stringURL"/>
@@ -126,6 +131,6 @@
         <element name="Pokedex" positionX="-165.30078125" positionY="-616.83984375" width="128" height="88"/>
         <element name="Pokemon" positionX="25.265625" positionY="-793.3671875" width="128" height="478"/>
         <element name="Team" positionX="-176.80859375" positionY="-266.953125" width="128" height="73"/>
-        <element name="Type" positionX="419.37109375" positionY="-512.08984375" width="128" height="118"/>
+        <element name="Type" positionX="419.37109375" positionY="-512.08984375" width="128" height="179"/>
     </elements>
 </model>

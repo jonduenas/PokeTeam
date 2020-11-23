@@ -14,6 +14,8 @@
 		651E246A24F1DD5F000052ED /* Pokedex.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 651E246824F1DD5F000052ED /* Pokedex.storyboard */; };
 		651E246C24F1DDD8000052ED /* TeamBuilder.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 651E246B24F1DDD8000052ED /* TeamBuilder.storyboard */; };
 		651E246F24F1DE10000052ED /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 651E246D24F1DE10000052ED /* Settings.storyboard */; };
+		6520E3D6256996A300C3AA2C /* TypeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6520E3D5256996A300C3AA2C /* TypeManager.swift */; };
+		6520E3DB2569979300C3AA2C /* TypeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6520E3DA2569979300C3AA2C /* TypeData.swift */; };
 		65221D13253508BD00C83E41 /* mewtwo.json in Resources */ = {isa = PBXBuildFile; fileRef = 65221D12253508BC00C83E41 /* mewtwo.json */; };
 		65221D1B25350DB600C83E41 /* unown.json in Resources */ = {isa = PBXBuildFile; fileRef = 65221D1A25350DB500C83E41 /* unown.json */; };
 		6525EE26250AAA91008C2967 /* PokemonBuilderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6525EE25250AAA91008C2967 /* PokemonBuilderVC.swift */; };
@@ -874,7 +876,7 @@
 		65DF93452517FD1F00116BB7 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DF93442517FD1F00116BB7 /* CoreDataStack.swift */; };
 		65DF93542518039A00116BB7 /* TestCoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DF93532518039A00116BB7 /* TestCoreDataStack.swift */; };
 		65DF936225180EA600116BB7 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DF936125180EA600116BB7 /* APIService.swift */; };
-		65E36FC624F84AD1003F00C3 /* NationalPokedex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E36FC524F84AD1003F00C3 /* NationalPokedex.swift */; };
+		65E36FC624F84AD1003F00C3 /* ResourceList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E36FC524F84AD1003F00C3 /* ResourceList.swift */; };
 		65E57469250D7EAD0099B9A7 /* SimpleOver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E57468250D7EAD0099B9A7 /* SimpleOver.swift */; };
 		65FC770025094B45001EAF59 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FC76FF25094B45001EAF59 /* DataManager.swift */; };
 /* End PBXBuildFile section */
@@ -904,6 +906,8 @@
 		651E246924F1DD5F000052ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Pokedex.storyboard; sourceTree = "<group>"; };
 		651E246B24F1DDD8000052ED /* TeamBuilder.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = TeamBuilder.storyboard; path = PokeTeam/Views/Storyboards/Base.lproj/TeamBuilder.storyboard; sourceTree = SOURCE_ROOT; };
 		651E246E24F1DE10000052ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Settings.storyboard; sourceTree = "<group>"; };
+		6520E3D5256996A300C3AA2C /* TypeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeManager.swift; sourceTree = "<group>"; };
+		6520E3DA2569979300C3AA2C /* TypeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeData.swift; sourceTree = "<group>"; };
 		65221D12253508BC00C83E41 /* mewtwo.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = mewtwo.json; sourceTree = "<group>"; };
 		65221D1A25350DB500C83E41 /* unown.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = unown.json; sourceTree = "<group>"; };
 		6525EE25250AAA91008C2967 /* PokemonBuilderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonBuilderVC.swift; sourceTree = "<group>"; };
@@ -1770,7 +1774,7 @@
 		65DF93442517FD1F00116BB7 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		65DF93532518039A00116BB7 /* TestCoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCoreDataStack.swift; sourceTree = "<group>"; };
 		65DF936125180EA600116BB7 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
-		65E36FC524F84AD1003F00C3 /* NationalPokedex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NationalPokedex.swift; sourceTree = "<group>"; };
+		65E36FC524F84AD1003F00C3 /* ResourceList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceList.swift; sourceTree = "<group>"; };
 		65E57468250D7EAD0099B9A7 /* SimpleOver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleOver.swift; sourceTree = "<group>"; };
 		65FC76FF25094B45001EAF59 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -2746,13 +2750,14 @@
 		65DF935825180C7B00116BB7 /* API Model */ = {
 			isa = PBXGroup;
 			children = (
-				65E36FC524F84AD1003F00C3 /* NationalPokedex.swift */,
+				65E36FC524F84AD1003F00C3 /* ResourceList.swift */,
 				6599203E24D8F20F0082F51C /* PokemonData.swift */,
 				6541AB1024FD7AB900960D17 /* FormData.swift */,
 				6599203C24D8F1EE0082F51C /* SpeciesData.swift */,
 				6599204624DA29800082F51C /* MoveData.swift */,
 				6599204824DA30530082F51C /* AbilityData.swift */,
 				6541E39224E0B5D80000564D /* GenerationData.swift */,
+				6520E3DA2569979300C3AA2C /* TypeData.swift */,
 			);
 			path = "API Model";
 			sourceTree = "<group>";
@@ -2783,6 +2788,7 @@
 			isa = PBXGroup;
 			children = (
 				65FC76FF25094B45001EAF59 /* DataManager.swift */,
+				6520E3D5256996A300C3AA2C /* TypeManager.swift */,
 				65DF93442517FD1F00116BB7 /* CoreDataStack.swift */,
 				65DF936125180EA600116BB7 /* APIService.swift */,
 				6554E7F024D4E16C00081EA9 /* PokemonEnums.swift */,
@@ -3776,6 +3782,7 @@
 				65E57469250D7EAD0099B9A7 /* SimpleOver.swift in Sources */,
 				6554E7C024D4E09B00081EA9 /* PokeDexVC.swift in Sources */,
 				6599204924DA30530082F51C /* AbilityData.swift in Sources */,
+				6520E3D6256996A300C3AA2C /* TypeManager.swift in Sources */,
 				658757D824EB261000ECD3CE /* StatView.swift in Sources */,
 				6541E39324E0B5D80000564D /* GenerationData.swift in Sources */,
 				650045B6250FFA340074E523 /* TeamBuilderViewController.swift in Sources */,
@@ -3791,6 +3798,7 @@
 				6599204724DA29800082F51C /* MoveData.swift in Sources */,
 				6528C08D24E6245000199DA7 /* ActivityIndicator.swift in Sources */,
 				65A7A17B24E6118F00D5E73B /* AbilityTransitioningDelegate.swift in Sources */,
+				6520E3DB2569979300C3AA2C /* TypeData.swift in Sources */,
 				651D26DD24F5DA12001A4DD1 /* PokeTeam.xcdatamodeld in Sources */,
 				65BD8E0325099EB300083A1D /* UIView+RoundedCorners.swift in Sources */,
 				65D98A792566F40600BDE9B6 /* TypeCheckerVC.swift in Sources */,
@@ -3803,7 +3811,7 @@
 				6580DF16250C579100603CED /* GradientView.swift in Sources */,
 				654AF694250D49A6000D09D3 /* CustomNavVC.swift in Sources */,
 				65FC770025094B45001EAF59 /* DataManager.swift in Sources */,
-				65E36FC624F84AD1003F00C3 /* NationalPokedex.swift in Sources */,
+				65E36FC624F84AD1003F00C3 /* ResourceList.swift in Sources */,
 				650B51CB2540F64400677493 /* FormImageButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3936,7 +3944,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -3991,7 +3999,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

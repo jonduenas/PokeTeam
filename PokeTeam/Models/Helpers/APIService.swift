@@ -24,8 +24,8 @@ final class APIService {
         let baseStringURL = "https://pokeapi.co/api/v2/"
         
         switch dataType {
-        case .allPokemon:
-            return URL (string: baseStringURL + dataType.rawValue)
+        case .allPokemon, .types:
+            return URL(string: baseStringURL + dataType.rawValue)
         default:
             guard let index = index else { return nil }
             return URL(string: baseStringURL + dataType.rawValue + "\(index)")
@@ -41,4 +41,5 @@ enum PokemonDataType: String {
     case move = "move/"
     case allPokemon = "pokemon-species?limit=5000"
     case form = "pokemon-form/"
+    case types = "type/"
 }
