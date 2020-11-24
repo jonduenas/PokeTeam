@@ -23,73 +23,7 @@ public final class DataManager {
 
 extension DataManager {
     
-    @discardableResult public func addPokemon(name: String, varietyName: String? = nil, speciesURL: String, pokemonURL: String? = nil, id: Int) -> PokemonMO {
-        let pokemonMO = PokemonMO(context: managedObjectContext)
-        
-        pokemonMO.speciesURL = speciesURL
-        pokemonMO.id = Int64(id)
-        pokemonMO.name = name
-        
-        if varietyName != nil {
-            pokemonMO.varietyName = varietyName
-        }
-        
-        if let pokemonURL = pokemonURL {
-            pokemonMO.pokemonURL = pokemonURL
-        }
-        
-        return pokemonMO
-    }
-    
-    @discardableResult public func addAbility(abilityName: String, pokemonName: String, isHidden: Bool, slot: Int, abilityDetails: AbilityDetails) -> AbilityMO {
-        let abilityMO = AbilityMO(context: managedObjectContext)
-        abilityMO.name = "\(pokemonName)-\(abilityName)"
-        abilityMO.isHidden = isHidden
-        abilityMO.slot = Int64(slot)
-        abilityMO.abilityDetails = abilityDetails
-        
-        return abilityMO
-    }
-    
-    @discardableResult public func addAbilityDetails(abilityName: String, url: String) -> AbilityDetails {
-        let abilityDetails = AbilityDetails(context: managedObjectContext)
-        abilityDetails.urlString = url
-        abilityDetails.name = abilityName
-        
-        return abilityDetails
-    }
-    
-    @discardableResult public func addTeam() -> TeamMO {
-        let team = TeamMO(context: managedObjectContext)
-        
-        return team
-    }
-    
-    @discardableResult public func updatePokedex(pokedex: ResourceList) -> [PokemonMO] {
-        var newPokemonArray = [PokemonMO]()
-        
-        managedObjectContext.performAndWait {
-            for pokemon in pokedex.results {
-                // Check if Pokemon already exists in Core Data
-                let isFound = checkCDForMatch(with: pokemon)
-                
-                if isFound {
-                    // Pokemon with matching name is found
-                    continue
-                } else {
-                    // No Pokemon with that name is found - create a new one
-                    guard let id = getID(from: pokemon.url) else { continue }
-                    
-                    let newPokemon = addPokemon(name: pokemon.name, speciesURL: pokemon.url, id: id)
-                    newPokemonArray.append(newPokemon)
-                }
-            }
-            print("Finished updating Pokedex")
-            coreDataStack.saveContext(managedObjectContext)
-        }
-        
-        return newPokemonArray
-    }
+    // MARK: - Data Methods
     
     private func checkCDForMatch(with pokemon: NameAndURL) -> Bool {
         var isFound: Bool = false
@@ -151,6 +85,52 @@ extension DataManager {
             print("Error loading from Core Data - \(error) - \(error.localizedDescription)")
         }
         return nil
+    }
+    
+    // MARK: - Pokemon Methods
+    
+    @discardableResult public func addPokemon(name: String, varietyName: String? = nil, speciesURL: String, pokemonURL: String? = nil, id: Int) -> PokemonMO {
+        let pokemonMO = PokemonMO(context: managedObjectContext)
+        
+        pokemonMO.speciesURL = speciesURL
+        pokemonMO.id = Int64(id)
+        pokemonMO.name = name
+        
+        if varietyName != nil {
+            pokemonMO.varietyName = varietyName
+        }
+        
+        if let pokemonURL = pokemonURL {
+            pokemonMO.pokemonURL = pokemonURL
+        }
+        
+        return pokemonMO
+    }
+    
+    @discardableResult public func updatePokedex(pokedex: ResourceList) -> [PokemonMO] {
+        var newPokemonArray = [PokemonMO]()
+        
+        managedObjectContext.performAndWait {
+            for pokemon in pokedex.results {
+                // Check if Pokemon already exists in Core Data
+                let isFound = checkCDForMatch(with: pokemon)
+                
+                if isFound {
+                    // Pokemon with matching name is found
+                    continue
+                } else {
+                    // No Pokemon with that name is found - create a new one
+                    guard let id = getID(from: pokemon.url) else { continue }
+                    
+                    let newPokemon = addPokemon(name: pokemon.name, speciesURL: pokemon.url, id: id)
+                    newPokemonArray.append(newPokemon)
+                }
+            }
+            print("Finished updating Pokedex")
+            coreDataStack.saveContext(managedObjectContext)
+        }
+        
+        return newPokemonArray
     }
     
     @discardableResult func updateDetails(for pokemonManagedObjectID: NSManagedObjectID, with speciesData: SpeciesData) -> PokemonMO {
@@ -274,6 +254,166 @@ extension DataManager {
         return altForm
     }
     
+    private func parseType(with pokemonData: PokemonData) -> [String] {
+        var typeArray = [String]()
+        for type in pokemonData.types {
+            typeArray.insert(type.name, at: type.slot - 1)
+        }
+        return typeArray
+    }
+    
+    private func parseGenus(with speciesData: SpeciesData) -> String {
+        for genus in speciesData.genera {
+            if genus.language == "en" {
+                return genus.genus
+            }
+        }
+        print("Error parsing Pokemon genus")
+        return ""
+    }
+    
+    private func parseFlavorText(with speciesData: SpeciesData) -> [String: [String]] {
+        var englishFlavorTexts = [String: [String]]()
+        
+        for entry in speciesData.flavorTextEntries {
+            if entry.language == "en" {
+                var flavorText = entry.flavorText.replacingOccurrences(of: "-\n", with: "-")
+                flavorText = flavorText.replacingOccurrences(of: "\\s", with: " ", options: .regularExpression)
+                
+                if englishFlavorTexts[entry.version] == nil {
+                    englishFlavorTexts[entry.version] = [flavorText]
+                } else {
+                    englishFlavorTexts[entry.version]?.append(flavorText)
+                }
+            } else {
+                continue
+            }
+        }
+        return englishFlavorTexts
+    }
+    
+    private func parseStats(with pokemonData: PokemonData) -> [String: Float] {
+        var stats = [String: Float]()
+        
+        for stat in pokemonData.stats {
+            stats[stat.statName] = Float(stat.baseStat)
+        }
+        return stats
+    }
+    
+    private func parseMoves(with pokemonData: PokemonData) -> [MoveMO] {
+        var movesArray = [MoveMO]()
+        
+        for move in pokemonData.moves {
+            let moveMO = MoveMO(context: managedObjectContext)
+            moveMO.name = move.name
+            moveMO.levelLearnedAt = Int64(move.levelLearnedAt)
+            moveMO.moveLearnMethod = move.moveLearnMethod
+            moveMO.urlString = move.url
+            
+            movesArray.append(moveMO)
+        }
+        
+        return movesArray
+    }
+    
+    private func parseAltForms(with pokemonData: PokemonData) -> [AltFormMO] {
+        var altFormsArray = [AltFormMO]()
+        
+        managedObjectContext.performAndWait {
+            let forms = pokemonData.forms.dropFirst()
+            
+            for form in forms {
+                let altFormMO = AltFormMO(context: managedObjectContext)
+                altFormMO.name = form.name
+                altFormMO.urlString = form.url
+                altFormsArray.append(altFormMO)
+            }
+        }
+        
+        return altFormsArray
+    }
+    
+    private func parseVarieties(with speciesData: SpeciesData, speciesURL: String) -> [PokemonMO] {
+        var pokemonVarieties = [PokemonMO]()
+        
+        for variety in speciesData.varieties {
+            let (isSpecialVariety, name) = variety.pokemon.name.isSpecialVariety()
+            
+            if isSpecialVariety && name == nil {
+                // If both are true, variety should be skipped entirely
+                continue
+            } else {
+                guard let varietyName = name else { continue }
+                guard let varietyID = getID(from: variety.pokemon.url) else { continue }
+                
+                let pokemonVariety = addPokemon(name: speciesData.name, varietyName: varietyName, speciesURL: speciesURL, pokemonURL: variety.pokemon.url, id: varietyID)
+                
+                pokemonVariety.imageID = varietyName.replacingOccurrences(of: speciesData.name, with: String(speciesData.pokedexNumbers[0].entryNumber))
+                
+                pokemonVariety.isAltVariety = !variety.isDefault
+                
+                pokemonVarieties.append(pokemonVariety)
+            }
+        }
+        return pokemonVarieties
+    }
+    
+    // MARK: - Ability Methods
+    
+    @discardableResult public func addAbility(abilityName: String, pokemonName: String, isHidden: Bool, slot: Int, abilityDetails: AbilityDetails) -> AbilityMO {
+        let abilityMO = AbilityMO(context: managedObjectContext)
+        abilityMO.name = "\(pokemonName)-\(abilityName)"
+        abilityMO.isHidden = isHidden
+        abilityMO.slot = Int64(slot)
+        abilityMO.abilityDetails = abilityDetails
+        
+        return abilityMO
+    }
+    
+    @discardableResult public func addAbilityDetails(abilityName: String, url: String) -> AbilityDetails {
+        let abilityDetails = AbilityDetails(context: managedObjectContext)
+        abilityDetails.urlString = url
+        abilityDetails.name = abilityName
+        
+        return abilityDetails
+    }
+    
+    private func parseAbilities(with pokemonData: PokemonData) -> [AbilityMO] {
+        var abilitiesArray = [AbilityMO]()
+        
+        for ability in pokemonData.abilities {
+            let abilityDetails = addAbilityDetails(abilityName: ability.name, url: ability.url)
+            
+            let abilityMO = addAbility(abilityName: ability.name, pokemonName: pokemonData.name, isHidden: ability.isHidden, slot: ability.slot, abilityDetails: abilityDetails)
+            
+            abilitiesArray.append(abilityMO)
+        }
+        
+        // Fixes issues specific to Zygarde entries
+        if pokemonData.name == "zygarde" {
+            let abilityName = "power-construct"
+            let abilityURL = "https://pokeapi.co/api/v2/ability/211/"
+            
+            let abilityDetails = addAbilityDetails(abilityName: abilityName, url: abilityURL)
+            
+            let abilityMO = addAbility(abilityName: abilityName, pokemonName: pokemonData.name, isHidden: false, slot: 3, abilityDetails: abilityDetails)
+            
+            abilitiesArray.append(abilityMO)
+        } else if pokemonData.name == "zygarde-10" {
+            let abilityName = "aura-break"
+            let abilityURL = "https://pokeapi.co/api/v2/ability/188/"
+            
+            let abilityDetails = addAbilityDetails(abilityName: abilityName, url: abilityURL)
+            
+            let abilityMO = addAbility(abilityName: abilityName, pokemonName: pokemonData.name, isHidden: false, slot: 0, abilityDetails: abilityDetails)
+            
+            abilitiesArray.append(abilityMO)
+        }
+        
+        return abilitiesArray
+    }
+    
     @discardableResult func addAbilityDescription(to abilityDetailObjectID: NSManagedObjectID, with abilityData: AbilityData) -> AbilityDetails {
         let ability = managedObjectContext.object(with: abilityDetailObjectID) as! AbilityDetails
         
@@ -383,145 +523,11 @@ extension DataManager {
         }
     }
     
-    // MARK: Private parsing methods
+    // MARK: - Team Methods
     
-    private func parseType(with pokemonData: PokemonData) -> [String] {
-        var typeArray = [String]()
-        for type in pokemonData.types {
-            typeArray.insert(type.name, at: type.slot - 1)
-        }
-        return typeArray
-    }
-    
-    private func parseGenus(with speciesData: SpeciesData) -> String {
-        for genus in speciesData.genera {
-            if genus.language == "en" {
-                return genus.genus
-            }
-        }
-        print("Error parsing Pokemon genus")
-        return ""
-    }
-    
-    private func parseFlavorText(with speciesData: SpeciesData) -> [String: [String]] {
-        var englishFlavorTexts = [String: [String]]()
+    @discardableResult public func addTeam() -> TeamMO {
+        let team = TeamMO(context: managedObjectContext)
         
-        for entry in speciesData.flavorTextEntries {
-            if entry.language == "en" {
-                var flavorText = entry.flavorText.replacingOccurrences(of: "-\n", with: "-")
-                flavorText = flavorText.replacingOccurrences(of: "\\s", with: " ", options: .regularExpression)
-                
-                if englishFlavorTexts[entry.version] == nil {
-                    englishFlavorTexts[entry.version] = [flavorText]
-                } else {
-                    englishFlavorTexts[entry.version]?.append(flavorText)
-                }
-            } else {
-                continue
-            }
-        }
-        return englishFlavorTexts
-    }
-    
-    private func parseStats(with pokemonData: PokemonData) -> [String: Float] {
-        var stats = [String: Float]()
-        
-        for stat in pokemonData.stats {
-            stats[stat.statName] = Float(stat.baseStat)
-        }
-        return stats
-    }
-    
-    private func parseAbilities(with pokemonData: PokemonData) -> [AbilityMO] {
-        var abilitiesArray = [AbilityMO]()
-        
-        for ability in pokemonData.abilities {
-            let abilityDetails = addAbilityDetails(abilityName: ability.name, url: ability.url)
-            
-            let abilityMO = addAbility(abilityName: ability.name, pokemonName: pokemonData.name, isHidden: ability.isHidden, slot: ability.slot, abilityDetails: abilityDetails)
-            
-            abilitiesArray.append(abilityMO)
-        }
-        
-        // Fixes issues specific to Zygarde entries
-        if pokemonData.name == "zygarde" {
-            let abilityName = "power-construct"
-            let abilityURL = "https://pokeapi.co/api/v2/ability/211/"
-            
-            let abilityDetails = addAbilityDetails(abilityName: abilityName, url: abilityURL)
-            
-            let abilityMO = addAbility(abilityName: abilityName, pokemonName: pokemonData.name, isHidden: false, slot: 3, abilityDetails: abilityDetails)
-            
-            abilitiesArray.append(abilityMO)
-        } else if pokemonData.name == "zygarde-10" {
-            let abilityName = "aura-break"
-            let abilityURL = "https://pokeapi.co/api/v2/ability/188/"
-            
-            let abilityDetails = addAbilityDetails(abilityName: abilityName, url: abilityURL)
-            
-            let abilityMO = addAbility(abilityName: abilityName, pokemonName: pokemonData.name, isHidden: false, slot: 0, abilityDetails: abilityDetails)
-            
-            abilitiesArray.append(abilityMO)
-        }
-        
-        return abilitiesArray
-    }
-    
-    private func parseMoves(with pokemonData: PokemonData) -> [MoveMO] {
-        var movesArray = [MoveMO]()
-        
-        for move in pokemonData.moves {
-            let moveMO = MoveMO(context: managedObjectContext)
-            moveMO.name = move.name
-            moveMO.levelLearnedAt = Int64(move.levelLearnedAt)
-            moveMO.moveLearnMethod = move.moveLearnMethod
-            moveMO.urlString = move.url
-            
-            movesArray.append(moveMO)
-        }
-        
-        return movesArray
-    }
-    
-    private func parseAltForms(with pokemonData: PokemonData) -> [AltFormMO] {
-        var altFormsArray = [AltFormMO]()
-        
-        managedObjectContext.performAndWait {
-            let forms = pokemonData.forms.dropFirst()
-            
-            for form in forms {
-                let altFormMO = AltFormMO(context: managedObjectContext)
-                altFormMO.name = form.name
-                altFormMO.urlString = form.url
-                altFormsArray.append(altFormMO)
-            }
-        }
-        
-        return altFormsArray
-    }
-    
-    private func parseVarieties(with speciesData: SpeciesData, speciesURL: String) -> [PokemonMO] {
-        var pokemonVarieties = [PokemonMO]()
-        
-        for variety in speciesData.varieties {
-            let (isSpecialVariety, name) = variety.pokemon.name.isSpecialVariety()
-            
-            if isSpecialVariety && name == nil {
-                // If both are true, variety should be skipped entirely
-                continue
-            } else {
-                guard let varietyName = name else { continue }
-                guard let varietyID = getID(from: variety.pokemon.url) else { continue }
-                
-                let pokemonVariety = addPokemon(name: speciesData.name, varietyName: varietyName, speciesURL: speciesURL, pokemonURL: variety.pokemon.url, id: varietyID)
-                
-                pokemonVariety.imageID = varietyName.replacingOccurrences(of: speciesData.name, with: String(speciesData.pokedexNumbers[0].entryNumber))
-                
-                pokemonVariety.isAltVariety = !variety.isDefault
-                
-                pokemonVarieties.append(pokemonVariety)
-            }
-        }
-        return pokemonVarieties
+        return team
     }
 }
