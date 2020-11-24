@@ -12,7 +12,6 @@ import Combine
 class TypeCheckerVC: UIViewController {
 
     let reuseIdentifier = "TypeChartCell"
-    private lazy var apiService = APIService()
     var coreDataStack: CoreDataStack!
     var dataManager: DataManager!
     
@@ -29,6 +28,8 @@ class TypeCheckerVC: UIViewController {
     }
     
     var subscriptions: Set<AnyCancellable> = []
+    
+    var allTypes = [TypeMO]()
     
     var typeSuperWeak = [PokemonType]()
     var typeWeak = [PokemonType]()
@@ -55,9 +56,7 @@ class TypeCheckerVC: UIViewController {
         
         typeSections = [typeSuperWeak, typeWeak, typeNeutral, typeResistant, typeSuperResistant, typeImmune]
         
-        if shouldFetchTypeDetails() {
-            fetchTypeDetails()
-        }
+        loadTypeDetails()
     }
     
     private func initializeButtons() {
@@ -65,30 +64,19 @@ class TypeCheckerVC: UIViewController {
         type2Button.pokemonType = PokemonType.steel
     }
     
-    private func shouldFetchTypeDetails() -> Bool {
-        return true
-    }
-    
-    private func fetchTypeDetails() {
-        let typeDataURL = apiService.createURL(for: .types)
-        
-        apiService.fetchAll(type: TypeData.self, from: typeDataURL!)
-            .sink { completion in
-                switch completion {
-                case .finished:
-                    print("Finished fetching all TypeData from API")
-                case .failure(let error):
-                    print("Error fetching all TypeData from API: \(error) - \(error.localizedDescription)")
-                }
-            } receiveValue: { allTypeData in
-                self.dataManager.parseTypeDataIntoCoreData(typeDataArray: allTypeData)
-                if let allTypeObjects = self.dataManager.getFromCoreData(entity: TypeMO.self, sortBy: "name") as? [TypeMO] {
-                    for type in allTypeObjects {
-                        print(type.name)
-                    }
-                }
-            }
-            .store(in: &subscriptions)
+    private func loadTypeDetails() {
+        if let loadedTypes = dataManager.getFromCoreData(entity: TypeMO.self, sortBy: "name", isAscending: true) as? [TypeMO] {
+            allTypes = loadedTypes
+            collectionView.reloadData()
+            
+            let type1_ = allTypes[4]
+            let type2_ = allTypes[6]
+            
+            type1Button.pokemonType = PokemonType(rawValue: type1_.name!)!
+            type2Button.pokemonType = PokemonType(rawValue: type2_.name!)!
+        } else {
+            print("Error loading Type Objects from Core Data")
+        }
     }
 
     

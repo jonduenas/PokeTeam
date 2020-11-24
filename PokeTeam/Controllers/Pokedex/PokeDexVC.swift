@@ -24,7 +24,6 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
     private lazy var backgroundDataManager = DataManager(managedObjectContext: coreDataStack.newDerivedContext(), coreDataStack: coreDataStack)
     
     var fetchedResultsController: NSFetchedResultsController<PokemonMO>!
-    //var pokemonArray = [PokemonMO]()
     var filteredPokemon = [PokemonMO]()
     var subscriptions: Set<AnyCancellable> = []
     var isSearchBarEmpty: Bool {
@@ -41,22 +40,15 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
         initializeNavigationBar()
         tableView.backgroundColor = .clear
 
-        let teamBuilderNav = tabBarController?.viewControllers?[1] as! CustomNavVC
-        let teamBuilderTab = teamBuilderNav.viewControllers[0] as! TeamBuilderViewController
-        teamBuilderTab.coreDataStack = coreDataStack
-        teamBuilderTab.dataManager = backgroundDataManager
-        
-        let typeCheckerNav = (tabBarController?.viewControllers?[2]) as! CustomNavVC
-        let typeCheckerTab = typeCheckerNav.viewControllers[0] as! TypeCheckerVC
-        typeCheckerTab.coreDataStack = coreDataStack
-        typeCheckerTab.dataManager = backgroundDataManager
-        
+        initializeTeamBuilderTab()
+        initializeTypeCheckerTab()
+
         initializeIndicatorView()
         initializeSearchBar()
         
         setState(loading: true)
         
-        loadSavedData()
+        loadSavedPokedexData()
         fetchPokedex()
     }
     
@@ -65,6 +57,8 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
         
         tableView.reloadData()
     }
+    
+    // MARK: - viewDidLoad Initializer methods
     
     private func initializeIndicatorView() {
         indicatorView = view.activityIndicator(style: .large, center: self.view.center)
@@ -78,7 +72,46 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
         navigationController?.navigationBar.setNavigationBarColor(to: UIColor.clear, backgroundEffect: UIBlurEffect(style: .systemUltraThinMaterial))
     }
     
-    private func loadSavedData() {
+    private func initializeTeamBuilderTab() {
+        let teamBuilderNav = tabBarController?.viewControllers?[1] as! CustomNavVC
+        let teamBuilderTab = teamBuilderNav.viewControllers[0] as! TeamBuilderViewController
+        teamBuilderTab.coreDataStack = coreDataStack
+        teamBuilderTab.dataManager = backgroundDataManager
+    }
+    
+    private func initializeTypeCheckerTab() {
+        let typeCheckerNav = (tabBarController?.viewControllers?[2]) as! CustomNavVC
+        let typeCheckerTab = typeCheckerNav.viewControllers[0] as! TypeCheckerVC
+        typeCheckerTab.coreDataStack = coreDataStack
+        typeCheckerTab.dataManager = backgroundDataManager
+        
+        if let typeObjects = backgroundDataManager.getFromCoreData(entity: TypeMO.self) as? [TypeMO] {
+            if typeObjects.isEmpty {
+                fetchTypeDataFromAPI()
+            }
+        } else {
+            fetchTypeDataFromAPI()
+        }
+    }
+    
+    private func fetchTypeDataFromAPI() {
+        let typesURL = apiService.createURL(for: .types)!
+        
+        apiService.fetchAll(type: TypeData.self, from: typesURL)
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    print("Finished fetching all TypeData from API")
+                case .failure(let error):
+                    print("Error fetching all TypeData from API: \(error) - \(error.localizedDescription)")
+                }
+            } receiveValue: { [weak self] allTypeData in
+                self?.backgroundDataManager.parseTypeDataIntoCoreData(typeDataArray: allTypeData)
+            }
+            .store(in: &subscriptions)
+    }
+    
+    private func loadSavedPokedexData() {
         print("Loading from Core Data")
         if fetchedResultsController == nil {
             let request: NSFetchRequest<PokemonMO> = PokemonMO.fetchRequest()
@@ -127,7 +160,7 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
                     print("Found \(difference) more Pokemon on the API - Should update.")
                     
                     self?.backgroundDataManager.updatePokedex(pokedex: pokedex)
-                    self?.loadSavedData()
+                    self?.loadSavedPokedexData()
                 } else {
                     print("Stored Pokemon count matches API - Should skip update")
                 }
