@@ -31,6 +31,21 @@ final class APIService {
             return URL(string: baseStringURL + dataType.rawValue + "\(index)")
         }
     }
+    
+    func fetchAll<T: Decodable>(type: T.Type, from url: URL) -> AnyPublisher<[T], Error> {
+        return fetch(type: ResourceList.self, from: url)
+            .map(\.results)
+            .flatMap { results -> AnyPublisher<[T], Error> in
+                return results.publisher
+                    .flatMap { resource in
+                        self.fetch(type: T.self, from: URL(string: resource.url)!)
+                    }
+                    .collect()
+                    .eraseToAnyPublisher()
+            }
+            .eraseToAnyPublisher()
+    }
+
 }
 
 enum PokemonDataType: String {

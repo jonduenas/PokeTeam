@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreData
+import Combine
 
 public final class DataManager {
     // MARK: - Properties

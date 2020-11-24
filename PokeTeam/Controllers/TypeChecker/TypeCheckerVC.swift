@@ -70,9 +70,9 @@ class TypeCheckerVC: UIViewController {
     }
     
     private func fetchTypeDetails() {
-        let typeManager = TypeManager()
-            
-        typeManager.fetchAllTypeData()
+        let typeDataURL = apiService.createURL(for: .types)
+        
+        apiService.fetchAll(type: TypeData.self, from: typeDataURL!)
             .sink { completion in
                 switch completion {
                 case .finished:
@@ -82,9 +82,11 @@ class TypeCheckerVC: UIViewController {
                 }
             } receiveValue: { allTypeData in
                 self.dataManager.parseTypeDataIntoCoreData(typeDataArray: allTypeData)
-                let allTypeObjects = self.dataManager.getFromCoreData(entity: TypeMO.self) as? [TypeMO]
-                print(allTypeObjects?[5].name)
-                print(allTypeObjects?[5].doubleDamageFrom)
+                if let allTypeObjects = self.dataManager.getFromCoreData(entity: TypeMO.self, sortBy: "name") as? [TypeMO] {
+                    for type in allTypeObjects {
+                        print(type.name)
+                    }
+                }
             }
             .store(in: &subscriptions)
     }
