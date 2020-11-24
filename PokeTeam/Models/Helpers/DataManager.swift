@@ -522,6 +522,7 @@ extension DataManager {
                 }
             }
         }
+        coreDataStack.saveContext(managedObjectContext)
     }
     
     // MARK: - Team Methods
