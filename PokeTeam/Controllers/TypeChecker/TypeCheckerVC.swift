@@ -14,6 +14,7 @@ class TypeCheckerVC: UIViewController {
     let reuseIdentifier = "TypeChartCell"
     var coreDataStack: CoreDataStack!
     var dataManager: DataManager!
+    var typeCalculator: TypeCalculator!
     
     var type1: PokemonType = .none {
         didSet {

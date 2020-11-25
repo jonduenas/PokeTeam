@@ -877,6 +877,8 @@
 		65DF936225180EA600116BB7 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DF936125180EA600116BB7 /* APIService.swift */; };
 		65E36FC624F84AD1003F00C3 /* ResourceList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E36FC524F84AD1003F00C3 /* ResourceList.swift */; };
 		65E57469250D7EAD0099B9A7 /* SimpleOver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E57468250D7EAD0099B9A7 /* SimpleOver.swift */; };
+		65EDE753256EFC7900ED2018 /* TypeCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65EDE752256EFC7900ED2018 /* TypeCalculator.swift */; };
+		65EDE758256F141100ED2018 /* TypeCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65EDE757256F141100ED2018 /* TypeCalculatorTests.swift */; };
 		65FC770025094B45001EAF59 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FC76FF25094B45001EAF59 /* DataManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -1774,6 +1776,8 @@
 		65DF936125180EA600116BB7 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		65E36FC524F84AD1003F00C3 /* ResourceList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceList.swift; sourceTree = "<group>"; };
 		65E57468250D7EAD0099B9A7 /* SimpleOver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleOver.swift; sourceTree = "<group>"; };
+		65EDE752256EFC7900ED2018 /* TypeCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeCalculator.swift; sourceTree = "<group>"; };
+		65EDE757256F141100ED2018 /* TypeCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeCalculatorTests.swift; sourceTree = "<group>"; };
 		65FC76FF25094B45001EAF59 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -2665,6 +2669,7 @@
 			isa = PBXGroup;
 			children = (
 				65CBACED2518272A000444C5 /* DataManagerTests.swift */,
+				65EDE757256F141100ED2018 /* TypeCalculatorTests.swift */,
 				65221D1A25350DB500C83E41 /* unown.json */,
 				6555D209253651C50037CE19 /* battle-armor.json */,
 				65221D12253508BC00C83E41 /* mewtwo.json */,
@@ -2721,6 +2726,7 @@
 		6554E7ED24D4E14600081EA9 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				65EDE752256EFC7900ED2018 /* TypeCalculator.swift */,
 				65DF935825180C7B00116BB7 /* API Model */,
 				651D26DB24F5DA12001A4DD1 /* PokeTeam.xcdatamodeld */,
 				65F4E678253A54BE003EFD5B /* Helpers */,
@@ -3807,6 +3813,7 @@
 				6580DF16250C579100603CED /* GradientView.swift in Sources */,
 				654AF694250D49A6000D09D3 /* CustomNavVC.swift in Sources */,
 				65FC770025094B45001EAF59 /* DataManager.swift in Sources */,
+				65EDE753256EFC7900ED2018 /* TypeCalculator.swift in Sources */,
 				65E36FC624F84AD1003F00C3 /* ResourceList.swift in Sources */,
 				650B51CB2540F64400677493 /* FormImageButton.swift in Sources */,
 			);
@@ -3819,6 +3826,7 @@
 				6554E7D324D4E09E00081EA9 /* PokeTeamTests.swift in Sources */,
 				65CBACEE2518272A000444C5 /* DataManagerTests.swift in Sources */,
 				65DF93542518039A00116BB7 /* TestCoreDataStack.swift in Sources */,
+				65EDE758256F141100ED2018 /* TypeCalculatorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
