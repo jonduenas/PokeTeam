@@ -868,6 +868,8 @@
 		65B7E6E3250E922C00EA512E /* ColorBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B7E6E2250E922C00EA512E /* ColorBlockView.swift */; };
 		65BD8E0325099EB300083A1D /* UIView+RoundedCorners.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65BD8E0225099EB300083A1D /* UIView+RoundedCorners.swift */; };
 		65CBACEE2518272A000444C5 /* DataManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65CBACED2518272A000444C5 /* DataManagerTests.swift */; };
+		65D7886A2571913400763B76 /* TypePickerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D788692571913400763B76 /* TypePickerVC.swift */; };
+		65D78871257199EF00763B76 /* TypePickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D78870257199EF00763B76 /* TypePickerCell.swift */; };
 		65D9217725420941009349DE /* FormCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D9217625420941009349DE /* FormCollectionCell.swift */; };
 		65D98A792566F40600BDE9B6 /* TypeCheckerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D98A782566F40600BDE9B6 /* TypeCheckerVC.swift */; };
 		65DBB9D724D8C920003450A0 /* PokemonDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DBB9D624D8C920003450A0 /* PokemonDetailVC.swift */; };
@@ -1767,6 +1769,8 @@
 		65B7E6E2250E922C00EA512E /* ColorBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorBlockView.swift; sourceTree = "<group>"; };
 		65BD8E0225099EB300083A1D /* UIView+RoundedCorners.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+RoundedCorners.swift"; sourceTree = "<group>"; };
 		65CBACED2518272A000444C5 /* DataManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManagerTests.swift; sourceTree = "<group>"; };
+		65D788692571913400763B76 /* TypePickerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypePickerVC.swift; sourceTree = "<group>"; };
+		65D78870257199EF00763B76 /* TypePickerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypePickerCell.swift; sourceTree = "<group>"; };
 		65D9217625420941009349DE /* FormCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormCollectionCell.swift; sourceTree = "<group>"; };
 		65D98A782566F40600BDE9B6 /* TypeCheckerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeCheckerVC.swift; sourceTree = "<group>"; };
 		65DBB9D624D8C920003450A0 /* PokemonDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetailVC.swift; sourceTree = "<group>"; };
@@ -2703,6 +2707,7 @@
 				650B51CA2540F64400677493 /* FormImageButton.swift */,
 				65685DDA253E2BFB00764424 /* AbilityButton.swift */,
 				6579BEBC256882FC00130E7E /* PokemonTypeButton.swift */,
+				65D78870257199EF00763B76 /* TypePickerCell.swift */,
 				65DE2F2225081BD000BE36DB /* PokemonCollectionCell.swift */,
 				656DD47324DF48C900C9EC16 /* TypeLabel.swift */,
 				6528C08C24E6245000199DA7 /* ActivityIndicator.swift */,
@@ -2747,6 +2752,7 @@
 			isa = PBXGroup;
 			children = (
 				65D98A782566F40600BDE9B6 /* TypeCheckerVC.swift */,
+				65D788692571913400763B76 /* TypePickerVC.swift */,
 			);
 			path = TypeChecker;
 			sourceTree = "<group>";
@@ -3781,6 +3787,7 @@
 				65A7A17724E5FE8000D5E73B /* AbilityPresentation.swift in Sources */,
 				65DF936225180EA600116BB7 /* APIService.swift in Sources */,
 				6528C09124E70CAE00199DA7 /* PokemonTableCell.swift in Sources */,
+				65D78871257199EF00763B76 /* TypePickerCell.swift in Sources */,
 				6599203F24D8F20F0082F51C /* PokemonData.swift in Sources */,
 				65E57469250D7EAD0099B9A7 /* SimpleOver.swift in Sources */,
 				6554E7C024D4E09B00081EA9 /* PokeDexVC.swift in Sources */,
@@ -3792,6 +3799,7 @@
 				65DF93452517FD1F00116BB7 /* CoreDataStack.swift in Sources */,
 				65B7E6E3250E922C00EA512E /* ColorBlockView.swift in Sources */,
 				651E246724F19874000052ED /* validateHTTPStatus+Publisher.swift in Sources */,
+				65D7886A2571913400763B76 /* TypePickerVC.swift in Sources */,
 				6579BEBD256882FC00130E7E /* PokemonTypeButton.swift in Sources */,
 				6554E7BC24D4E09B00081EA9 /* AppDelegate.swift in Sources */,
 				656DD47424DF48C900C9EC16 /* TypeLabel.swift in Sources */,
