@@ -70,8 +70,42 @@ class TypeCheckerVC: UIViewController {
             allTypes = loadedTypes
             collectionView.reloadData()
             
-            let type1_ = allTypes[4]
-            let type2_ = allTypes[6]
+            let type1_ = allTypes[17]
+            let type2_ = allTypes[2]
+            
+            typeCalculator = TypeCalculator(type1: type1_, type2: type2_, allTypes: allTypes)
+            
+            typeCalculator.parseDamageRelations()
+            
+            print("Super Weak To:")
+            for type in typeCalculator.superWeakTo {
+                print(type.name!)
+            }
+            
+            print("Weak To:")
+            for type in typeCalculator.weakTo {
+                print(type.name!)
+            }
+            
+            print("Normal Damage:")
+            for type in typeCalculator.normalDamage {
+                print(type.name!)
+            }
+            
+            print("Resistant To:")
+            for type in typeCalculator.resistantTo {
+                print(type.name!)
+            }
+            
+            print("Super Resistant To:")
+            for type in typeCalculator.superResistantTo {
+                print(type.name!)
+            }
+            
+            print("Immune To:")
+            for type in typeCalculator.immuneTo {
+                print(type.name!)
+            }
             
             type1Button.pokemonType = PokemonType(rawValue: type1_.name!)!
             type2Button.pokemonType = PokemonType(rawValue: type2_.name!)!

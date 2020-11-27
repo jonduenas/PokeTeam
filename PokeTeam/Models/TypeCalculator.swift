@@ -11,7 +11,7 @@ import Foundation
 public final class TypeCalculator {
     let allTypes: [TypeMO]
     
-    var type1: TypeMO {
+    var type1: TypeMO? {
         didSet {
             parseDamageRelations()
         }
@@ -30,68 +30,112 @@ public final class TypeCalculator {
     var superResistantTo = Set<TypeMO>()
     var immuneTo = Set<TypeMO>()
     
-    init(type1: TypeMO, type2: TypeMO?, allTypes: [TypeMO]) {
+    init(type1: TypeMO?, type2: TypeMO?, allTypes: [TypeMO]) {
         self.type1 = type1
         self.type2 = type2
         self.allTypes = allTypes
     }
     
-    func calculateTwoDamageRelations(type1DamageRelation: Set<TypeMO>, type2DamageRelation: Set<TypeMO>) -> [TypeMO: Int] {
+    func parseDamageRelations() {
+        resetAllTypeDamageRelations()
+        
+        if (type1 == nil && type2 != nil) || (type2 == nil && type1 != nil) {
+            if let type1_ = type1 {
+                parseOneType(type: type1_)
+            } else {
+                parseOneType(type: type2!)
+            }
+        } else if type1 != nil && type2 != nil {
+            parseTwoTypes(type1!, type2!)
+        } else {
+            print("Error parsing types. Both are set to nil.")
+        }
+    }
+    
+    private func parseOneType(type: TypeMO) {
+        weakTo = type.doubleDamageFrom as? Set<TypeMO> ?? []
+        resistantTo = type.halfDamageFrom as? Set<TypeMO> ?? []
+        immuneTo = type.noDamageFrom as? Set<TypeMO> ?? []
+        
+        addUnusedTypesToNormalDamage()
+    }
+    
+    private func parseTwoTypes(_ type1: TypeMO, _ type2: TypeMO) {
+        let type1DoubleDamage = type1.doubleDamageFrom as? Set<TypeMO> ?? []
+        let type1HalfDamage = type1.halfDamageFrom as? Set<TypeMO> ?? []
+        let type1NoDamage = type1.noDamageFrom as? Set<TypeMO> ?? []
+        
+        let type2DoubleDamage = type2.doubleDamageFrom as? Set<TypeMO> ?? []
+        let type2HalfDamage = type2.halfDamageFrom as? Set<TypeMO> ?? []
+        let type2NoDamage = type2.noDamageFrom as? Set<TypeMO> ?? []
+        
+        var doubleDamageCount = calculateTwoDamageRelations(type1DamageRelation: type1DoubleDamage, type2DamageRelation: type2DoubleDamage)
+        var halfDamageCount = calculateTwoDamageRelations(type1DamageRelation: type1HalfDamage, type2DamageRelation: type2HalfDamage)
+        immuneTo = type1NoDamage.union(type2NoDamage)
+        
+        for key in doubleDamageCount.keys {
+            if halfDamageCount.keys.contains(key) {
+                // If a Pokemon has 2 types and one type is weak to something while the other type resists, it makes damage normal.
+                // Remove type from both doubleDamageCount and halfDamageCount so it will fall into normal damage
+                doubleDamageCount.removeValue(forKey: key)
+                halfDamageCount.removeValue(forKey: key)
+            }
+        }
+        
+        for double in doubleDamageCount {
+            if immuneTo.contains(double.key) {
+                continue
+            }
+            
+            if double.value > 1 {
+                superWeakTo.insert(double.key)
+            } else {
+                weakTo.insert(double.key)
+            }
+        }
+        
+        for half in halfDamageCount {
+            if immuneTo.contains(half.key) {
+                continue
+            }
+            
+            if half.value > 1 {
+                superResistantTo.insert(half.key)
+            } else {
+                resistantTo.insert(half.key)
+            }
+        }
+        
+        addUnusedTypesToNormalDamage()
+    }
+    
+    private func calculateTwoDamageRelations(type1DamageRelation: Set<TypeMO>, type2DamageRelation: Set<TypeMO>) -> [TypeMO: Int] {
         var damageRelationCount = [TypeMO: Int]()
         
-        let typeSequence = zip(type1DamageRelation, type2DamageRelation)
+        for type in type1DamageRelation {
+            damageRelationCount[type, default: 0] += 1
+        }
         
-        for (typeA, typeB) in typeSequence {
-            damageRelationCount[typeA, default: 0] += 1
-            damageRelationCount[typeB, default: 0] += 1
+        for type in type2DamageRelation {
+            damageRelationCount[type, default: 0] += 1
         }
         
         return damageRelationCount
     }
     
-    func parseDamageRelations() {
-        if type2 == nil {
-            weakTo = type1.doubleDamageFrom as? Set<TypeMO> ?? []
-            resistantTo = type1.halfDamageFrom as? Set<TypeMO> ?? []
-            immuneTo = type1.noDamageFrom as? Set<TypeMO> ?? []
-            
-            let usedTypes = weakTo.union(resistantTo).union(immuneTo)
-            
-            normalDamage = Set(allTypes.filter { !usedTypes.contains($0) })
-        } else {
-            let type1DoubleDamage = type1.doubleDamageFrom as? Set<TypeMO> ?? []
-            let type1HalfDamage = type1.halfDamageFrom as? Set<TypeMO> ?? []
-            let type1NoDamage = type1.noDamageFrom as? Set<TypeMO> ?? []
-            
-            let type2DoubleDamage = type2!.doubleDamageFrom as? Set<TypeMO> ?? []
-            let type2HalfDamage = type2!.halfDamageFrom as? Set<TypeMO> ?? []
-            let type2NoDamage = type2!.noDamageFrom as? Set<TypeMO> ?? []
-            
-            let doubleDamageCount = calculateTwoDamageRelations(type1DamageRelation: type1DoubleDamage, type2DamageRelation: type2DoubleDamage)
-            let halfDamageCount = calculateTwoDamageRelations(type1DamageRelation: type1HalfDamage, type2DamageRelation: type2HalfDamage)
-            let noDamage = type1NoDamage.union(type2NoDamage)
-            
-            let damageSequence = zip(doubleDamageCount, halfDamageCount)
-            
-            for (double, half) in damageSequence {
-                if double.value > 1 {
-                    // If the count exceeds 1, then it is super weak
-                    superWeakTo.insert(double.key)
-                } else if noDamage.contains(double.key) {
-                    // If any type does no damage, regardless of it doing double to the other type, then it is immune
-                    immuneTo.insert(double.key)
-                } else {
-                    weakTo.insert(double.key)
-                }
-                
-                if half.value > 1 {
-                    superResistantTo.insert(half.key)
-                } else if noDamage.contains(half.key) {
-                    immuneTo.insert(half.key)
-                } else {
-                    resistantTo.insert(half.key)
-                }
-            }
-        }
+    private func addUnusedTypesToNormalDamage() {
+        let usedTypes = weakTo.union(resistantTo).union(immuneTo).union(superResistantTo).union(superWeakTo)
+        
+        normalDamage = Set(allTypes.filter { !usedTypes.contains($0) })
+    }
+    
+    private func resetAllTypeDamageRelations() {
+        superWeakTo.removeAll()
+        weakTo.removeAll()
+        normalDamage.removeAll()
+        resistantTo.removeAll()
+        superResistantTo.removeAll()
+        normalDamage.removeAll()
+        immuneTo.removeAll()
     }
 }
