@@ -17,6 +17,7 @@ class TypePickerCell: UICollectionViewCell {
         super.awakeFromNib()
         
         layer.cornerRadius = cornerRadius
+        typeLabel.addShadow(radius: 0.5)
     }
     
     func setTypeInfo(to type: String) {
