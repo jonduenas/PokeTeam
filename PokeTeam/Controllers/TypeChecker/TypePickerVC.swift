@@ -13,6 +13,7 @@ class TypePickerVC: UIViewController {
     let reuseIdentifier = "TypePickerCell"
     
     var allTypes = [String]()
+    var selectedTypeSlot: Int = 0
     var delegate: TypeCheckerVC?
     
     @IBOutlet weak var collectionView: UICollectionView!
@@ -24,8 +25,6 @@ class TypePickerVC: UIViewController {
         collectionView.dataSource = self
         collectionView.collectionViewLayout = createLayout()
     }
-    
-
     
     // MARK: - Navigation
 
@@ -41,7 +40,7 @@ extension TypePickerVC {
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                              heightDimension: .absolute(44))
+                                              heightDimension: .absolute(40))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 2)
         let spacing = CGFloat(10)
         group.interItemSpacing = .fixed(spacing)
@@ -70,6 +69,15 @@ extension TypePickerVC: UICollectionViewDelegate, UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("Selected \(allTypes[indexPath.row])")
+        let selectedTypeName = allTypes[indexPath.row]
+        print("Selected \(selectedTypeName)")
+        
+        self.dismiss(animated: true) { [weak self] in
+            if self?.selectedTypeSlot == 1 {
+                self?.delegate?.type1 = PokemonType(rawValue: selectedTypeName) ?? .none
+            } else if self?.selectedTypeSlot == 2 {
+                self?.delegate?.type2 = PokemonType(rawValue: selectedTypeName) ?? .none
+            }
+        }
     }
 }

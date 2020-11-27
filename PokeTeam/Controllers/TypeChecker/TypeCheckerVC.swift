@@ -15,16 +15,20 @@ class TypeCheckerVC: UIViewController {
     var coreDataStack: CoreDataStack!
     var dataManager: DataManager!
     var typeCalculator: TypeCalculator!
+    var type1Object: TypeMO?
+    var type2Object: TypeMO?
     
     var type1: PokemonType = .none {
         didSet {
-            // TODO: - Calculate weaknesses and strengths and update type arrays
+            type1Button.pokemonType = type1
+            calculateAndUpdate()
         }
     }
     
     var type2: PokemonType = .none {
         didSet {
-            // TODO: - Calculate weaknesses and strengths and update type arrays
+            type2Button.pokemonType = type2
+            calculateAndUpdate()
         }
     }
     
@@ -32,14 +36,14 @@ class TypeCheckerVC: UIViewController {
     
     var allTypes = [TypeMO]()
     
-    var typeSuperWeak = [PokemonType]()
-    var typeWeak = [PokemonType]()
-    var typeNeutral = [PokemonType]()
-    var typeResistant = [PokemonType]()
-    var typeSuperResistant = [PokemonType]()
-    var typeImmune = [PokemonType]()
+    var typeSuperWeak = [TypeMO]()
+    var typeWeak = [TypeMO]()
+    var typeNeutral = [TypeMO]()
+    var typeResistant = [TypeMO]()
+    var typeSuperResistant = [TypeMO]()
+    var typeImmune = [TypeMO]()
     
-    var typeSections = [[PokemonType]]()
+    var typeSections = [[TypeMO]]()
     
     @IBOutlet weak var type1Button: PokemonTypeButton!
     @IBOutlet weak var type2Button: PokemonTypeButton!
@@ -61,56 +65,74 @@ class TypeCheckerVC: UIViewController {
     }
     
     private func initializeButtons() {
-        type1Button.pokemonType = PokemonType.grass
-        type2Button.pokemonType = PokemonType.steel
+        type1Button.pokemonType = PokemonType.none
+        type2Button.pokemonType = PokemonType.none
     }
     
     private func loadTypeDetails() {
         if let loadedTypes = dataManager.getFromCoreData(entity: TypeMO.self, sortBy: "name", isAscending: true) as? [TypeMO] {
             allTypes = loadedTypes
             collectionView.reloadData()
-            
-            let type1_ = allTypes[17]
-            let type2_ = allTypes[2]
-            
-            typeCalculator = TypeCalculator(type1: type1_, type2: type2_, allTypes: allTypes)
-            
-            typeCalculator.parseDamageRelations()
-            
-            print("Super Weak To:")
-            for type in typeCalculator.superWeakTo {
-                print(type.name!)
-            }
-            
-            print("Weak To:")
-            for type in typeCalculator.weakTo {
-                print(type.name!)
-            }
-            
-            print("Normal Damage:")
-            for type in typeCalculator.normalDamage {
-                print(type.name!)
-            }
-            
-            print("Resistant To:")
-            for type in typeCalculator.resistantTo {
-                print(type.name!)
-            }
-            
-            print("Super Resistant To:")
-            for type in typeCalculator.superResistantTo {
-                print(type.name!)
-            }
-            
-            print("Immune To:")
-            for type in typeCalculator.immuneTo {
-                print(type.name!)
-            }
-            
-            type1Button.pokemonType = PokemonType(rawValue: type1_.name!)!
-            type2Button.pokemonType = PokemonType(rawValue: type2_.name!)!
         } else {
             print("Error loading Type Objects from Core Data")
+        }
+    }
+    
+    private func calculateAndUpdate() {
+        if type1 != .none {
+            type1Object = dataManager.getFromCoreData(entity: TypeMO.self, predicate: NSPredicate(format: "name == %@", type1.rawValue))?[0] as? TypeMO
+        }
+        
+        if type2 != .none {
+            type2Object = dataManager.getFromCoreData(entity: TypeMO.self, predicate: NSPredicate(format: "name == %@", type2.rawValue))?[0] as? TypeMO
+        }
+        
+        if typeCalculator == nil {
+            typeCalculator = TypeCalculator(type1: type1Object, type2: type2Object, allTypes: allTypes)
+            typeCalculator.parseDamageRelations()
+        } else {
+            typeCalculator.type1 = type1Object
+            typeCalculator.type2 = type2Object
+            typeCalculator.parseDamageRelations()
+        }
+        
+        typeSuperWeak = Array(typeCalculator.superWeakTo).sorted(by: { $0.name! < $1.name! })
+        typeWeak = Array(typeCalculator.weakTo).sorted(by: { $0.name! < $1.name! })
+        typeNeutral = Array(typeCalculator.normalDamage).sorted(by: { $0.name! < $1.name! })
+        typeResistant = Array(typeCalculator.resistantTo).sorted(by: { $0.name! < $1.name! })
+        typeSuperResistant = Array(typeCalculator.superResistantTo).sorted(by: { $0.name! < $1.name! })
+        typeImmune = Array(typeCalculator.immuneTo).sorted(by: { $0.name! < $1.name! })
+        
+        collectionView.reloadData()
+        
+        print("Super Weak To:")
+        for type in typeSuperWeak{
+            print(type.name!)
+        }
+        
+        print("Weak To:")
+        for type in typeWeak {
+            print(type.name!)
+        }
+        
+        print("Normal Damage:")
+        for type in typeNeutral {
+            print(type.name!)
+        }
+        
+        print("Resistant To:")
+        for type in typeResistant {
+            print(type.name!)
+        }
+        
+        print("Super Resistant To:")
+        for type in typeSuperResistant {
+            print(type.name!)
+        }
+        
+        print("Immune To:")
+        for type in typeImmune {
+            print(type.name!)
         }
     }
 
@@ -139,9 +161,16 @@ class TypeCheckerVC: UIViewController {
         
         typePicker.allTypes = allTypesStrings
         typePicker.delegate = self
+        
+        let buttonTapped = sender as! PokemonTypeButton
+        
+        switch buttonTapped.tag {
+        case 1, 2:
+            typePicker.selectedTypeSlot = buttonTapped.tag
+        default:
+            return
+        }
     }
-    
-
 }
 
 // MARK: - UICollectionView Methods
@@ -154,7 +183,7 @@ extension TypeCheckerVC: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return 40 // typeSuperWeak.count
+            return typeSuperWeak.count
         case 1:
             return typeWeak.count
         case 2:
