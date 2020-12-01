@@ -838,6 +838,8 @@
 		6528C85924E72B1D00199DA7 /* ekans.png in Resources */ = {isa = PBXBuildFile; fileRef = 6528C47524E72B1C00199DA7 /* ekans.png */; };
 		6528C85A24E72B1D00199DA7 /* hakamo-o.png in Resources */ = {isa = PBXBuildFile; fileRef = 6528C47624E72B1C00199DA7 /* hakamo-o.png */; };
 		6528C85C24E7305B00199DA7 /* meganium.png in Resources */ = {isa = PBXBuildFile; fileRef = 6528C85B24E7305B00199DA7 /* meganium.png */; };
+		6531FB902574316E00972993 /* createLayout+UICollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6531FB8F2574316E00972993 /* createLayout+UICollectionView.swift */; };
+		6531FBAB257599EC00972993 /* TypeCheckerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6531FBAA257599EC00972993 /* TypeCheckerCell.swift */; };
 		6541AB1124FD7AB900960D17 /* FormData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6541AB1024FD7AB900960D17 /* FormData.swift */; };
 		6541AB1324FD97E200960D17 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6541AB1224FD97E200960D17 /* Strings.swift */; };
 		6541E39324E0B5D80000564D /* GenerationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6541E39224E0B5D80000564D /* GenerationData.swift */; };
@@ -1734,6 +1736,8 @@
 		6528C47524E72B1C00199DA7 /* ekans.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ekans.png; sourceTree = "<group>"; };
 		6528C47624E72B1C00199DA7 /* hakamo-o.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hakamo-o.png"; sourceTree = "<group>"; };
 		6528C85B24E7305B00199DA7 /* meganium.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = meganium.png; sourceTree = "<group>"; };
+		6531FB8F2574316E00972993 /* createLayout+UICollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "createLayout+UICollectionView.swift"; sourceTree = "<group>"; };
+		6531FBAA257599EC00972993 /* TypeCheckerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeCheckerCell.swift; sourceTree = "<group>"; };
 		6541AB1024FD7AB900960D17 /* FormData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormData.swift; sourceTree = "<group>"; };
 		6541AB1224FD97E200960D17 /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		6541E39224E0B5D80000564D /* GenerationData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerationData.swift; sourceTree = "<group>"; };
@@ -2636,6 +2640,18 @@
 			path = Sprites/Small;
 			sourceTree = "<group>";
 		};
+		6531FB98257438C100972993 /* UICollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				65D9217625420941009349DE /* FormCollectionCell.swift */,
+				65DE2F2225081BD000BE36DB /* PokemonCollectionCell.swift */,
+				65D78870257199EF00763B76 /* TypePickerCell.swift */,
+				6531FBAA257599EC00972993 /* TypeCheckerCell.swift */,
+				6579BEC12568894400130E7E /* TypeCheckerHeaderView.swift */,
+			);
+			path = UICollectionView;
+			sourceTree = "<group>";
+		};
 		6554E7AF24D4E09B00081EA9 = {
 			isa = PBXGroup;
 			children = (
@@ -2699,22 +2715,19 @@
 			isa = PBXGroup;
 			children = (
 				65F4E668253A5311003EFD5B /* Storyboards */,
+				6531FB98257438C100972993 /* UICollectionView */,
 				6525EE27250ADC2F008C2967 /* CustomColor+UINavigationBar.swift */,
 				65BD8E0225099EB300083A1D /* UIView+RoundedCorners.swift */,
 				65E57468250D7EAD0099B9A7 /* SimpleOver.swift */,
 				6580DF15250C579100603CED /* GradientView.swift */,
 				65B7E6E2250E922C00EA512E /* ColorBlockView.swift */,
 				6528C09024E70CAE00199DA7 /* PokemonTableCell.swift */,
-				65D9217625420941009349DE /* FormCollectionCell.swift */,
 				650B51CA2540F64400677493 /* FormImageButton.swift */,
 				65685DDA253E2BFB00764424 /* AbilityButton.swift */,
 				6579BEBC256882FC00130E7E /* PokemonTypeButton.swift */,
-				65D78870257199EF00763B76 /* TypePickerCell.swift */,
-				65DE2F2225081BD000BE36DB /* PokemonCollectionCell.swift */,
 				656DD47324DF48C900C9EC16 /* TypeLabel.swift */,
 				6528C08C24E6245000199DA7 /* ActivityIndicator.swift */,
 				658757D724EB261000ECD3CE /* StatView.swift */,
-				6579BEC12568894400130E7E /* TypeCheckerHeaderView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2778,6 +2791,7 @@
 			isa = PBXGroup;
 			children = (
 				6541AB1224FD97E200960D17 /* Strings.swift */,
+				6531FB8F2574316E00972993 /* createLayout+UICollectionView.swift */,
 				65D788752571A1A900763B76 /* UILabel.swift */,
 				651E246624F19874000052ED /* validateHTTPStatus+Publisher.swift */,
 			);
@@ -3790,6 +3804,7 @@
 				65A7A17724E5FE8000D5E73B /* AbilityPresentation.swift in Sources */,
 				65DF936225180EA600116BB7 /* APIService.swift in Sources */,
 				6528C09124E70CAE00199DA7 /* PokemonTableCell.swift in Sources */,
+				6531FBAB257599EC00972993 /* TypeCheckerCell.swift in Sources */,
 				65D78871257199EF00763B76 /* TypePickerCell.swift in Sources */,
 				6599203F24D8F20F0082F51C /* PokemonData.swift in Sources */,
 				65E57469250D7EAD0099B9A7 /* SimpleOver.swift in Sources */,
@@ -3825,6 +3840,7 @@
 				654AF694250D49A6000D09D3 /* CustomNavVC.swift in Sources */,
 				65D788762571A1A900763B76 /* UILabel.swift in Sources */,
 				65FC770025094B45001EAF59 /* DataManager.swift in Sources */,
+				6531FB902574316E00972993 /* createLayout+UICollectionView.swift in Sources */,
 				65EDE753256EFC7900ED2018 /* TypeCalculator.swift in Sources */,
 				65E36FC624F84AD1003F00C3 /* ResourceList.swift in Sources */,
 				650B51CB2540F64400677493 /* FormImageButton.swift in Sources */,

@@ -23,7 +23,7 @@ class TypePickerVC: UIViewController {
 
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.collectionViewLayout = createLayout()
+        collectionView.collectionViewLayout = collectionView.createTwoColumnLayout()
     }
     
     // MARK: - Navigation
@@ -33,26 +33,7 @@ class TypePickerVC: UIViewController {
      }
 }
 
-extension TypePickerVC {
-    func createLayout() -> UICollectionViewLayout {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                             heightDimension: .fractionalHeight(1.0))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                              heightDimension: .absolute(40))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 2)
-        let spacing = CGFloat(10)
-        group.interItemSpacing = .fixed(spacing)
-
-        let section = NSCollectionLayoutSection(group: group)
-        section.interGroupSpacing = spacing
-        section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 0, trailing: 20)
-
-        let layout = UICollectionViewCompositionalLayout(section: section)
-        return layout
-    }
-}
+// MARK: - UICollectionView Methods
 
 extension TypePickerVC: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

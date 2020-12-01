@@ -20,15 +20,15 @@
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="i8w-9l-Icb">
                                 <rect key="frame" x="0.0" y="213" width="375" height="516"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="zQk-7t-xlF">
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="MY7-Fk-0SE">
                                     <size key="itemSize" width="128" height="128"/>
-                                    <size key="headerReferenceSize" width="50" height="50"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="TypeChartCell" id="IyC-uE-p5s">
-                                        <rect key="frame" x="0.0" y="50" width="128" height="128"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="hwh-Et-WJD">
                                             <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
@@ -36,26 +36,6 @@
                                         </collectionViewCellContentView>
                                     </collectionViewCell>
                                 </cells>
-                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="TypeCheckerHeaderView" id="NfU-Fy-E6Y" customClass="TypeCheckerHeaderView" customModule="PokeTeam" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="so9-7S-50a">
-                                            <rect key="frame" x="30.000000000000004" y="14.999999999999998" width="43.333333333333343" height="20.333333333333329"/>
-                                            <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
-                                            <nil key="textColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="so9-7S-50a" firstAttribute="leading" secondItem="NfU-Fy-E6Y" secondAttribute="leading" constant="30" id="5rc-GX-aCQ"/>
-                                        <constraint firstItem="so9-7S-50a" firstAttribute="centerY" secondItem="NfU-Fy-E6Y" secondAttribute="centerY" id="ZPZ-gE-IiI"/>
-                                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="so9-7S-50a" secondAttribute="trailing" constant="20" symbolic="YES" id="rXa-Dl-dTN"/>
-                                    </constraints>
-                                    <connections>
-                                        <outlet property="headerLabel" destination="so9-7S-50a" id="pf5-gw-cIx"/>
-                                    </connections>
-                                </collectionReusableView>
                             </collectionView>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="6TL-zV-s0H">
                                 <rect key="frame" x="0.0" y="88" width="375" height="125"/>
@@ -178,7 +158,6 @@
         <!--Type PickerVC-->
         <scene sceneID="0Il-mr-8mt">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="99o-KJ-sVd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="TypePickerVC" id="INo-uj-z91" customClass="TypePickerVC" customModule="PokeTeam" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="X31-Ir-TOS">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
@@ -272,6 +251,7 @@
                         <outlet property="collectionView" destination="dMx-Dc-GUk" id="KNy-e2-h9j"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="99o-KJ-sVd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4485.6000000000004" y="328.81773399014781"/>
         </scene>
