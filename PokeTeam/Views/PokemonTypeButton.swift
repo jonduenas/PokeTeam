@@ -32,6 +32,7 @@ class PokemonTypeButton: UIButton {
     private func commonInit() {
         setBackgroundAndTitle()
         layer.cornerRadius = cornerRadius
+        titleLabel?.addShadow(radius: 0.5)
     }
     
     private func setBackgroundAndTitle() {

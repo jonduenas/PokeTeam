@@ -37,14 +37,14 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="6TL-zV-s0H">
-                                <rect key="frame" x="0.0" y="88" width="375" height="125"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="6TL-zV-s0H">
+                                <rect key="frame" x="20" y="88" width="335" height="125"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="Adw-56-Nov">
-                                        <rect key="frame" x="0.0" y="30" width="187.66666666666666" height="65"/>
+                                        <rect key="frame" x="0.0" y="30" width="162.66666666666666" height="65"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Type 1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QUQ-rT-yf8">
-                                                <rect key="frame" x="75.333333333333329" y="0.0" width="36.666666666666671" height="20"/>
+                                                <rect key="frame" x="63" y="0.0" width="36.666666666666657" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="20" id="vrb-U9-Vnu"/>
                                                 </constraints>
@@ -53,11 +53,12 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YD3-ID-MPf" customClass="PokemonTypeButton" customModule="PokeTeam" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="25" width="147.66666666666666" height="40"/>
+                                                <rect key="frame" x="0.0" y="25" width="162.66666666666666" height="40"/>
                                                 <color key="backgroundColor" red="1" green="0.57810515169999999" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="40" id="ujx-lB-h9w"/>
                                                 </constraints>
+                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
                                                 <state key="normal" title="Type">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
@@ -68,15 +69,15 @@
                                             </button>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="YD3-ID-MPf" secondAttribute="trailing" constant="20" id="VRg-DL-WgR"/>
-                                            <constraint firstItem="YD3-ID-MPf" firstAttribute="leading" secondItem="Adw-56-Nov" secondAttribute="leading" constant="20" id="bmX-tF-pCN"/>
+                                            <constraint firstAttribute="trailing" secondItem="YD3-ID-MPf" secondAttribute="trailing" id="VRg-DL-WgR"/>
+                                            <constraint firstItem="YD3-ID-MPf" firstAttribute="leading" secondItem="Adw-56-Nov" secondAttribute="leading" id="bmX-tF-pCN"/>
                                         </constraints>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="juG-NO-nL0">
-                                        <rect key="frame" x="187.66666666666663" y="30" width="187.33333333333337" height="65"/>
+                                        <rect key="frame" x="172.66666666666663" y="30" width="162.33333333333337" height="65"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Type 2" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qbu-Tp-M2V">
-                                                <rect key="frame" x="74.333333333333343" y="0.0" width="38.333333333333343" height="20"/>
+                                                <rect key="frame" x="62" y="0.0" width="38.333333333333343" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="20" id="jYt-jd-cEf"/>
                                                 </constraints>
@@ -84,12 +85,13 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ME-GA-nw9" customClass="PokemonTypeButton" customModule="PokeTeam" customModuleProvider="target">
-                                                <rect key="frame" x="20" y="25" width="147.33333333333334" height="40"/>
+                                            <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ME-GA-nw9" customClass="PokemonTypeButton" customModule="PokeTeam" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="25" width="162.33333333333334" height="40"/>
                                                 <color key="backgroundColor" red="1" green="0.57810515169999999" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="40" id="Atf-dn-ras"/>
                                                 </constraints>
+                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
                                                 <state key="normal" title="Type">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
@@ -100,14 +102,13 @@
                                             </button>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="7ME-GA-nw9" secondAttribute="trailing" constant="20" id="1bq-jI-kyX"/>
-                                            <constraint firstItem="7ME-GA-nw9" firstAttribute="leading" secondItem="juG-NO-nL0" secondAttribute="leading" constant="20" id="4M4-Vs-Rgc"/>
+                                            <constraint firstAttribute="trailing" secondItem="7ME-GA-nw9" secondAttribute="trailing" id="1bq-jI-kyX"/>
+                                            <constraint firstItem="7ME-GA-nw9" firstAttribute="leading" secondItem="juG-NO-nL0" secondAttribute="leading" id="4M4-Vs-Rgc"/>
                                         </constraints>
                                     </stackView>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="125" id="bPp-UG-VNn"/>
-                                    <constraint firstItem="Adw-56-Nov" firstAttribute="width" secondItem="6TL-zV-s0H" secondAttribute="width" multiplier="0.5" id="cEP-sx-RAv"/>
                                 </constraints>
                             </stackView>
                         </subviews>
@@ -115,11 +116,11 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="vKa-4p-ZCK" firstAttribute="trailing" secondItem="i8w-9l-Icb" secondAttribute="trailing" id="Dbd-7f-Zvq"/>
-                            <constraint firstItem="6TL-zV-s0H" firstAttribute="leading" secondItem="vKa-4p-ZCK" secondAttribute="leading" id="EVB-6C-Lff"/>
+                            <constraint firstItem="6TL-zV-s0H" firstAttribute="leading" secondItem="vKa-4p-ZCK" secondAttribute="leading" constant="20" id="EVB-6C-Lff"/>
                             <constraint firstItem="6TL-zV-s0H" firstAttribute="top" secondItem="vKa-4p-ZCK" secondAttribute="top" id="H0I-I8-ljF"/>
                             <constraint firstItem="vKa-4p-ZCK" firstAttribute="bottom" secondItem="i8w-9l-Icb" secondAttribute="bottom" id="HBY-tu-Gnd"/>
                             <constraint firstItem="i8w-9l-Icb" firstAttribute="leading" secondItem="vKa-4p-ZCK" secondAttribute="leading" id="JbH-c9-q19"/>
-                            <constraint firstItem="6TL-zV-s0H" firstAttribute="trailing" secondItem="vKa-4p-ZCK" secondAttribute="trailing" id="Zzq-gD-8G2"/>
+                            <constraint firstItem="6TL-zV-s0H" firstAttribute="trailing" secondItem="vKa-4p-ZCK" secondAttribute="trailing" constant="-20" id="Zzq-gD-8G2"/>
                             <constraint firstItem="i8w-9l-Icb" firstAttribute="top" secondItem="6TL-zV-s0H" secondAttribute="bottom" id="i6H-qB-y7a"/>
                         </constraints>
                     </view>
