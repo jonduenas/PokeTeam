@@ -125,10 +125,14 @@ class TypeCheckerVC: UIViewController {
         
         if type1 != .none {
             type1Object = dataManager.getFromCoreData(entity: TypeMO.self, predicate: NSPredicate(format: "name == %@", type1.rawValue))?[0] as? TypeMO
+        } else {
+            type1Object = nil
         }
         
         if type2 != .none {
             type2Object = dataManager.getFromCoreData(entity: TypeMO.self, predicate: NSPredicate(format: "name == %@", type2.rawValue))?[0] as? TypeMO
+        } else {
+            type2Object = nil
         }
         
         if typeCalculator == nil {
@@ -192,6 +196,8 @@ class TypeCheckerVC: UIViewController {
                 allTypesStrings.append(typeName)
             }
         }
+        
+        allTypesStrings.append("none")
         
         let typePicker = segue.destination as! TypePickerVC
         
