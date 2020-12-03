@@ -12,12 +12,12 @@ class TypeCheckerVC: UIViewController {
     static let sectionHeaderElementKind = "section-header-element-kind"
     
     enum TypeEffectiveness: String, CaseIterable {
-        case superWeak = "Super Weak To"
-        case weak = "Weak To"
+        case superWeak = "Super Weak To (4x)"
+        case weak = "Weak To (2x)"
         case normal = "Normal Damage From"
-        case resistant = "Resistant To"
-        case superResistant = "Super Resistant To"
-        case immune = "Immune To"
+        case resistant = "Resistant To (0.5x)"
+        case superResistant = "Super Resistant To (0.25x)"
+        case immune = "Immune To (0x)"
     }
     
     let typePickerTransitioningDelegate = TypePickerTransitioningDelegate()
@@ -188,6 +188,10 @@ class TypeCheckerVC: UIViewController {
         print("Type 2 Tapped")
     }
     
+    @IBAction func infoButtonTapped(_ sender: Any) {
+        print("Info tapped")
+        showAlert(message: "This tool is for checking a Pokemon's vulnerabilities based on their typing. Select 1 or 2 types to see what move types will be super effective or not very effective against a Pokemon with those types.")
+    }
     
     // MARK: - Navigation
 

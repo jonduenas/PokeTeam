@@ -124,9 +124,16 @@
                             <constraint firstItem="i8w-9l-Icb" firstAttribute="top" secondItem="6TL-zV-s0H" secondAttribute="bottom" id="i6H-qB-y7a"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="TYPE CHECKER" largeTitleDisplayMode="always" id="Ln6-m6-Zni"/>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="TYPE CHECKER" largeTitleDisplayMode="always" id="Ln6-m6-Zni">
+                        <barButtonItem key="rightBarButtonItem" title="Info" image="info.circle" catalog="system" id="Dll-Vn-tfe">
+                            <connections>
+                                <action selector="infoButtonTapped:" destination="ctR-Of-ber" id="DpV-b5-5OU"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics" barStyle="black"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="collectionView" destination="i8w-9l-Icb" id="v9w-If-K5f"/>
                         <outlet property="type1Button" destination="YD3-ID-MPf" id="dO0-rc-xjo"/>
@@ -263,6 +270,7 @@
     <color key="tintColor" name="poke-blue"/>
     <resources>
         <image name="gauge" catalog="system" width="128" height="121"/>
+        <image name="info.circle" catalog="system" width="128" height="121"/>
         <image name="x.circle.fill" catalog="system" width="128" height="121"/>
         <namedColor name="poke-blue">
             <color red="0.23137254901960785" green="0.29803921568627451" blue="0.792156862745098" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
