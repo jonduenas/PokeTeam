@@ -43,6 +43,7 @@ class TypeCheckerVC: UIViewController {
     }
     
     var typeEffectiveness = [TypeEffectiveness: [TypeMO]]()
+    var typeSections = [TypeEffectiveness]()
     
     lazy var allTypes = loadTypeDetails()
     
@@ -70,10 +71,11 @@ class TypeCheckerVC: UIViewController {
     private func configureDataSource() {
         dataSource = UICollectionViewDiffableDataSource<TypeEffectiveness, TypeMO>(collectionView: collectionView, cellProvider: { (collectionView, indexPath, pokemonType) -> UICollectionViewCell? in
             
-            let section = TypeEffectiveness.allCases[indexPath.section]
+            //let section = TypeEffectiveness.allCases[indexPath.section]
             
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TypeCheckerCell.reuseIdentifier, for: indexPath) as? TypeCheckerCell else { fatalError("Could not create new cell")}
-            cell.pokemonType = self.typeEffectiveness[section]?[indexPath.row].name
+            
+            cell.pokemonType = pokemonType.name
             
             return cell
         })
@@ -82,7 +84,9 @@ class TypeCheckerVC: UIViewController {
             
             guard let supplementaryView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: TypeCheckerHeaderView.reuseIdentifier, for: indexPath) as? TypeCheckerHeaderView else { fatalError("Cannot create header view") }
             
-            supplementaryView.label.text = TypeEffectiveness.allCases[indexPath.section].rawValue
+            let section = self.typeSections[indexPath.section]
+            
+            supplementaryView.label.text = section.rawValue
             
             return supplementaryView
         }
@@ -92,23 +96,11 @@ class TypeCheckerVC: UIViewController {
     
     private func applySnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<TypeEffectiveness, TypeMO>()
-        snapshot.appendSections([TypeEffectiveness.superWeak])
-        snapshot.appendItems(typeEffectiveness[.superWeak] ?? [])
         
-        snapshot.appendSections([TypeEffectiveness.weak])
-        snapshot.appendItems(typeEffectiveness[.weak] ?? [])
-        
-        snapshot.appendSections([TypeEffectiveness.normal])
-        snapshot.appendItems(typeEffectiveness[.normal] ?? [])
-        
-        snapshot.appendSections([TypeEffectiveness.resistant])
-        snapshot.appendItems(typeEffectiveness[.resistant] ?? [])
-        
-        snapshot.appendSections([TypeEffectiveness.superResistant])
-        snapshot.appendItems(typeEffectiveness[.superResistant] ?? [])
-        
-        snapshot.appendSections([TypeEffectiveness.immune])
-        snapshot.appendItems(typeEffectiveness[.immune] ?? [])
+        for section in typeSections {
+            snapshot.appendSections([section])
+            snapshot.appendItems(typeEffectiveness[section] ?? [])
+        }
         
         dataSource.apply(snapshot, animatingDifferences: true)
     }
@@ -128,16 +120,15 @@ class TypeCheckerVC: UIViewController {
     }
     
     private func calculateAndUpdate() {
+        typeEffectiveness = [:]
+        typeSections = []
+        
         if type1 != .none {
             type1Object = dataManager.getFromCoreData(entity: TypeMO.self, predicate: NSPredicate(format: "name == %@", type1.rawValue))?[0] as? TypeMO
         }
         
         if type2 != .none {
             type2Object = dataManager.getFromCoreData(entity: TypeMO.self, predicate: NSPredicate(format: "name == %@", type2.rawValue))?[0] as? TypeMO
-        }
-        
-        if type1 == type2 {
-            type2 = .none
         }
         
         if typeCalculator == nil {
@@ -149,15 +140,37 @@ class TypeCheckerVC: UIViewController {
             typeCalculator.parseDamageRelations()
         }
         
-        typeEffectiveness[.superWeak] = Array(typeCalculator.superWeakTo).sorted(by: { $0.name! < $1.name! })
-        typeEffectiveness[.weak] = Array(typeCalculator.weakTo).sorted(by: { $0.name! < $1.name! })
-        typeEffectiveness[.normal] = Array(typeCalculator.normalDamage).sorted(by: { $0.name! < $1.name! })
-        typeEffectiveness[.resistant] = Array(typeCalculator.resistantTo).sorted(by: { $0.name! < $1.name! })
-        typeEffectiveness[.superResistant] = Array(typeCalculator.superResistantTo).sorted(by: { $0.name! < $1.name! })
-        typeEffectiveness[.immune] = Array(typeCalculator.immuneTo).sorted(by: { $0.name! < $1.name! })
+        if !typeCalculator.superWeakTo.isEmpty {
+            typeEffectiveness[.superWeak] = Array(typeCalculator.superWeakTo).sorted(by: { $0.name! < $1.name! })
+            typeSections.append(.superWeak)
+        }
+        
+        if !typeCalculator.weakTo.isEmpty {
+            typeEffectiveness[.weak] = Array(typeCalculator.weakTo).sorted(by: { $0.name! < $1.name! })
+            typeSections.append(.weak)
+        }
+        
+        if !typeCalculator.normalDamage.isEmpty {
+            typeEffectiveness[.normal] = Array(typeCalculator.normalDamage).sorted(by: { $0.name! < $1.name! })
+            typeSections.append(.normal)
+        }
+        
+        if !typeCalculator.resistantTo.isEmpty {
+            typeEffectiveness[.resistant] = Array(typeCalculator.resistantTo).sorted(by: { $0.name! < $1.name! })
+            typeSections.append(.resistant)
+        }
+        
+        if !typeCalculator.superResistantTo.isEmpty {
+            typeEffectiveness[.superResistant] = Array(typeCalculator.superResistantTo).sorted(by: { $0.name! < $1.name! })
+            typeSections.append(.superResistant)
+        }
+        
+        if !typeCalculator.immuneTo.isEmpty {
+            typeEffectiveness[.immune] = Array(typeCalculator.immuneTo).sorted(by: { $0.name! < $1.name! })
+            typeSections.append(.immune)
+        }
         
         applySnapshot()
-        
     }
 
     

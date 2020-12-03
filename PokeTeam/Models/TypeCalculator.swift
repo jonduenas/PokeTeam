@@ -9,7 +9,7 @@
 import Foundation
 
 public final class TypeCalculator {
-    let allTypes: [TypeMO]
+    var allTypes: [TypeMO]
     
     var type1: TypeMO? {
         didSet {
@@ -22,7 +22,7 @@ public final class TypeCalculator {
             parseDamageRelations()
         }
     }
-    
+
     var superWeakTo = Set<TypeMO>()
     var weakTo = Set<TypeMO>()
     var normalDamage = Set<TypeMO>()
