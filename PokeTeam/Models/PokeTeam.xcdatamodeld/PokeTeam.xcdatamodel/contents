@@ -107,7 +107,6 @@
         </uniquenessConstraints>
     </entity>
     <entity name="Type" representedClassName="TypeMO" syncable="YES" codeGenerationType="class">
-        <attribute name="color" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String" defaultValueString=""/>
         <attribute name="stringURL" optional="YES" attributeType="String"/>
@@ -131,6 +130,6 @@
         <element name="Pokedex" positionX="-165.30078125" positionY="-616.83984375" width="128" height="88"/>
         <element name="Pokemon" positionX="25.265625" positionY="-793.3671875" width="128" height="478"/>
         <element name="Team" positionX="-176.80859375" positionY="-266.953125" width="128" height="73"/>
-        <element name="Type" positionX="419.37109375" positionY="-512.08984375" width="128" height="179"/>
+        <element name="Type" positionX="419.37109375" positionY="-512.08984375" width="128" height="164"/>
     </elements>
 </model>
