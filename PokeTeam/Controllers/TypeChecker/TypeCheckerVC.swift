@@ -20,6 +20,8 @@ class TypeCheckerVC: UIViewController {
         case immune = "Immune To"
     }
     
+    let typePickerTransitioningDelegate = TypePickerTransitioningDelegate()
+    
     var dataSource: UICollectionViewDiffableDataSource<TypeEffectiveness, TypeMO>! = nil
     
     var coreDataStack: CoreDataStack!
@@ -203,6 +205,14 @@ class TypeCheckerVC: UIViewController {
         
         typePicker.allTypes = allTypesStrings
         typePicker.delegate = self
+        
+        // Sets slide over transition if screen is large enough to accomodate - standard modal presentation if not
+        let screenHeight = UIScreen.main.bounds.height
+        
+        if screenHeight > typePickerTransitioningDelegate.height {
+            typePicker.transitioningDelegate = typePickerTransitioningDelegate
+            typePicker.modalPresentationStyle = .custom
+        }
         
         let buttonTapped = sender as! PokemonTypeButton
         

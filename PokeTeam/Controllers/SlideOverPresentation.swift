@@ -8,10 +8,10 @@
 
 import UIKit
 
-class AbilityPresentation: UIPresentationController {
+class SlideOverPresentation: UIPresentationController {
     private let blurEffectView: UIVisualEffectView!
-    private let height: CGFloat = 300.0
     
+    var height: CGFloat = 300.0
     var tapGestureRecognizer: UITapGestureRecognizer = UITapGestureRecognizer()
     
     @objc func dismiss() {

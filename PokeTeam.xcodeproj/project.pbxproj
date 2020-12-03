@@ -864,11 +864,12 @@
 		6599203F24D8F20F0082F51C /* PokemonData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6599203E24D8F20F0082F51C /* PokemonData.swift */; };
 		6599204724DA29800082F51C /* MoveData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6599204624DA29800082F51C /* MoveData.swift */; };
 		6599204924DA30530082F51C /* AbilityData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6599204824DA30530082F51C /* AbilityData.swift */; };
-		65A7A17724E5FE8000D5E73B /* AbilityPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A7A17624E5FE8000D5E73B /* AbilityPresentation.swift */; };
+		65A7A17724E5FE8000D5E73B /* SlideOverPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A7A17624E5FE8000D5E73B /* SlideOverPresentation.swift */; };
 		65A7A17924E60F8600D5E73B /* AbilityDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A7A17824E60F8600D5E73B /* AbilityDetailVC.swift */; };
 		65A7A17B24E6118F00D5E73B /* AbilityTransitioningDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A7A17A24E6118F00D5E73B /* AbilityTransitioningDelegate.swift */; };
 		65B7E6E3250E922C00EA512E /* ColorBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B7E6E2250E922C00EA512E /* ColorBlockView.swift */; };
 		65BD8E0325099EB300083A1D /* UIView+RoundedCorners.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65BD8E0225099EB300083A1D /* UIView+RoundedCorners.swift */; };
+		65C78A2C25797C5300580178 /* TypePickerTransitioningDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C78A2B25797C5300580178 /* TypePickerTransitioningDelegate.swift */; };
 		65CBACEE2518272A000444C5 /* DataManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65CBACED2518272A000444C5 /* DataManagerTests.swift */; };
 		65D7886A2571913400763B76 /* TypePickerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D788692571913400763B76 /* TypePickerVC.swift */; };
 		65D78871257199EF00763B76 /* TypePickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D78870257199EF00763B76 /* TypePickerCell.swift */; };
@@ -1768,11 +1769,12 @@
 		6599203E24D8F20F0082F51C /* PokemonData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonData.swift; sourceTree = "<group>"; };
 		6599204624DA29800082F51C /* MoveData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveData.swift; sourceTree = "<group>"; };
 		6599204824DA30530082F51C /* AbilityData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbilityData.swift; sourceTree = "<group>"; };
-		65A7A17624E5FE8000D5E73B /* AbilityPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbilityPresentation.swift; sourceTree = "<group>"; };
+		65A7A17624E5FE8000D5E73B /* SlideOverPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideOverPresentation.swift; sourceTree = "<group>"; };
 		65A7A17824E60F8600D5E73B /* AbilityDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbilityDetailVC.swift; sourceTree = "<group>"; };
 		65A7A17A24E6118F00D5E73B /* AbilityTransitioningDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbilityTransitioningDelegate.swift; sourceTree = "<group>"; };
 		65B7E6E2250E922C00EA512E /* ColorBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorBlockView.swift; sourceTree = "<group>"; };
 		65BD8E0225099EB300083A1D /* UIView+RoundedCorners.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+RoundedCorners.swift"; sourceTree = "<group>"; };
+		65C78A2B25797C5300580178 /* TypePickerTransitioningDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypePickerTransitioningDelegate.swift; sourceTree = "<group>"; };
 		65CBACED2518272A000444C5 /* DataManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManagerTests.swift; sourceTree = "<group>"; };
 		65D788692571913400763B76 /* TypePickerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypePickerVC.swift; sourceTree = "<group>"; };
 		65D78870257199EF00763B76 /* TypePickerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypePickerCell.swift; sourceTree = "<group>"; };
@@ -2736,6 +2738,7 @@
 			isa = PBXGroup;
 			children = (
 				654AF693250D49A6000D09D3 /* CustomNavVC.swift */,
+				65A7A17624E5FE8000D5E73B /* SlideOverPresentation.swift */,
 				65F4E67F253A54E3003EFD5B /* Pokedex */,
 				65F4E683253A54F2003EFD5B /* TeamBuilder */,
 				65D98A772566F3C800BDE9B6 /* TypeChecker */,
@@ -2768,6 +2771,7 @@
 			children = (
 				65D98A782566F40600BDE9B6 /* TypeCheckerVC.swift */,
 				65D788692571913400763B76 /* TypePickerVC.swift */,
+				65C78A2B25797C5300580178 /* TypePickerTransitioningDelegate.swift */,
 			);
 			path = TypeChecker;
 			sourceTree = "<group>";
@@ -2828,7 +2832,6 @@
 				6554E7BF24D4E09B00081EA9 /* PokeDexVC.swift */,
 				65DBB9D624D8C920003450A0 /* PokemonDetailVC.swift */,
 				65A7A17824E60F8600D5E73B /* AbilityDetailVC.swift */,
-				65A7A17624E5FE8000D5E73B /* AbilityPresentation.swift */,
 				65A7A17A24E6118F00D5E73B /* AbilityTransitioningDelegate.swift */,
 			);
 			path = Pokedex;
@@ -3801,8 +3804,9 @@
 				6579BEC22568894400130E7E /* TypeCheckerHeaderView.swift in Sources */,
 				6541AB1324FD97E200960D17 /* Strings.swift in Sources */,
 				65A7A17924E60F8600D5E73B /* AbilityDetailVC.swift in Sources */,
-				65A7A17724E5FE8000D5E73B /* AbilityPresentation.swift in Sources */,
+				65A7A17724E5FE8000D5E73B /* SlideOverPresentation.swift in Sources */,
 				65DF936225180EA600116BB7 /* APIService.swift in Sources */,
+				65C78A2C25797C5300580178 /* TypePickerTransitioningDelegate.swift in Sources */,
 				6528C09124E70CAE00199DA7 /* PokemonTableCell.swift in Sources */,
 				6531FBAB257599EC00972993 /* TypeCheckerCell.swift in Sources */,
 				65D78871257199EF00763B76 /* TypePickerCell.swift in Sources */,
