@@ -115,6 +115,7 @@ class PokemonDetailVC: UIViewController {
     }
     
     private func changeShownForm(to pokemonForm: PokemonMO) {
+        pokemon = pokemonForm
         updatePokemonUI(with: pokemonForm)
         updateStats(with: pokemonForm)
         layoutAbilities(with: pokemonForm)
