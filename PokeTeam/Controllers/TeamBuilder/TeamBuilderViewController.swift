@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 
 private let reuseIdentifier = "PokemonCollectionCell"
-private let segueIdentifier = "detailSegue"
+private let detailSegueIdentifier = "detailSegue"
 
 class TeamBuilderViewController: UIViewController {
 
@@ -20,6 +20,8 @@ class TeamBuilderViewController: UIViewController {
     var coreDataStack: CoreDataStack!
     var dataManager: DataManager!
     
+    var dataSource: UICollectionViewDiffableDataSource<Int, PokemonMO>! = nil
+    
     @IBOutlet weak var collectionView: UICollectionView!
     
     override func viewDidLoad() {
@@ -28,19 +30,12 @@ class TeamBuilderViewController: UIViewController {
         navigationController?.delegate = self
         setupCustomNavController()
         
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.backgroundColor = .clear
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
         loadSavedTeam()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+        
+//        collectionView.delegate = self
+//        collectionView.dataSource = self
+        configureCollectionView()
+        configureDataSource()
     }
     
     func setupCustomNavController() {
@@ -62,13 +57,45 @@ class TeamBuilderViewController: UIViewController {
                 let firstTeam = teamsArray[0]
                 let teamSet = firstTeam.members
                 team = teamSet?.array as! [PokemonMO]
+                
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                }
             }
         } catch {
             print("Team fetch failed: \(error)")
         }
-        DispatchQueue.main.async {
-            self.collectionView.reloadData()
-        }
+    }
+    
+    private func configureCollectionView() {
+        collectionView.backgroundColor = .clear
+        //collectionView.register(PokemonCollectionCell.self, forCellWithReuseIdentifier: PokemonCollectionCell.reuseIdentifier)
+    }
+    
+    private func configureDataSource() {
+        dataSource = UICollectionViewDiffableDataSource<Int, PokemonMO>(collectionView: collectionView, cellProvider: { (collectionView, indexPath, pokemon) -> UICollectionViewCell? in
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PokemonCollectionCell.reuseIdentifier, for: indexPath) as? PokemonCollectionCell else { fatalError("Could not create new cell")}
+            
+            cell.setPokemonInfo(for: pokemon)
+            
+            return cell
+        })
+        
+        applySnapshot()
+    }
+    
+    private func applySnapshot() {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, PokemonMO>()
+        
+        snapshot.appendSections([1])
+        snapshot.appendItems(team)
+        
+        dataSource.apply(snapshot, animatingDifferences: true)
+    }
+    
+    @IBAction func refreshTapped(_ sender: Any) {
+        loadSavedTeam()
+        applySnapshot()
     }
     
     // MARK: - Navigation
@@ -77,7 +104,7 @@ class TeamBuilderViewController: UIViewController {
         let indexPath = collectionView.indexPathsForSelectedItems!
         let selectedItem = indexPath[0].row
         
-        if segue.identifier == segueIdentifier {
+        if segue.identifier == detailSegueIdentifier {
             let detailVC = segue.destination as! PokemonBuilderVC
             detailVC.pokemonName = team[selectedItem].name
             detailVC.pokemonImageName = team[selectedItem].imageID
@@ -87,24 +114,24 @@ class TeamBuilderViewController: UIViewController {
     }
 }
 
-extension TeamBuilderViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return team.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PokemonCollectionCell
-        
-        // Configure the cell
-        cell.setPokemonInfo(for: team[indexPath.row])
-        
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("Selected \(indexPath.item)")
-    }
-}
+//extension TeamBuilderViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        return team.count
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PokemonCollectionCell
+//
+//        // Configure the cell
+//        cell.setPokemonInfo(for: team[indexPath.row])
+//
+//        return cell
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//        print("Selected \(indexPath.item)")
+//    }
+//}
 
 extension TeamBuilderViewController: UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
     

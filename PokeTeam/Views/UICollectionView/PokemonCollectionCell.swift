@@ -9,6 +9,7 @@
 import UIKit
 
 class PokemonCollectionCell: UICollectionViewCell {
+    static let reuseIdentifier = "PokemonCollectionCell"
     
     let cornerRadius: CGFloat = 45
     @IBOutlet weak var pokemonImageView: UIImageView!

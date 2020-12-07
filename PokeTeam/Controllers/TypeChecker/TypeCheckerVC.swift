@@ -73,10 +73,7 @@ class TypeCheckerVC: UIViewController {
     private func configureDataSource() {
         dataSource = UICollectionViewDiffableDataSource<TypeEffectiveness, TypeMO>(collectionView: collectionView, cellProvider: { (collectionView, indexPath, pokemonType) -> UICollectionViewCell? in
             
-            //let section = TypeEffectiveness.allCases[indexPath.section]
-            
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TypeCheckerCell.reuseIdentifier, for: indexPath) as? TypeCheckerCell else { fatalError("Could not create new cell")}
-            
             cell.pokemonType = pokemonType.name
             
             return cell
@@ -87,7 +84,7 @@ class TypeCheckerVC: UIViewController {
             guard let supplementaryView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: TypeCheckerHeaderView.reuseIdentifier, for: indexPath) as? TypeCheckerHeaderView else { fatalError("Cannot create header view") }
             
             let section = self.typeSections[indexPath.section]
-            
+
             supplementaryView.label.text = section.rawValue
             
             return supplementaryView
@@ -190,7 +187,7 @@ class TypeCheckerVC: UIViewController {
     
     @IBAction func infoButtonTapped(_ sender: Any) {
         print("Info tapped")
-        showAlert(message: "This tool is for checking a Pokemon's vulnerabilities based on their typing. Select 1 or 2 types to see what move types will be super effective or not very effective against a Pokemon with those types.")
+        showAlert(message: "This tool is for checking a Pokemon's vulnerabilities based on their typing. Select 1 or 2 types to see which move types will be super effective or not very effective against another Pokemon with those types.")
     }
     
     // MARK: - Navigation
