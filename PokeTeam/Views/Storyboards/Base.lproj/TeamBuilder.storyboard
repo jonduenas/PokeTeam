@@ -168,13 +168,7 @@
                             <constraint firstItem="nAT-sb-hhR" firstAttribute="leading" secondItem="oUG-yU-bgg" secondAttribute="leading" id="kQl-h2-Bnj"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="cS0-HS-3Hj">
-                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="yux-4I-9jd">
-                            <connections>
-                                <action selector="refreshTapped:" destination="wY4-TS-6aC" id="0jl-fu-XJk"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="cS0-HS-3Hj"/>
                     <connections>
                         <outlet property="collectionView" destination="nAT-sb-hhR" id="5ps-kh-kl5"/>
                     </connections>
