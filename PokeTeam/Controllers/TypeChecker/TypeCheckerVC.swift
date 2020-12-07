@@ -12,12 +12,12 @@ class TypeCheckerVC: UIViewController {
     static let sectionHeaderElementKind = "section-header-element-kind"
     
     enum TypeEffectiveness: String, CaseIterable {
-        case superWeak = "Super Weak To (4x)"
-        case weak = "Weak To (2x)"
+        case superWeak = "Super Weak To (4x Damage)"
+        case weak = "Weak To (2x Damage)"
         case normal = "Normal Damage From"
-        case resistant = "Resistant To (0.5x)"
-        case superResistant = "Super Resistant To (0.25x)"
-        case immune = "Immune To (0x)"
+        case resistant = "Resistant To (0.5x Damage)"
+        case superResistant = "Super Resistant To (0.25x Damage)"
+        case immune = "Immune To (No Damage)"
     }
     
     let typePickerTransitioningDelegate = TypePickerTransitioningDelegate()
