@@ -43,7 +43,7 @@ class PokemonCollectionCell: UICollectionViewCell {
     func setPokemonInfo() {
         guard let pokemon = pokemon else { return }
         
-        pokemonNameLabel.text = pokemon.varietyName?.formatPokemonName()
+        pokemonNameLabel.text = pokemon.name?.formatPokemonName()
         
         if let imageID = pokemon.imageID {
             pokemonImageView.image = UIImage(named: imageID)

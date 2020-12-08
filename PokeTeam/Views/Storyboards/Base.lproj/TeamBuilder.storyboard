@@ -72,12 +72,12 @@
                                                                 <constraint firstAttribute="width" constant="10" id="Ktr-aY-KQC"/>
                                                             </constraints>
                                                         </imageView>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pokemon" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.69999998807907104" translatesAutoresizingMaskIntoConstraints="NO" id="WIp-AY-5S3">
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pokemon" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="15" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WIp-AY-5S3">
                                                             <rect key="frame" x="0.0" y="0.0" width="217" height="35"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="35" id="qeI-tn-hez"/>
                                                             </constraints>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="29"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
