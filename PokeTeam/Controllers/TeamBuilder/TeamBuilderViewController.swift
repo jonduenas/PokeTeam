@@ -52,7 +52,7 @@ class TeamBuilderViewController: UIViewController {
             
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PokemonCollectionCell.reuseIdentifier, for: indexPath) as? PokemonCollectionCell else { fatalError("Could not create new cell")}
             
-            cell.setPokemonInfo(for: pokemonObject)
+            cell.pokemon = pokemonObject
             
             return cell
         })

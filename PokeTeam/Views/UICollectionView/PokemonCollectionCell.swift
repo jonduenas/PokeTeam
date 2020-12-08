@@ -12,6 +12,13 @@ class PokemonCollectionCell: UICollectionViewCell {
     static let reuseIdentifier = "PokemonCollectionCell"
     
     let cornerRadius: CGFloat = 45
+    
+    var pokemon: PokemonMO? {
+        didSet {
+            setPokemonInfo()
+        }
+    }
+    
     @IBOutlet weak var pokemonImageView: UIImageView!
     @IBOutlet weak var pokemonNameLabel: UILabel!
     @IBOutlet weak var pokemonType1Label: PokemonTypeLabel!
@@ -33,9 +40,16 @@ class PokemonCollectionCell: UICollectionViewCell {
         layer.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: cornerRadius).cgPath
     }
     
-    func setPokemonInfo(for pokemon: PokemonMO) {
-        pokemonNameLabel.text = pokemon.name?.formatPokemonName()
-        pokemonImageView.image = UIImage(named: pokemon.imageID!)
+    func setPokemonInfo() {
+        guard let pokemon = pokemon else { return }
+        
+        pokemonNameLabel.text = pokemon.varietyName?.formatPokemonName()
+        
+        if let imageID = pokemon.imageID {
+            pokemonImageView.image = UIImage(named: imageID)
+        } else {
+            pokemonImageView.image = UIImage(named: "substitute")
+        }
         
         // Update Pokemon types
         if let pokemonTypes = pokemon.type {
