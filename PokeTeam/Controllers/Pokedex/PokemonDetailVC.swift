@@ -445,12 +445,12 @@ class PokemonDetailVC: UIViewController {
             if let existingTeam = team {
                 existingTeam.addToMembers(self.pokemon)
                 print("Adding \(self.pokemon.name!) to existing team.")
-                self.coreDataStack.saveContext()
+                self.coreDataStack.saveContext(self.backgroundDataManager.managedObjectContext)
             } else {
                 let newTeam = self.backgroundDataManager.addTeam()
                 newTeam.addToMembers(self.pokemon)
                 print("Adding \(self.pokemon.name!) to new team.")
-                self.coreDataStack.saveContext()
+                self.coreDataStack.saveContext(self.backgroundDataManager.managedObjectContext)
             }
         }))
         present(alertController, animated: true)
@@ -467,20 +467,15 @@ class PokemonDetailVC: UIViewController {
     }
     
     private func loadTeam() -> TeamMO? {
-        let context = coreDataStack.mainContext
-        let teamRequest: NSFetchRequest<TeamMO> = TeamMO.fetchRequest()
-        
-        do {
-            let teams = try context.fetch(teamRequest)
-            if teams.count > 0 {
-                return teams[0]
+        if let allTeams = backgroundDataManager.getFromCoreData(entity: TeamMO.self) as? [TeamMO] {
+            if !allTeams.isEmpty {
+                return allTeams[0]
             } else {
                 return nil
             }
-        } catch {
-            print("Error reloading Pokemon - \(error) - \(error.localizedDescription)")
+        } else {
+            return nil
         }
-        return nil
     }
 }
 
