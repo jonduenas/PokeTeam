@@ -95,6 +95,17 @@ class DataManagerTests: XCTestCase {
         
         XCTAssertNotNil(newTeam)
     }
+    
+    func testAddPokemonToTeam() {
+        let pokemon = sut.addPokemon(name: "pidgey", speciesURL: "testurl", id: 16)
+        
+        let newTeam = sut.addTeam()
+        
+        pokemon.addToTeam(newTeam)
+        
+        XCTAssertEqual(newTeam.members?.count, 1)
+        XCTAssertTrue(newTeam.members!.contains(pokemon))
+    }
 
     func testUpdatePokedex() {
         // given
