@@ -70,6 +70,8 @@ extension String {
         let zygardeString = "zygarde"
         let miniorString = "minior"
         let necrozmaString = "necrozma"
+        let urshifuString = "urshifu"
+        let calyrexString = "calyrex"
         
         if self.contains(megaString) {
             let name = megaString + " " + self.replacingOccurrences(of: megaString, with: "").replacingOccurrences(of: "--", with: " ").replacingOccurrences(of: "-", with: "")
@@ -81,6 +83,9 @@ extension String {
             return name.capitalized
         } else if self.contains(basculinString) {
             let name = self.replacingOccurrences(of: speciesName, with: "").replacingFirstOccurrence(of: "-", with: "")
+            return name.capitalized
+        } else if self.contains(urshifuString) || self.contains(calyrexString) {
+            let name = self.replacingOccurrences(of: speciesName, with: "").replacingOccurrences(of: "-", with: " ")
             return name.capitalized
         } else {
             var name = self.replacingOccurrences(of: speciesName, with: "").replacingOccurrences(of: "--", with: " ").replacingOccurrences(of: "-", with: "")
