@@ -43,6 +43,7 @@ class TeamBuilderViewController: UIViewController {
     }
 
     private func configureCollectionView() {
+        collectionView.delegate = self
         collectionView.backgroundColor = .clear
     }
     
@@ -76,6 +77,8 @@ class TeamBuilderViewController: UIViewController {
     }
 }
 
+// MARK: - UINavigationController Transitioning Delegate Methods
+
 extension TeamBuilderViewController: UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
     
     func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
@@ -83,6 +86,8 @@ extension TeamBuilderViewController: UIViewControllerTransitioningDelegate, UINa
         return simpleOver
     }
 }
+
+// MARK: - NSFetchedResultsController Methods
 
 extension TeamBuilderViewController: NSFetchedResultsControllerDelegate {
     private func configureFetchedResultsController() {
@@ -127,5 +132,25 @@ extension TeamBuilderViewController: NSFetchedResultsControllerDelegate {
         
         let shouldAnimate = collectionView.numberOfSections != 0
         dataSource.apply(snapshot as NSDiffableDataSourceSnapshot<Int, NSManagedObjectID>, animatingDifferences: shouldAnimate)
+    }
+}
+
+// MARK: - UICollectionView Methods
+
+extension TeamBuilderViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let selectedPokemonObjectID = dataSource.itemIdentifier(for: indexPath) else { return }
+        
+        guard let selectedPokemonObject = try? fetchedResultsController.managedObjectContext.existingObject(with: selectedPokemonObjectID) as? PokemonMO else { return }
+        
+        let alertContoller = UIAlertController(title: "Remove Pokemon from team?", message: "Would you like to remove \(selectedPokemonObject.name?.formatPokemonName() ?? "this Pokemon") from your team?", preferredStyle: .alert)
+        alertContoller.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alertContoller.addAction(UIAlertAction(title: "Remove", style: .destructive, handler: { _ in
+            if let team = selectedPokemonObject.team {
+                selectedPokemonObject.removeFromTeam(team)
+                self.coreDataStack.saveContext(self.fetchedResultsController.managedObjectContext)
+            }
+        }))
+        present(alertContoller, animated: true)
     }
 }

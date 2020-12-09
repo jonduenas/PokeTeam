@@ -57,11 +57,11 @@
                                     <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PokemonCollectionCell" id="WT3-nK-anE" customClass="PokemonCollectionCell" customModule="PokeTeam" customModuleProvider="target">
                                         <rect key="frame" x="47" y="15" width="320" height="95"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="2fR-Xr-SoO">
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="2fR-Xr-SoO">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="95"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <subviews>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XPO-Qc-dbi">
+                                                <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XPO-Qc-dbi">
                                                     <rect key="frame" x="103" y="10" width="217" height="75"/>
                                                     <subviews>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron.right" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="ugg-69-6Vu">
@@ -153,7 +153,6 @@
                                             <outlet property="pokemonNameLabel" destination="WIp-AY-5S3" id="wyc-pm-cK9"/>
                                             <outlet property="pokemonType1Label" destination="cIF-D4-CZy" id="q2D-Qx-Yxp"/>
                                             <outlet property="pokemonType2Label" destination="5kt-qS-RUs" id="Af8-rx-UlL"/>
-                                            <segue destination="A7p-DA-mdD" kind="show" identifier="detailSegue" id="6iG-hC-jgm"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -186,14 +185,14 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="100" translatesAutoresizingMaskIntoConstraints="NO" id="Qn0-af-pUH">
-                                <rect key="frame" x="143" y="160" width="128" height="128"/>
+                                <rect key="frame" x="143" y="64" width="128" height="128"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="128" id="Ygu-22-elX"/>
                                     <constraint firstAttribute="height" constant="128" id="wFF-OK-FvL"/>
                                 </constraints>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Jf-dr-9Mk" customClass="RoundedCorners" customModule="PokeTeam" customModuleProvider="target">
-                                <rect key="frame" x="20" y="338" width="374" height="128"/>
+                                <rect key="frame" x="20" y="242" width="374" height="128"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Coming Soon..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8yP-N5-dAB">
                                         <rect key="frame" x="114.5" y="10" width="145" height="26.5"/>
@@ -242,7 +241,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JrV-2w-aej" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3606" y="511"/>
+            <point key="canvasLocation" x="3529" y="511"/>
         </scene>
     </scenes>
     <resources>
