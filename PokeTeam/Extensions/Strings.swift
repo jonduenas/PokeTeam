@@ -42,8 +42,12 @@ extension String {
             return "Nidoran ♀"
         case "farfetchd":
             return "Farfetch'd"
+        case "sirfetchd":
+            return "Sirfetch'd"
         case "mr-mime":
             return "Mr. Mime"
+        case "mr-rime":
+            return "Mr. Rime"
         case "mime-jr":
             return "Mime Jr."
         case "type-null":
