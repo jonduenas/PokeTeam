@@ -43,6 +43,8 @@ extension DataManager {
     }
     
     private func getID(from url: String) -> Int? {
+        // FIXME: This whole thing is unnecessary. Convert all to URL.lastPathComponent
+        #warning("Use URL.lastPathComponent instead")
         let baseURL = "https://pokeapi.co/api/v2/"
         let speciesEndpoint = "pokemon-species/"
         let pokemonEndpoint = "pokemon/"
@@ -527,8 +529,9 @@ extension DataManager {
     
     // MARK: - Team Methods
     
-    @discardableResult public func addTeam() -> TeamMO {
+    @discardableResult public func addTeam(name: String) -> TeamMO {
         let team = TeamMO(context: managedObjectContext)
+        team.name = name
         
         return team
     }

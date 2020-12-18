@@ -86,7 +86,7 @@
         <relationship name="altForm" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="AltForm" inverseName="pokemon" inverseEntity="AltForm"/>
         <relationship name="moves" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Move" inverseName="pokemon" inverseEntity="Move"/>
         <relationship name="pokedex" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Pokedex" inverseName="pokemon" inverseEntity="Pokedex"/>
-        <relationship name="team" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Team" inverseName="members" inverseEntity="Team"/>
+        <relationship name="team" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Team" inverseName="members" inverseEntity="Team"/>
         <relationship name="varieties" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Pokemon" inverseName="varieties" inverseEntity="Pokemon"/>
         <fetchIndex name="byNameIndex">
             <fetchIndexElement property="name" type="Binary" order="ascending"/>
@@ -128,7 +128,7 @@
         <element name="AltForm" positionX="79.828125" positionY="-179.87109375" width="128" height="163"/>
         <element name="Move" positionX="497.80859375" positionY="-285.21484375" width="128" height="148"/>
         <element name="Pokedex" positionX="-165.30078125" positionY="-616.83984375" width="128" height="88"/>
-        <element name="Pokemon" positionX="25.265625" positionY="-793.3671875" width="128" height="478"/>
+        <element name="Pokemon" positionX="25.265625" positionY="-793.3671875" width="128" height="464"/>
         <element name="Team" positionX="-176.80859375" positionY="-266.953125" width="128" height="73"/>
         <element name="Type" positionX="419.37109375" positionY="-512.08984375" width="128" height="164"/>
     </elements>

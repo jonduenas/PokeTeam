@@ -228,6 +228,8 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
     // MARK: Search Bar Methods
     
     func filterContentForSearchText(_ searchText: String) {
+        // FIXME: Search doesn't match pokemon like Tapu Lele since the pokemon.name is tapu-lele
+        #warning("Not all searches match correctly")
         filteredPokemon = (searchText.isEmpty ? fetchedResultsController.fetchedObjects : fetchedResultsController.fetchedObjects!.filter({ (pokemon) -> Bool in
             return pokemon.name?.range(of: searchText, options: .caseInsensitive) != nil
         }))!

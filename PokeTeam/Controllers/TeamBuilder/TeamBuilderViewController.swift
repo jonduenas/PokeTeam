@@ -65,7 +65,6 @@ class TeamBuilderViewController: UIViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let indexPath = collectionView.indexPathsForSelectedItems!
-        //let selectedItem = indexPath[0].row
         
         if segue.identifier == detailSegueIdentifier {
             let detailVC = segue.destination as! PokemonBuilderVC
@@ -93,12 +92,9 @@ extension TeamBuilderViewController: NSFetchedResultsControllerDelegate {
     private func configureFetchedResultsController() {
         let request: NSFetchRequest<PokemonMO> = PokemonMO.fetchRequest()
         
-        let filter = NSPredicate(format: "ANY team != nil")
+        let filter = NSPredicate(format: "ANY team.name == %@", "defaultTeam")
         request.predicate = filter
-        
-        let sort = NSSortDescriptor(key: "id", ascending: true)
-        
-        request.sortDescriptors = [sort]
+        request.sortDescriptors = []
         
         fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: coreDataStack.mainContext, sectionNameKeyPath: nil, cacheName: nil)
         fetchedResultsController.delegate = self
@@ -139,16 +135,19 @@ extension TeamBuilderViewController: NSFetchedResultsControllerDelegate {
 
 extension TeamBuilderViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let selectedPokemonObjectID = dataSource.itemIdentifier(for: indexPath) else { return }
+        let moc = dataManager.managedObjectContext
         
-        guard let selectedPokemonObject = try? fetchedResultsController.managedObjectContext.existingObject(with: selectedPokemonObjectID) as? PokemonMO else { return }
+        guard let selectedPokemonObjectID = dataSource.itemIdentifier(for: indexPath) else { return }
+        guard let selectedPokemonObject = try? moc.existingObject(with: selectedPokemonObjectID) as? PokemonMO else { return }
         
         let alertContoller = UIAlertController(title: "Remove Pokemon from team?", message: "Would you like to remove \(selectedPokemonObject.name?.formatPokemonName() ?? "this Pokemon") from your team?", preferredStyle: .alert)
         alertContoller.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         alertContoller.addAction(UIAlertAction(title: "Remove", style: .destructive, handler: { _ in
             if let team = selectedPokemonObject.team {
-                selectedPokemonObject.removeFromTeam(team)
-                self.coreDataStack.saveContext(self.fetchedResultsController.managedObjectContext)
+                moc.perform {
+                    selectedPokemonObject.removeFromTeam(team)
+                    self.coreDataStack.saveContext(moc)
+                }
             }
         }))
         present(alertContoller, animated: true)

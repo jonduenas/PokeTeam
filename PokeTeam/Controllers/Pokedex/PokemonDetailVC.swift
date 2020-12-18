@@ -408,12 +408,7 @@ class PokemonDetailVC: UIViewController {
         let storyboard = UIStoryboard(name: "Pokedex", bundle: nil)
         let abilityController = storyboard.instantiateViewController(withIdentifier: "AbilityVC") as! AbilityDetailVC
         abilityController.abilityName = abilities[sender.tag].abilityDetails?.name
-//        abilityController.abilityManagedObjectID = abilities[sender.tag].objectID
-//        print(abilities[sender.tag])
         abilityController.coreDataStack = coreDataStack
-//        abilityController.backgroundDataManager = backgroundDataManager
-//        abilityController.apiService = apiService
-        
         abilityController.transitioningDelegate = abilityTransitioningDelegate
         abilityController.modalPresentationStyle = .custom
 
@@ -435,7 +430,6 @@ class PokemonDetailVC: UIViewController {
         } else {
             showAddToTeamAlert(team: nil)
         }
-        
     }
     
     private func showAddToTeamAlert(team: TeamMO?) {
@@ -443,14 +437,19 @@ class PokemonDetailVC: UIViewController {
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         alertController.addAction(UIAlertAction(title: "Add", style: .default, handler: { _ in
             if let existingTeam = team {
-                existingTeam.addToMembers(self.pokemon)
-                print("Adding \(self.pokemon.name!) to existing team.")
-                self.coreDataStack.saveContext(self.backgroundDataManager.managedObjectContext)
+                self.pokemon.managedObjectContext?.perform {
+                    self.pokemon.addToTeam(existingTeam)
+                    print("Adding \(self.pokemon.name!) to existing team.")
+                    self.coreDataStack.saveContext(self.backgroundDataManager.managedObjectContext)
+                }
             } else {
-                let newTeam = self.backgroundDataManager.addTeam()
-                newTeam.addToMembers(self.pokemon)
-                print("Adding \(self.pokemon.name!) to new team.")
-                self.coreDataStack.saveContext(self.backgroundDataManager.managedObjectContext)
+                let newTeam = self.backgroundDataManager.addTeam(name: "defaultTeam")
+                
+                self.pokemon.managedObjectContext?.perform {
+                    self.pokemon.addToTeam(newTeam)
+                    print("Adding \(self.pokemon.name!) to new team.")
+                    self.coreDataStack.saveContext(self.backgroundDataManager.managedObjectContext)
+                }
             }
         }))
         present(alertController, animated: true)

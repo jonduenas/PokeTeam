@@ -47,15 +47,15 @@ class PokemonBuilderVC: UIViewController {
     }
     
     private func remove(pokemon: PokemonMO) {
-        coreDataStack.mainContext.performAndWait {
-            let teamSet = pokemon.team
-            let teamArray = teamSet?.allObjects as? [TeamMO]
-            if teamArray?.count == 1 {
-                if let team = teamArray?[0] {
-                    team.removeFromMembers(pokemon)
-                }
-            }
-            coreDataStack.saveContext()
-        }
+//        coreDataStack.mainContext.performAndWait {
+//            let teamSet = pokemon.team
+//            let teamArray = teamSet?.allObjects as? [TeamMO]
+//            if teamArray?.count == 1 {
+//                if let team = teamArray?[0] {
+//                    team.removeFromMembers(pokemon)
+//                }
+//            }
+//            coreDataStack.saveContext()
+//        }
     }
 }
