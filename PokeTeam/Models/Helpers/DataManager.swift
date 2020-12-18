@@ -43,30 +43,19 @@ extension DataManager {
     }
     
     private func getID(from url: String) -> Int? {
-        // FIXME: This whole thing is unnecessary. Convert all to URL.lastPathComponent
-        #warning("Use URL.lastPathComponent instead")
-        let baseURL = "https://pokeapi.co/api/v2/"
-        let speciesEndpoint = "pokemon-species/"
-        let pokemonEndpoint = "pokemon/"
-        
-        if url.contains(speciesEndpoint) {
-            if let returnInt = Int(url.dropFirst(baseURL.count + speciesEndpoint.count).dropLast()) {
-                return returnInt
-            } else {
-                print("Error getting ID from URL")
-                return nil
-            }
-        } else if url.contains(pokemonEndpoint) {
-            if let returnInt = Int(url.dropFirst(baseURL.count + pokemonEndpoint.count).dropLast()) {
-                return returnInt
-            } else {
-                print("Error getting ID from URL")
-                return nil
-            }
-        } else {
-            print("Error getting ID from URL")
+        guard let pokemonURL = URL(string: url) else {
+            print("Error with converting Pokemon URL string to URL object")
             return nil
         }
+        
+        let idString = pokemonURL.lastPathComponent
+        
+        guard let id = Int(idString) else {
+            print("Error converting Pokemon URL lastPathComponent to Int")
+            return nil
+        }
+        
+        return id
     }
     
     public func getFromCoreData<T: NSManagedObject>(entity: T.Type, sortBy: String? = nil, isAscending: Bool = true, predicate: NSPredicate? = nil) -> [Any]?  {
