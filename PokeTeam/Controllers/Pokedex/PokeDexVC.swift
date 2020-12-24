@@ -136,7 +136,7 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
         }
     }
     
-    private func fetchPokedex() {
+    @objc private func fetchPokedex() {
         guard let url = apiService.createURL(for: .allPokemon) else {
             print("Error creating URL")
             return
@@ -151,6 +151,7 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
                     break
                 case .failure(let error):
                     print("Error fetching from API: \(error) - \(error.localizedDescription)")
+                    self.updateUI(error: error)
                 }
             }, receiveValue: { [weak self] pokedex in
                 guard let managedObjects = self?.fetchedResultsController.fetchedObjects else { return }
@@ -175,9 +176,13 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
         return pokedex.count != managedObjects.count || managedObjects.isEmpty
     }
     
-    private func updateUI() {
+    private func updateUI(error: Error? = nil) {
         DispatchQueue.main.async { [weak self] in
             print("Updating UI")
+            if let error = error {
+                self?.showAlert(message: "Error downloading data from server: \(error.localizedDescription)")
+                self?.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(self?.fetchPokedex))
+            }
             self?.tableView.reloadData()
             self?.setState(loading: false)
         }
