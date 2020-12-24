@@ -23,6 +23,7 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
     private lazy var coreDataStack = CoreDataStack()
     private lazy var backgroundDataManager = DataManager(managedObjectContext: coreDataStack.newDerivedContext(), coreDataStack: coreDataStack)
     
+    var refreshButton: UIBarButtonItem?
     var fetchedResultsController: NSFetchedResultsController<PokemonMO>!
     var filteredPokemon = [PokemonMO]()
     var subscriptions: Set<AnyCancellable> = []
@@ -70,6 +71,8 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
         navigationItem.title = "POKEDEX"
         navigationItem.largeTitleDisplayMode = .always
         navigationController?.navigationBar.setNavigationBarColor(to: UIColor.clear, backgroundEffect: UIBlurEffect(style: .systemUltraThinMaterial))
+        
+        refreshButton = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(fetchPokedex))
     }
     
     private func initializeTeamBuilderTab() {
@@ -137,6 +140,8 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
     }
     
     @objc private func fetchPokedex() {
+        setState(loading: true)
+        
         guard let url = apiService.createURL(for: .allPokemon) else {
             print("Error creating URL")
             return
@@ -178,13 +183,17 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
     
     private func updateUI(error: Error? = nil) {
         DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             print("Updating UI")
             if let error = error {
-                self?.showAlert(message: "Error downloading data from server: \(error.localizedDescription)")
-                self?.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(self?.fetchPokedex))
+                self.showAlert(message: "Error downloading data from server: \(error.localizedDescription)")
+                self.navigationItem.rightBarButtonItem = self.refreshButton
+                self.setState(loading: false)
+                return
             }
-            self?.tableView.reloadData()
-            self?.setState(loading: false)
+            self.navigationItem.rightBarButtonItem = nil
+            self.tableView.reloadData()
+            self.setState(loading: false)
         }
     }
     
