@@ -29,6 +29,9 @@ class PokemonDetailVC: UIViewController {
     var abilityArray: [AbilityMO]?
     var subscriptions: Set<AnyCancellable> = []
     var indicatorView: UIActivityIndicatorView!
+    var refreshButton: UIBarButtonItem?
+    var addToTeamButton: UIBarButtonItem?
+    var isBaseForm: Bool = true
     
     @IBOutlet weak var formCollectionView: UICollectionView!
     
@@ -75,8 +78,7 @@ class PokemonDetailVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.title = "Pokémon Detail"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addToTeam))
+        initializeNavigationBar()
         
         indicatorView = self.view.activityIndicator(style: .large, center: self.view.center)
         view.addSubview(indicatorView)
@@ -91,7 +93,7 @@ class PokemonDetailVC: UIViewController {
         formCollectionView.dataSource = self
         
         if shouldFetchDetails(for: pokemonFormsArray[0]) {
-            fetchDetails(for: pokemonFormsArray[0], isBaseForm: true)
+            fetchDetails(for: pokemonFormsArray[0], isBaseForm: isBaseForm)
         } else {
             showDetails(with: pokemonFormsArray[0])
         }
@@ -101,6 +103,15 @@ class PokemonDetailVC: UIViewController {
         super.viewDidAppear(animated)
         
         colorBlockView.animateOnShow()
+    }
+    
+    private func initializeNavigationBar() {
+        navigationItem.title = "Pokémon Detail"
+        
+        refreshButton = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(refreshButtonTapped))
+        addToTeamButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addToTeam))
+        
+        navigationItem.rightBarButtonItem = addToTeamButton
     }
     
     private func shouldFetchDetails(for pokemonForm: PokemonMO) -> Bool {
@@ -115,6 +126,7 @@ class PokemonDetailVC: UIViewController {
     }
     
     private func changeShownForm(to pokemonForm: PokemonMO) {
+        isBaseForm = !pokemonForm.isAltForm
         pokemon = pokemonForm
         updatePokemonUI(with: pokemonForm)
         updateStats(with: pokemonForm)
@@ -126,17 +138,11 @@ class PokemonDetailVC: UIViewController {
         
         print("Fetching Pokemon details from API")
         
-        var pokemonID: Int64?
-        
         var speciesURL: URL? = nil
         pokemonForm.managedObjectContext?.performAndWait {
             guard let speciesStringURL = pokemonForm.speciesURL else { return }
             speciesURL = URL(string: speciesStringURL)
-            pokemonID = pokemonForm.id
         }
-        
-        print("Fetching pokemon ID: \(pokemonID)")
-        print("Pokemon variety name: \(pokemonForm.varietyName)")
         
         apiService.fetch(type: SpeciesData.self, from: speciesURL!)
             .flatMap { speciesData -> AnyPublisher<PokemonData, Error> in
@@ -150,56 +156,40 @@ class PokemonDetailVC: UIViewController {
                 print("Finished updating Pokemon")
             case .failure(let error):
                 print("Error updating Pokemon: \(error) - \(error.localizedDescription)")
+                self.showError(error)
             }
         }) { pokemonData in
             self.backgroundDataManager.updateDetails(for: pokemonForm.objectID, with: pokemonData)
             self.coreDataStack.saveContext(self.backgroundDataManager.managedObjectContext)
             
-//            guard let pokemonFormID = pokemonID else {
-//                print("Error with retrieving Pokemon ID")
-//                return
-//            }
-            
             pokemonForm.managedObjectContext?.refresh(pokemonForm, mergeChanges: true)
             
             DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                
+                self.navigationItem.rightBarButtonItem = self.addToTeamButton
+                
                 if isBaseForm {
-                    self?.pokemonFormsArray = [pokemonForm]
-                    self?.showDetails(with: pokemonForm)
+                    self.pokemonFormsArray = [pokemonForm]
+                    self.showDetails(with: pokemonForm)
                 } else {
-                    self?.changeShownForm(to: pokemonForm)
+                    self.changeShownForm(to: pokemonForm)
                 }
                 
-                self?.setState(loading: false)
+                self.setState(loading: false)
             }
-            
-//            if let updatedPokemon = self.backgroundDataManager.getFromCoreData(entity: PokemonMO.self, predicate: NSPredicate(format: "id == %@", pokemonFormID)) as? [PokemonMO] {
-//                if updatedPokemon.count > 0 {
-//                    DispatchQueue.main.async { [weak self] in
-//                        if isBaseForm {
-//                            self?.pokemonFormsArray = updatedPokemon
-//                            self?.showDetails(with: updatedPokemon[0])
-//                        } else {
-//                            self?.changeShownForm(to: updatedPokemon[0])
-//                        }
-//
-//                        self?.setState(loading: false)
-//                    }
-//                } else {
-//                    print("Error finding Pokemon to load from Core Data")
-//                    DispatchQueue.main.async { [weak self] in
-//                        self?.setState(loading: false)
-//                    }
-//                }
-//            } else {
-//                print("Error reloading pokemon")
-//                DispatchQueue.main.async { [weak self] in
-//                    self?.setState(loading: false)
-//                }
-//            }
-            
         }
         .store(in: &subscriptions)
+    }
+    
+    private func showError(_ error: Error) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.showAlert(message: "Error fetching data from the server: \(error.localizedDescription)")
+            self.setState(loading: false)
+            self.detailView.isHidden = true
+            self.navigationItem.rightBarButtonItem = self.refreshButton
+        }
     }
     
     func fetchPokemonData(with id: Int) -> AnyPublisher<PokemonData, Error> {
@@ -401,6 +391,10 @@ class PokemonDetailVC: UIViewController {
     
     // MARK: - Button Methods
     
+    @objc private func refreshButtonTapped() {
+        fetchDetails(for: pokemon, isBaseForm: isBaseForm)
+    }
+    
     @objc private func abilityButtonTapped(sender: UIButton!) {
         print(sender.tag)
         guard let abilities = abilityArray else { return }
@@ -497,9 +491,13 @@ extension PokemonDetailVC: UICollectionViewDelegate, UICollectionViewDataSource 
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("Selected \(pokemonFormsArray[indexPath.row].varietyName!)")
+        
         let selectedForm = pokemonFormsArray[indexPath.row]
+        pokemon = selectedForm
+        isBaseForm = indexPath.row == 0
+        
         if shouldFetchDetails(for: selectedForm) {
-            fetchDetails(for: selectedForm, isBaseForm: false)
+            fetchDetails(for: selectedForm, isBaseForm: isBaseForm)
         } else {
             changeShownForm(to: selectedForm)
         }
