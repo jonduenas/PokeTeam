@@ -53,13 +53,6 @@ class AbilityDetailVC: UIViewController {
             print("abilityName is nill")
         }
         
-//        if let abilityObjectID = abilityManagedObjectID {
-//            ability = backgroundDataManager.managedObjectContext.object(with: abilityObjectID) as? AbilityMO
-//            print(ability?.name)
-//            print(ability?.isHidden)
-//            print(ability?.urlString)
-//        }
-        
         initializeActivityIndicator()
         
         if shouldUpdateDetails() {
@@ -94,15 +87,17 @@ class AbilityDetailVC: UIViewController {
         setState(loading: true)
 
         apiService.fetch(type: AbilityData.self, from: abilityURL)
-            .sink(receiveCompletion: { results in
+            .sink(receiveCompletion: { [weak self] results in
+                guard let self = self else { return }
                 switch results {
                 case .finished:
                     break
                 case .failure(let error):
-                    print(error)
+                    self.showError(error)
                 }
             },
-                  receiveValue: { (abilityData) in
+                  receiveValue: { [weak self] abilityData in
+                    guard let self = self else { return }
                     guard let objectID = self.abilityDetails?.objectID else { return }
                     self.backgroundDataManager.addAbilityDescription(to: objectID, with: abilityData)
                     self.coreDataStack.saveContext(self.backgroundDataManager.managedObjectContext)
@@ -117,6 +112,15 @@ class AbilityDetailVC: UIViewController {
                     }
             })
             .store(in: &subscriptions)
+    }
+    
+    private func showError(_ error: Error) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.showAlert(title: "", message: "Error downloading data from server: \(error.localizedDescription)") {
+                self.dismiss(animated: true)
+            }
+        }
     }
     
     private func showAbilityDetails() {
