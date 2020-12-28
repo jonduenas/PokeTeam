@@ -47,10 +47,14 @@ class AbilityDetailVC: UIViewController {
         }
         
         if let abilityName = abilityName {
-            let fetchedAbilityArray = backgroundDataManager.getFromCoreData(entity: AbilityDetails.self, predicate: NSPredicate(format: "name == %@", abilityName)) as! [AbilityDetails]
+            guard let fetchedAbilityArray = backgroundDataManager.getFromCoreData(entity: AbilityDetails.self, predicate: NSPredicate(format: "name == %@", abilityName)) as? [AbilityDetails] else {
+                showAlert(message: "Error loading stored data.")
+                return
+            }
             abilityDetails = fetchedAbilityArray[0]
         } else {
             print("abilityName is nill")
+            showAlert(message: "Error loading Pokemon ability.")
         }
         
         initializeActivityIndicator()
@@ -76,11 +80,13 @@ class AbilityDetailVC: UIViewController {
     private func fetchAbilityDetails() {
         guard let abilityURLString = abilityDetails?.urlString else {
             print("Error finding ability.urlString")
+            showAlert(message: "Error fetching data for Pokemon ability.")
             return
         }
         
         guard let abilityURL = URL(string: abilityURLString) else {
             print("Error creating ability URL")
+            showAlert(message: "Error fetching data for Pokemon ability.")
             return
         }
 
