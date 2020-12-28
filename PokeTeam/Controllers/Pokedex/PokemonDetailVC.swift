@@ -504,15 +504,4 @@ extension PokemonDetailVC: UICollectionViewDelegate, UICollectionViewDataSource 
     }
 }
 
-extension UIViewController {
-    func showAlert(title: String = "", message: String, afterConfirm: (() -> Void)? = nil) {
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let OKAction = UIAlertAction(title: "OK", style: .default) { _ in
-            if let action = afterConfirm {
-                action()
-            }
-        }
-        alertController.addAction(OKAction)
-        self.present(alertController, animated: true, completion: nil)
-    }
-}
+

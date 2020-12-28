@@ -860,6 +860,7 @@
 		6579BEC22568894400130E7E /* TypeCheckerHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6579BEC12568894400130E7E /* TypeCheckerHeaderView.swift */; };
 		6580DF16250C579100603CED /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6580DF15250C579100603CED /* GradientView.swift */; };
 		658757D824EB261000ECD3CE /* StatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658757D724EB261000ECD3CE /* StatView.swift */; };
+		6593F176259A7468003BFA54 /* showAlert+UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6593F175259A7468003BFA54 /* showAlert+UIViewController.swift */; };
 		6599203D24D8F1EE0082F51C /* SpeciesData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6599203C24D8F1EE0082F51C /* SpeciesData.swift */; };
 		6599203F24D8F20F0082F51C /* PokemonData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6599203E24D8F20F0082F51C /* PokemonData.swift */; };
 		6599204724DA29800082F51C /* MoveData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6599204624DA29800082F51C /* MoveData.swift */; };
@@ -1765,6 +1766,7 @@
 		6579BEC12568894400130E7E /* TypeCheckerHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeCheckerHeaderView.swift; sourceTree = "<group>"; };
 		6580DF15250C579100603CED /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		658757D724EB261000ECD3CE /* StatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatView.swift; sourceTree = "<group>"; };
+		6593F175259A7468003BFA54 /* showAlert+UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "showAlert+UIViewController.swift"; sourceTree = "<group>"; };
 		6599203C24D8F1EE0082F51C /* SpeciesData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeciesData.swift; sourceTree = "<group>"; };
 		6599203E24D8F20F0082F51C /* PokemonData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonData.swift; sourceTree = "<group>"; };
 		6599204624DA29800082F51C /* MoveData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveData.swift; sourceTree = "<group>"; };
@@ -2798,6 +2800,7 @@
 				6531FB8F2574316E00972993 /* createLayout+UICollectionView.swift */,
 				65D788752571A1A900763B76 /* UILabel.swift */,
 				651E246624F19874000052ED /* validateHTTPStatus+Publisher.swift */,
+				6593F175259A7468003BFA54 /* showAlert+UIViewController.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -3847,6 +3850,7 @@
 				6531FB902574316E00972993 /* createLayout+UICollectionView.swift in Sources */,
 				65EDE753256EFC7900ED2018 /* TypeCalculator.swift in Sources */,
 				65E36FC624F84AD1003F00C3 /* ResourceList.swift in Sources */,
+				6593F176259A7468003BFA54 /* showAlert+UIViewController.swift in Sources */,
 				650B51CB2540F64400677493 /* FormImageButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
