@@ -105,6 +105,7 @@ extension TeamBuilderViewController: NSFetchedResultsControllerDelegate {
             try fetchedResultsController.performFetch()
         } catch {
             print("Error performing fetch - \(error.localizedDescription)")
+            showAlert(message: "Error fetching team data: \(error.localizedDescription)")
         }
     }
     
