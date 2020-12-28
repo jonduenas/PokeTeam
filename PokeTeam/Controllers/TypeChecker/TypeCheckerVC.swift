@@ -114,6 +114,7 @@ class TypeCheckerVC: UIViewController {
             return loadedTypes
         } else {
             print("Error loading Type Objects from Core Data")
+            showAlert(message: "Error loading Pokemon types.")
             return []
         }
     }
