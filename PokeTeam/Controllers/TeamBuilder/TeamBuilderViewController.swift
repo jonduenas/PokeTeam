@@ -35,7 +35,18 @@ class TeamBuilderViewController: UIViewController {
         fetchTeam()
     }
     
-    func setupCustomNavController() {
+    func reloadTeam() {
+        fetchedResultsController = nil
+        configureFetchedResultsController()
+        
+        dataSource = nil
+        collectionView.dataSource = nil
+        configureDataSource()
+        
+        fetchTeam()
+    }
+    
+    private func setupCustomNavController() {
         let customNavVC = navigationController as! CustomNavVC
         navigationItem.title = "TEAM BUILDER"
         

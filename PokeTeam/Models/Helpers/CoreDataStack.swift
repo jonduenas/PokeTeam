@@ -75,4 +75,31 @@ open class CoreDataStack {
             self.saveContext(self.mainContext)
         }
     }
+    
+    public func deletePersistentStore() {
+        guard let url = persistentContainer.persistentStoreDescriptions.first?.url else { return }
+        
+        let persistentStoreCoordinator = persistentContainer.persistentStoreCoordinator
+        
+        mainContext.performAndWait {
+            mainContext.reset()
+            
+            do {
+                try persistentStoreCoordinator.destroyPersistentStore(at:url, ofType: NSSQLiteStoreType, options: nil)
+            } catch {
+                print("Attempted to clear persistent store: " + error.localizedDescription)
+            }
+            
+            persistentContainer.loadPersistentStores { [weak self] (storeDescription, error) in
+                guard let self = self else { return }
+                
+                if let error = error as NSError? {
+                    fatalError("Unresolved error \(error), \(error.userInfo)")
+                } else {
+                    self.saveContext()
+                    self.mainContext = self.persistentContainer.viewContext
+                }
+            }
+        }
+    }
 }

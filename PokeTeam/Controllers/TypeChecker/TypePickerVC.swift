@@ -26,6 +26,10 @@ class TypePickerVC: UIViewController {
         collectionView.collectionViewLayout = collectionView.createTwoColumnLayout()
     }
     
+    deinit {
+        print("TypePickerVC cleared")
+    }
+    
     // MARK: - Navigation
 
      @IBAction func closeButtonTapped(_ sender: Any) {

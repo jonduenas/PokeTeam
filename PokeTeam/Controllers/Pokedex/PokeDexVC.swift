@@ -43,20 +43,14 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
 
         initializeTeamBuilderTab()
         initializeTypeCheckerTab()
+        initializeSettingsTab()
 
         initializeIndicatorView()
         initializeSearchBar()
         
         setState(loading: true)
         
-        loadSavedPokedexData()
-        fetchPokedex()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        tableView.reloadData()
+        loadPokedex()
     }
     
     // MARK: - viewDidLoad Initializer methods
@@ -97,7 +91,13 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
         }
     }
     
-    private func fetchTypeDataFromAPI() {
+    private func initializeSettingsTab() {
+        let settingsNav = tabBarController?.viewControllers?[3] as! CustomNavVC
+        let settingsTab = settingsNav.viewControllers[0] as! SettingsVC
+        settingsTab.coreDataStack = coreDataStack
+    }
+    
+    func fetchTypeDataFromAPI() {
         let typesURL = apiService.createURL(for: .types)!
         
         apiService.fetchAll(type: TypeData.self, from: typesURL)
@@ -109,9 +109,21 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
                     print("Error fetching all TypeData from API: \(error) - \(error.localizedDescription)")
                 }
             } receiveValue: { [weak self] allTypeData in
-                self?.backgroundDataManager.parseTypeDataIntoCoreData(typeDataArray: allTypeData)
+                guard let self = self else { return }
+                self.backgroundDataManager.parseTypeDataIntoCoreData(typeDataArray: allTypeData)
+                
+                DispatchQueue.main.async {
+                    let typeCheckerNav = self.tabBarController?.viewControllers?[2] as! CustomNavVC
+                    let typeCheckerTab = typeCheckerNav.viewControllers[0] as! TypeCheckerVC
+                    typeCheckerTab.allTypes = self.backgroundDataManager.getFromCoreData(entity: TypeMO.self, sortBy: "name", isAscending: true) as! [TypeMO]
+                }
             }
             .store(in: &subscriptions)
+    }
+    
+    func loadPokedex() {
+        loadSavedPokedexData()
+        fetchPokedex()
     }
     
     private func loadSavedPokedexData() {

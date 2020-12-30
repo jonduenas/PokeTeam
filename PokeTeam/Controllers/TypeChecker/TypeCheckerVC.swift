@@ -47,7 +47,7 @@ class TypeCheckerVC: UIViewController {
     var typeEffectiveness = [TypeEffectiveness: [TypeMO]]()
     var typeSections = [TypeEffectiveness]()
     
-    lazy var allTypes = loadTypeDetails()
+    var allTypes: [TypeMO] = []
     
     @IBOutlet weak var type1Button: PokemonTypeButton!
     @IBOutlet weak var type2Button: PokemonTypeButton!
@@ -62,6 +62,16 @@ class TypeCheckerVC: UIViewController {
         configureDataSource()
         
         initializeButtons()
+        
+        allTypes = loadTypeDetails()
+    }
+    
+    func reloadData() {
+        allTypes.removeAll()
+        type1 = .none
+        type2 = .none
+        initializeButtons()
+        applySnapshot()
     }
     
     private func configureCollectionView() {
@@ -111,6 +121,7 @@ class TypeCheckerVC: UIViewController {
     
     private func loadTypeDetails() -> [TypeMO] {
         if let loadedTypes = dataManager.getFromCoreData(entity: TypeMO.self, sortBy: "name", isAscending: true) as? [TypeMO] {
+            print("Loaded \(loadedTypes.count) Pokemon types")
             return loadedTypes
         } else {
             print("Error loading Type Objects from Core Data")
@@ -124,13 +135,19 @@ class TypeCheckerVC: UIViewController {
         typeSections = []
         
         if type1 != .none {
-            type1Object = dataManager.getFromCoreData(entity: TypeMO.self, predicate: NSPredicate(format: "name == %@", type1.rawValue))?[0] as? TypeMO
+            let fetchedObjects = dataManager.getFromCoreData(entity: TypeMO.self, predicate: NSPredicate(format: "name == %@", type1.rawValue)) as! [TypeMO]
+            if !fetchedObjects.isEmpty {
+                type1Object = fetchedObjects[0]
+            }
         } else {
             type1Object = nil
         }
         
         if type2 != .none {
-            type2Object = dataManager.getFromCoreData(entity: TypeMO.self, predicate: NSPredicate(format: "name == %@", type2.rawValue))?[0] as? TypeMO
+            let fetchedObjects = dataManager.getFromCoreData(entity: TypeMO.self, predicate: NSPredicate(format: "name == %@", type2.rawValue)) as! [TypeMO]
+            if !fetchedObjects.isEmpty {
+                type2Object = fetchedObjects[0]
+            }
         } else {
             type2Object = nil
         }
