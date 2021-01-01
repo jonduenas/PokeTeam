@@ -95,6 +95,8 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
         let settingsNav = tabBarController?.viewControllers?[3] as! CustomNavVC
         let settingsTab = settingsNav.viewControllers[0] as! SettingsVC
         settingsTab.coreDataStack = coreDataStack
+        settingsTab.apiService = apiService
+        settingsTab.dataManager = backgroundDataManager
     }
     
     func fetchTypeDataFromAPI() {
