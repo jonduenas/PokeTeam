@@ -8,6 +8,7 @@
 
 import UIKit
 import Combine
+import CoreData
 
 class SettingsVC: UITableViewController {
     
@@ -20,7 +21,7 @@ class SettingsVC: UITableViewController {
     var dataManager: DataManager!
     var tableViewCells = [String]()
     var subscriptions: Set<AnyCancellable> = []
-    var speciesData: [SpeciesData] = []
+    //var speciesData: [SpeciesData] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,82 +50,123 @@ class SettingsVC: UITableViewController {
     }
     
     private func downloadAndStoreAllData() {
-//        print("Downloading and storing all data from server")
-//        guard let speciesURL = apiService.createURL(for: .species) else { return }
-//
-//        //var allSpeciesData = [SpeciesData]()
-//
-//        apiService.fetchAll(type: SpeciesData.self, from: speciesURL)
-//            .flatMap { allSpeciesData -> AnyPublisher<[PokemonData], Error> in
-//                return allSpeciesData.publisher
-//                    .map(\.varieties)
-//                    .flatMap { varieties -> AnyPublisher<[PokemonData], Error> in
-//                        return varieties.publisher
-//                            .flatMap { variety in
-//                                self.apiService.fetch(type: PokemonData.self, from: URL(string: variety.pokemon.url)!)
-//                            }
-//                            .collect()
-//                            .eraseToAnyPublisher()
-//                    }
-//                    .eraseToAnyPublisher()
-//            }
-//            .sink { completion in
-//                switch completion {
-//                case .finished:
-//                    print("Finished fetching all TypeData from API")
-//                case .failure(let error):
-//                    print("Error fetching all SpeciesData from API: \(error) - \(error.localizedDescription)")
-//                }
-//            } receiveValue: { pokemonDataArray in
-//
-//            }
-//            .store(in: &subscriptions)
-        
         downloadAllSpeciesData()
-            .flatMap { allSpeciesData in
-                allSpeciesData.publisher.eraseToAnyPublisher()
+            .map({ _ -> [PokemonMO] in
+                return self.dataManager.getFromCoreData(entity: PokemonMO.self) as! [PokemonMO]
+            })
+            .flatMap { allPokemonArray -> AnyPublisher<[PokemonMO], Error> in
+                return allPokemonArray.publisher.setFailureType(to: Error.self)
+                    .flatMap({ pokemon in
+                        self.downloadPokemonData(for: pokemon)
+                    })
+                    .collect()
+                    .eraseToAnyPublisher()
             }
-            .flatMap { speciesData -> AnyPublisher<[PokemonData], Error> in
-                let pokedexNumber = speciesData.pokedexNumbers[0].entryNumber
-                let speciesURL = self.apiService.createURL(for: .species, fromIndex: pokedexNumber)!
-                self.dataManager.addPokemon(name: speciesData.name, speciesURL: speciesURL.absoluteString, id: speciesData.pokedexNumbers[0].entryNumber)
-                return self.downloadAllPokemonDataFor(species: speciesData)
-                    .flatMap { allVarietyData in
-                        return allVarietyData.publisher.eraseToAnyPublisher()
-                    }
-                    .flatMap { pokemonData -> AnyPublisher<[AbilityData], Error> in
-                        
-                        return self.downloadAllAbilityDataFor(pokemon: pokemonData)
-                    }.eraseToAnyPublisher()
+            .flatMap { allPokemon -> AnyPublisher<[[AbilityDetails]], Error> in
+                return allPokemon.publisher.setFailureType(to: Error.self)
+                    .flatMap { pokemon -> AnyPublisher<[AbilityDetails], Error> in
+                        return self.downloadAllAbilityDataFor(pokemon)
+                    }.collect()
+                    .eraseToAnyPublisher()
             }
-            .collect()
-            .eraseToAnyPublisher()
+            .ignoreOutput()
+            .receive(on: DispatchQueue.main)
+            .sink { completion in
+                switch completion {
+                case .failure(let error):
+                    let errorMessage = "Error downloading all Pokemon Data: \(error.localizedDescription)"
+                    print(errorMessage)
+                    self.showAlert(message: errorMessage)
+                case .finished:
+                    self.clearAllTabData()
+                    let finishedMessage = "Finished downloading all data"
+                    print(finishedMessage)
+                    self.showAlert(message: finishedMessage)
+                }
+            } receiveValue: { _ in
+                print("Finished downloading all data")
+            }
+            .store(in: &subscriptions)
     }
     
-    func downloadAllSpeciesData() -> AnyPublisher<[SpeciesData], Error> {
-        guard let speciesURL = apiService.createURL(for: .species) else {
+    func downloadAllSpeciesData() -> AnyPublisher<[PokemonMO], Error> {
+        guard let speciesURL = apiService.createURL(for: .allPokemon) else {
             print("Unable to create species data url")
             return Result.Publisher([]).eraseToAnyPublisher()
         }
+        // Download SpeciesData of all Pokemon Species
         return apiService.fetchAll(type: SpeciesData.self, from: speciesURL)
-        // TODO: .map and transform species data to Pokemon object and return publisher with [PokemonMO]
-    }
-    
-    func downloadAllPokemonDataFor(species: SpeciesData) -> AnyPublisher<[PokemonData], Error> {
-        return species.varieties.publisher
-            .flatMap { variety in
-                self.apiService.fetch(type: PokemonData.self, from: URL(string: variety.pokemon.url)!)
-            }
-            .collect()
+            .flatMap({ allSpeciesData -> AnyPublisher<[PokemonMO], Error> in
+                // Iterate through each individual SpeciesData
+                allSpeciesData.publisher.setFailureType(to: Error.self)
+                    .map { speciesData -> PokemonMO in
+                        // Create new Pokemon Managed Object
+                        let pokedexNumber = speciesData.pokedexNumbers[0].entryNumber
+                        let speciesURL = self.apiService.createURL(for: .species, fromIndex: pokedexNumber)!
+                        let pokemon = self.dataManager.addPokemon(name: speciesData.name, speciesURL: speciesURL.absoluteString, id: speciesData.pokedexNumbers[0].entryNumber)
+                        return self.dataManager.updateDetails(for: pokemon.objectID, with: speciesData)
+                    }
+                    .flatMap({ pokemon -> AnyPublisher<PokemonMO, Error> in
+                        // Download SpeciesData for Pokemon Varieties
+                        guard let pokemonVarieties = pokemon.varieties else { return Empty().eraseToAnyPublisher() }
+                        let pokemonVarietiesArray = pokemonVarieties.array as! [PokemonMO]
+                        
+                        // Iterate through each individual variety
+                        return pokemonVarietiesArray.publisher.setFailureType(to: Error.self)
+                            .flatMap { pokemonVariety -> AnyPublisher<PokemonMO, Error> in
+                                let speciesURL = URL(string: pokemonVariety.speciesURL!)!
+                                return self.apiService.fetch(type: SpeciesData.self, from: speciesURL)
+                                    .map { varietySpeciesData -> PokemonMO in
+                                        return self.dataManager.updateDetails(for: pokemonVariety.objectID, with: varietySpeciesData)
+                                    }.eraseToAnyPublisher()
+                            }.eraseToAnyPublisher()
+                    })
+                    .collect()
+                    .eraseToAnyPublisher()
+            })
             .eraseToAnyPublisher()
     }
     
-    func downloadAllAbilityDataFor(pokemon: PokemonData) -> AnyPublisher<[AbilityData], Error> {
-        return pokemon.abilities.publisher
-            .flatMap({ ability in
-                self.apiService.fetch(type: AbilityData.self, from: URL(string: ability.url)!)
-            })
-            .collect()
+    func downloadPokemonData(for pokemon: PokemonMO) -> AnyPublisher<PokemonMO, Error> {
+        // Download PokemonData for new Pokemon Managed Object
+        guard let pokemonURLString = pokemon.pokemonURL else { return Empty().eraseToAnyPublisher() }
+        let pokemonDataURL = URL(string: pokemonURLString)!
+        
+        return self.apiService.fetch(type: PokemonData.self, from: pokemonDataURL)
+            .map { pokemonData -> PokemonMO in
+                // Update Pokemon Managed Object with PokemonData
+                self.dataManager.updateDetails(for: pokemon.objectID, with: pokemonData)
+                return pokemon
+            }.eraseToAnyPublisher()
+    }
+    
+    func downloadAllVarietyDataFor(_ pokemon: PokemonMO) -> AnyPublisher<[PokemonData], Error> {
+        guard let pokemonVarieties = pokemon.varieties else { return Result.Publisher([]).eraseToAnyPublisher() }
+        
+        let pokemonVarietyArray = pokemonVarieties.array as! [PokemonMO]
+        
+        return pokemonVarietyArray.publisher.setFailureType(to: Error.self)
+            .flatMap { pokemonVariety -> AnyPublisher<PokemonData, Error> in
+                return self.apiService.fetch(type: PokemonData.self, from: URL(string: pokemonVariety.pokemonURL!)!)
+            }.collect()
+            .eraseToAnyPublisher()
+    }
+    
+    func downloadAllAbilityDataFor(_ pokemon: PokemonMO) -> AnyPublisher<[AbilityDetails], Error> {
+        guard let abilitiesSet = pokemon.abilities else { return Result.Publisher([]).eraseToAnyPublisher() }
+        
+        let abilitiesArray = abilitiesSet.array as! [AbilityMO]
+        
+        return abilitiesArray.publisher.setFailureType(to: Error.self)
+            .flatMap { ability -> AnyPublisher<AbilityDetails, Error> in
+                guard let abilityDetailsStringURL = ability.abilityDetails?.urlString else { return Empty().eraseToAnyPublisher() }
+                
+                return self.apiService.fetch(type: AbilityData.self, from: URL(string: abilityDetailsStringURL)!)
+                    .map { abilityData -> AbilityDetails in
+                        guard let abilityDetailsObject = ability.abilityDetails else { fatalError("This should always exist") }
+                        return self.dataManager.addAbilityDescription(to: abilityDetailsObject.objectID, with: abilityData)
+                    }.eraseToAnyPublisher()
+            }.collect()
             .eraseToAnyPublisher()
     }
 
@@ -156,6 +198,7 @@ class SettingsVC: UITableViewController {
             let alertController = UIAlertController(title: tableViewCells[indexPath.row], message: "This will download ALL relevant data from the server and store it locally for offline usage. Depending on your connection, this may take some time. Would you like to proceed?", preferredStyle: .alert)
             alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel))
             alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
+                self.coreDataStack.deletePersistentStore()
                 self.downloadAndStoreAllData()
             }))
             present(alertController, animated: true)

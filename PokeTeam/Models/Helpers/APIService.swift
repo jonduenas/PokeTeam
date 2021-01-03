@@ -10,6 +10,7 @@ import Foundation
 import Combine
 
 final class APIService {
+    
     func fetch<T: Decodable>(type: T.Type, from url: URL) -> AnyPublisher<T, Error> {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
@@ -27,8 +28,11 @@ final class APIService {
         case .allPokemon, .types:
             return URL(string: baseStringURL + dataType.rawValue)
         default:
-            guard let index = index else { return nil }
-            return URL(string: baseStringURL + dataType.rawValue + "\(index)")
+            if let index = index {
+                return URL(string: baseStringURL + dataType.rawValue + "\(index)")
+            } else {
+                return URL(string: baseStringURL + dataType.rawValue)
+            }
         }
     }
     
