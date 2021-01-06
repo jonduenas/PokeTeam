@@ -402,7 +402,9 @@ class PokemonDetailVC: UIViewController {
         let storyboard = UIStoryboard(name: "Pokedex", bundle: nil)
         let abilityController = storyboard.instantiateViewController(withIdentifier: "AbilityVC") as! AbilityDetailVC
         abilityController.abilityName = abilities[sender.tag].abilityDetails?.name
+        abilityController.apiService = apiService
         abilityController.coreDataStack = coreDataStack
+        abilityController.backgroundDataManager = backgroundDataManager
         abilityController.transitioningDelegate = abilityTransitioningDelegate
         abilityController.modalPresentationStyle = .custom
 

@@ -30,22 +30,6 @@ class AbilityDetailVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if coreDataStack == nil {
-            print("Initializing new CoreDataStack")
-            coreDataStack = CoreDataStack()
-        }
-        
-        if backgroundDataManager == nil {
-            print("Initializing new DataManager")
-            let backgroundContext = coreDataStack.newDerivedContext()
-            backgroundDataManager = DataManager(managedObjectContext: backgroundContext, coreDataStack: coreDataStack)
-        }
-        
-        if apiService == nil {
-            print("Initializing new APIService")
-            apiService = APIService()
-        }
-        
         if let abilityName = abilityName {
             guard let fetchedAbilityArray = backgroundDataManager.getFromCoreData(entity: AbilityDetails.self, predicate: NSPredicate(format: "name == %@", abilityName)) as? [AbilityDetails] else {
                 showAlert(message: "Error loading stored data.")
