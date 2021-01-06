@@ -43,7 +43,7 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
 
         initializeTeamBuilderTab()
         initializeTypeCheckerTab()
-        initializeSettingsTab()
+        //initializeSettingsTab()
 
         initializeIndicatorView()
         initializeSearchBar()
@@ -91,11 +91,11 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
         }
     }
     
-    private func initializeSettingsTab() {
-        let settingsNav = tabBarController?.viewControllers?[3] as! CustomNavVC
-        let settingsTab = settingsNav.viewControllers[0] as! SettingsVC
-        settingsTab.coreDataStack = coreDataStack
-    }
+//    private func initializeSettingsTab() {
+//        let settingsNav = tabBarController?.viewControllers?[3] as! CustomNavVC
+//        let settingsTab = settingsNav.viewControllers[0] as! SettingsVC
+//        settingsTab.coreDataStack = coreDataStack
+//    }
     
     func fetchTypeDataFromAPI() {
         let typesURL = apiService.createURL(for: .types)!
