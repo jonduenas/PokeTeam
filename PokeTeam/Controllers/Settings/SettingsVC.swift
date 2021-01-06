@@ -70,18 +70,24 @@ class SettingsVC: UITableViewController {
                     .eraseToAnyPublisher()
             }
             .ignoreOutput()
-            .receive(on: DispatchQueue.main)
             .sink { completion in
                 switch completion {
                 case .failure(let error):
                     let errorMessage = "Error downloading all Pokemon Data: \(error.localizedDescription)"
-                    print(errorMessage)
-                    self.showAlert(message: errorMessage)
+                    print(error)
+                    DispatchQueue.main.async {
+                        self.showAlert(message: errorMessage)
+                    }
                 case .finished:
-                    self.clearAllTabData()
-                    let finishedMessage = "Finished downloading all data"
-                    print(finishedMessage)
-                    self.showAlert(message: finishedMessage)
+                    self.coreDataStack.saveContext(self.dataManager.managedObjectContext)
+                    
+                    DispatchQueue.main.async {
+                        self.clearAllTabData()
+                        let finishedMessage = "Finished downloading all data"
+                        print(finishedMessage)
+                        self.showAlert(message: finishedMessage)
+                    }
+                    
                 }
             } receiveValue: { _ in
                 print("Finished downloading all data")
@@ -117,7 +123,9 @@ class SettingsVC: UITableViewController {
                                 let speciesURL = URL(string: pokemonVariety.speciesURL!)!
                                 return self.apiService.fetch(type: SpeciesData.self, from: speciesURL)
                                     .map { varietySpeciesData -> PokemonMO in
-                                        return self.dataManager.updateDetails(for: pokemonVariety.objectID, with: varietySpeciesData)
+                                        let returnPokemon = self.dataManager.updateDetails(for: pokemonVariety.objectID, with: varietySpeciesData)
+                                        self.coreDataStack.saveContext(self.dataManager.managedObjectContext)
+                                        return returnPokemon
                                     }.eraseToAnyPublisher()
                             }.eraseToAnyPublisher()
                     })
