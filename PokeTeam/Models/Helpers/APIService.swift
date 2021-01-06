@@ -21,15 +21,16 @@ final class APIService {
     }
     
     func createURL(for dataType: PokemonDataType, fromIndex index: Int? = nil) -> URL? {
-        let baseStringURL = "https://pokeapi.co/api/v2/"
+        let baseURL = URL("https://pokeapi.co/api/v2/")
         
-        switch dataType {
-        case .allPokemon, .types:
-            return URL(string: baseStringURL + dataType.rawValue)
-        default:
-            guard let index = index else { return nil }
-            return URL(string: baseStringURL + dataType.rawValue + "\(index)")
+        var returnURL = URL(string: dataType.rawValue, relativeTo: baseURL)
+        
+        if let indexNumber = index {
+            // If index is set and not nil, add index to end of URL
+            returnURL?.appendPathComponent(String(indexNumber))
         }
+        
+        return returnURL
     }
     
     func fetchAll<T: Decodable>(type: T.Type, from url: URL) -> AnyPublisher<[T], Error> {
@@ -49,12 +50,12 @@ final class APIService {
 }
 
 enum PokemonDataType: String {
-    case pokedex = "pokedex/"
-    case pokemon = "pokemon/"
-    case species = "pokemon-species/"
-    case ability = "ability/"
-    case move = "move/"
+    case pokedex = "pokedex"
+    case pokemon = "pokemon"
+    case species = "pokemon-species"
+    case ability = "ability"
+    case move = "move"
     case allPokemon = "pokemon-species?limit=5000"
-    case form = "pokemon-form/"
-    case types = "type/"
+    case form = "pokemon-form"
+    case types = "type"
 }

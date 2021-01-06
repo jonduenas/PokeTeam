@@ -91,7 +91,7 @@ class DataManagerTests: XCTestCase {
     }
     
     func testAddTeam() {
-        let newTeam = sut.addTeam()
+        let newTeam = sut.addTeam(name: "defaultTeam")
         
         XCTAssertNotNil(newTeam)
     }
@@ -99,7 +99,7 @@ class DataManagerTests: XCTestCase {
     func testAddPokemonToTeam() {
         let pokemon = sut.addPokemon(name: "pidgey", speciesURL: "testurl", id: 16)
         
-        let newTeam = sut.addTeam()
+        let newTeam = sut.addTeam(name: "testTeam")
         
         pokemon.addToTeam(newTeam)
         
