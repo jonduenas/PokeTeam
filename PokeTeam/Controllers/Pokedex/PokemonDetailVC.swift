@@ -106,10 +106,11 @@ class PokemonDetailVC: UIViewController {
     }
     
     private func initializeNavigationBar() {
-        navigationItem.title = "Pokémon Detail"
+        //navigationItem.title = "Pokémon Detail"
         
         refreshButton = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(refreshButtonTapped))
-        addToTeamButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addToTeam))
+        //addToTeamButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addToTeam))
+        addToTeamButton = UIBarButtonItem(title: "+ Team", style: .plain, target: self, action: #selector(addToTeam))
         
         navigationItem.rightBarButtonItem = addToTeamButton
     }
@@ -429,7 +430,7 @@ class PokemonDetailVC: UIViewController {
     }
     
     private func showAddToTeamAlert(team: TeamMO?) {
-        let alertController = UIAlertController(title: "Add to team", message: "Would you like to add \(pokemon.name?.formatPokemonName() ?? "this pokemon") to your team?", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "Add To Team", message: "Would you like to add \(pokemon.name?.formatPokemonName() ?? "this pokemon") to your team?", preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         alertController.addAction(UIAlertAction(title: "Add", style: .default, handler: { _ in
             if let existingTeam = team {
