@@ -1,8 +1,19 @@
 {
   "images" : [
     {
-      "filename" : "ball_icon.pdf",
-      "idiom" : "universal"
+      "filename" : "Poke Ball.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "Poke Ball@2x.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "Poke Ball@3x.png",
+      "idiom" : "universal",
+      "scale" : "3x"
     }
   ],
   "info" : {
