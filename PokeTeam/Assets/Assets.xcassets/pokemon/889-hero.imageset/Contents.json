@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "851_gmax.png",
+      "filename" : "889.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "851_gmax@2x.png",
+      "filename" : "889@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "851_gmax@3x.png",
+      "filename" : "889@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
