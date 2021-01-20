@@ -41,7 +41,7 @@
             <objects>
                 <viewController id="wY4-TS-6aC" customClass="TeamBuilderViewController" customModule="PokeTeam" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="v9U-ZR-ko0">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="813"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="nAT-sb-hhR">
@@ -64,12 +64,12 @@
                                                 <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XPO-Qc-dbi">
                                                     <rect key="frame" x="103" y="10" width="217" height="75"/>
                                                     <subviews>
-                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron.right" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="ugg-69-6Vu">
-                                                            <rect key="frame" x="187" y="29.5" width="10" height="16.5"/>
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="trash" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="ugg-69-6Vu">
+                                                            <rect key="frame" x="182" y="26.5" width="20" height="20.5"/>
                                                             <color key="tintColor" systemColor="opaqueSeparatorColor"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="20" id="2Dd-xk-zSn"/>
-                                                                <constraint firstAttribute="width" constant="10" id="Ktr-aY-KQC"/>
+                                                                <constraint firstAttribute="width" constant="20" id="Ktr-aY-KQC"/>
                                                             </constraints>
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pokemon" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="15" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WIp-AY-5S3">
@@ -119,7 +119,7 @@
                                                         <constraint firstItem="cIF-D4-CZy" firstAttribute="top" secondItem="5kt-qS-RUs" secondAttribute="top" id="2MS-GQ-92J"/>
                                                         <constraint firstAttribute="trailing" secondItem="WIp-AY-5S3" secondAttribute="trailing" id="2Q0-cN-5At"/>
                                                         <constraint firstItem="WIp-AY-5S3" firstAttribute="leading" secondItem="XPO-Qc-dbi" secondAttribute="leading" id="6eT-Te-OUy"/>
-                                                        <constraint firstAttribute="trailing" secondItem="ugg-69-6Vu" secondAttribute="trailing" constant="20" id="B3F-u9-5hV"/>
+                                                        <constraint firstAttribute="trailing" secondItem="ugg-69-6Vu" secondAttribute="trailing" constant="15" id="B3F-u9-5hV"/>
                                                         <constraint firstItem="cIF-D4-CZy" firstAttribute="top" secondItem="WIp-AY-5S3" secondAttribute="bottom" constant="5" id="Fsf-uT-baP"/>
                                                         <constraint firstItem="cIF-D4-CZy" firstAttribute="leading" secondItem="WIp-AY-5S3" secondAttribute="leading" id="J7v-A9-zcL"/>
                                                         <constraint firstItem="ugg-69-6Vu" firstAttribute="centerY" secondItem="XPO-Qc-dbi" secondAttribute="centerY" id="PVQ-01-Sr1"/>
@@ -246,8 +246,8 @@
     </scenes>
     <resources>
         <image name="100" width="263" height="263"/>
-        <image name="chevron.right" catalog="system" width="96" height="128"/>
         <image name="shield.lefthalf.fill" catalog="system" width="128" height="121"/>
+        <image name="trash" catalog="system" width="121" height="128"/>
         <namedColor name="navbar">
             <color red="0.85100001096725464" green="0.2199999988079071" blue="0.2669999897480011" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
