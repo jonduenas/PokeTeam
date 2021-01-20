@@ -245,7 +245,11 @@ class PokemonDetailVC: UIViewController {
         updateName(with: pokemonForm)
         
         if let imageID = pokemonForm.imageID {
-            pokemonImageView.image = UIImage(named: imageID)
+            if let image = UIImage(named: imageID) {
+                pokemonImageView.image = image
+            } else {
+                pokemonImageView.image = UIImage(named: "poke_ball")
+            }
         }
         
         updateType(with: pokemonForm)
