@@ -106,12 +106,8 @@ class PokemonDetailVC: UIViewController {
     }
     
     private func initializeNavigationBar() {
-        //navigationItem.title = "Pokémon Detail"
-        
         refreshButton = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(refreshButtonTapped))
-        //addToTeamButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addToTeam))
         addToTeamButton = UIBarButtonItem(title: "+ Team", style: .plain, target: self, action: #selector(addToTeam))
-        
         navigationItem.rightBarButtonItem = addToTeamButton
     }
     
@@ -205,12 +201,6 @@ class PokemonDetailVC: UIViewController {
         return apiService.fetch(type: SpeciesData.self, from: speciesURL)
     }
     
-    func fetchFormData(with form: NameAndURL) -> AnyPublisher<FormData, Error> {
-        let formURL = URL(string: form.url)!
-        
-        return apiService.fetch(type: FormData.self, from: formURL)
-    }
-    
     private func updateFormsCollection(with baseForm: PokemonMO) {
         if let varieties = baseForm.varieties {
             if varieties.count > 0 {
@@ -252,6 +242,23 @@ class PokemonDetailVC: UIViewController {
     private func updatePokemonUI(with pokemonForm: PokemonMO) {
         print("Updating UI")
         
+        updateName(with: pokemonForm)
+        
+        if let imageID = pokemonForm.imageID {
+            pokemonImageView.image = UIImage(named: imageID)
+        }
+        
+        updateType(with: pokemonForm)
+        
+        updateNumberAndGenus(with: pokemonForm)
+        
+        updateDescription(with: pokemonForm)
+        
+        heightLabel.text = "\(pokemonForm.height) m"
+        weightLabel.text = "\(pokemonForm.weight) kg"
+    }
+    
+    fileprivate func updateName(with pokemonForm: PokemonMO) {
         var pokemonName = "Pokemon"
         
         if let name = pokemonForm.name {
@@ -259,18 +266,16 @@ class PokemonDetailVC: UIViewController {
         }
         
         pokemonNameLabel.text = pokemonName.formatPokemonName()
-    
+        
         if pokemonForm.name != pokemonForm.varietyName {
             pokemonVarietyNameLabel.isHidden = false
             pokemonVarietyNameLabel.text = pokemonForm.varietyName?.formatVarietyName(speciesName: pokemonName)
         } else {
             pokemonVarietyNameLabel.isHidden = true
         }
-        
-        if let imageID = pokemonForm.imageID {
-            pokemonImageView.image = UIImage(named: imageID)
-        }
-        
+    }
+    
+    fileprivate func updateType(with pokemonForm: PokemonMO) {
         // Update Pokemon types
         if let pokemonType = pokemonForm.type {
             if pokemonType.count > 1 {
@@ -281,14 +286,18 @@ class PokemonDetailVC: UIViewController {
                 pokemonType2Label.isHidden = true
             }
         }
-        
+    }
+    
+    fileprivate func updateNumberAndGenus(with pokemonForm: PokemonMO) {
         let pokemonIDString = String(withInt: Int(pokemonForm.nationalPokedexNumber), leadingZeros: 3)
         if pokemonForm.genus == "" {
             pokemonNumberAndGenusLabel.text = "No. \(pokemonIDString) – Genus Unknown"
         } else {
             pokemonNumberAndGenusLabel.text = "No. \(pokemonIDString) – \(pokemonForm.genus ?? "Genus Unknown")"
         }
-        
+    }
+    
+    fileprivate func updateDescription(with pokemonForm: PokemonMO) {
         pokemonDescriptionLabel.text = "Error finding Pokemon description."
         
         switch pokemonForm.generation {
@@ -311,9 +320,6 @@ class PokemonDetailVC: UIViewController {
                 pokemonDescriptionLabel.text = flavorText[0]
             }
         }
-        
-        heightLabel.text = "\(pokemonForm.height) m"
-        weightLabel.text = "\(pokemonForm.weight) kg"
     }
     
     private func updateStats(with pokemonForm: PokemonMO) {
@@ -363,7 +369,7 @@ class PokemonDetailVC: UIViewController {
         guard let abilities = abilityArray else { return }
         
         if abilities.isEmpty {
-            // If the API has no abilities listed, e.g. currently all of Gen 8
+            // If the API has no abilities listed, such as cases where the data is new and being updated
             let notFoundLabel = UILabel()
             
             if pokemonForm.generation == "generation-viii" {
@@ -430,7 +436,9 @@ class PokemonDetailVC: UIViewController {
     }
     
     private func showAddToTeamAlert(team: TeamMO?) {
-        let alertController = UIAlertController(title: "Add To Team", message: "Would you like to add \(pokemon.name?.formatPokemonName() ?? "this pokemon") to your team?", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "Add To Team",
+                                                message: "Would you like to add \(pokemon.name?.formatPokemonName() ?? "this pokemon") to your team?",
+                                                preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         alertController.addAction(UIAlertAction(title: "Add", style: .default, handler: { _ in
             if let existingTeam = team {
@@ -506,5 +514,3 @@ extension PokemonDetailVC: UICollectionViewDelegate, UICollectionViewDataSource 
         }
     }
 }
-
-
