@@ -300,23 +300,28 @@ class PokemonDetailVC: UIViewController {
     fileprivate func updateDescription(with pokemonForm: PokemonMO) {
         pokemonDescriptionLabel.text = "Error finding Pokemon description."
         
+        // Meltan and Melmetal get Sword description despite not technically being gen 8
+        if pokemonForm.id == 808 || pokemonForm.id == 809 || pokemonForm.id == 10199 {
+            if let flavorText = pokemonForm.flavorText?["sword"] {
+                pokemonDescriptionLabel.text = flavorText[0]
+                return
+            }
+        }
+        
         switch pokemonForm.generation {
         case "generation-viii":
             // Use Sword flavor text for Gen 8 only since not every pokemon is in Sword/Shield
             if let flavorText = pokemonForm.flavorText?["sword"] {
-                print(flavorText[0])
                 pokemonDescriptionLabel.text = flavorText[0]
             }
         case "generation-vii":
             // Use Ultra-Sun flavor text for anything Gen 7
             if let flavorText = pokemonForm.flavorText?["ultra-sun"] {
-                print(flavorText[0])
                 pokemonDescriptionLabel.text = flavorText[0]
             }
         default:
             // Default for all other Pokemon is Pokemon X flavor text
             if let flavorText = pokemonForm.flavorText?["x"] {
-                print(flavorText[0])
                 pokemonDescriptionLabel.text = flavorText[0]
             }
         }
