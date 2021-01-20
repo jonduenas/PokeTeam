@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "pokedex-background.png",
+      "filename" : "890-eternamax.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "pokedex-background@2x.png",
+      "filename" : "890-eternamax@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "pokedex-background@3x.png",
+      "filename" : "890-eternamax@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
