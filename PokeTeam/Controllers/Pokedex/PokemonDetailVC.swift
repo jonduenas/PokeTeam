@@ -243,19 +243,9 @@ class PokemonDetailVC: UIViewController {
         print("Updating UI")
         
         updateName(with: pokemonForm)
-        
-        if let imageID = pokemonForm.imageID {
-            if let image = UIImage(named: imageID) {
-                pokemonImageView.image = image
-            } else {
-                pokemonImageView.image = UIImage(named: "poke_ball")
-            }
-        }
-        
+        updateImage(with: pokemonForm)
         updateType(with: pokemonForm)
-        
         updateNumberAndGenus(with: pokemonForm)
-        
         updateDescription(with: pokemonForm)
         
         heightLabel.text = "\(pokemonForm.height) m"
@@ -276,6 +266,16 @@ class PokemonDetailVC: UIViewController {
             pokemonVarietyNameLabel.text = pokemonForm.varietyName?.formatVarietyName(speciesName: pokemonName)
         } else {
             pokemonVarietyNameLabel.isHidden = true
+        }
+    }
+    
+    fileprivate func updateImage(with pokemonForm: PokemonMO) {
+        if let imageID = pokemonForm.imageID {
+            if let image = UIImage(named: imageID) {
+                pokemonImageView.image = image
+            } else {
+                pokemonImageView.image = UIImage(named: "poke_ball")
+            }
         }
     }
     
