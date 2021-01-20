@@ -463,9 +463,11 @@ class PokemonDetailVC: UIViewController {
     private func setState(loading: Bool) {
         if loading {
             detailView.isHidden = true
+            navigationItem.rightBarButtonItem?.isEnabled = false
             indicatorView.startAnimating()
         } else {
             detailView.isHidden = false
+            navigationItem.rightBarButtonItem?.isEnabled = true
             indicatorView.stopAnimating()
         }
     }
