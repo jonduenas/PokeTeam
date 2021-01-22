@@ -9,6 +9,12 @@
 import Foundation
 import CoreData
 
+//protocol CoreDataStackClient {
+//    var coreDataStack: CoreDataStack { get }
+//    var dataManager: DataManager { get }
+//    init?(coder: NSCoder, coreDataStack: CoreDataStack, dataManager: DataManager)
+//}
+
 open class CoreDataStack {
     public static let modelName = "PokeTeam"
     

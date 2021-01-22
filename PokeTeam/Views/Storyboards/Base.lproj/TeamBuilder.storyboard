@@ -36,10 +36,10 @@
             </objects>
             <point key="canvasLocation" x="1961" y="511"/>
         </scene>
-        <!--Team Builder View Controller-->
+        <!--Team BuilderVC-->
         <scene sceneID="Ej3-S5-ozH">
             <objects>
-                <viewController id="wY4-TS-6aC" customClass="TeamBuilderViewController" customModule="PokeTeam" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="TeamBuilderVC" id="wY4-TS-6aC" customClass="TeamBuilderVC" customModule="PokeTeam" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="v9U-ZR-ko0">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

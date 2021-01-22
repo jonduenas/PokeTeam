@@ -9,6 +9,19 @@
 import UIKit
 
 class TypeCheckerVC: UIViewController {
+    var coreDataStack: CoreDataStack
+    var dataManager: DataManager
+    
+    init?(coder: NSCoder, coreDataStack: CoreDataStack, dataManager: DataManager) {
+        self.coreDataStack = coreDataStack
+        self.dataManager = dataManager
+        super.init(coder: coder)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     static let sectionHeaderElementKind = "section-header-element-kind"
     
     enum TypeEffectiveness: String, CaseIterable {
@@ -24,8 +37,6 @@ class TypeCheckerVC: UIViewController {
     
     var dataSource: UICollectionViewDiffableDataSource<TypeEffectiveness, TypeMO>! = nil
     
-    var coreDataStack: CoreDataStack!
-    var dataManager: DataManager!
     var typeCalculator: TypeCalculator!
     var type1Object: TypeMO?
     var type2Object: TypeMO?

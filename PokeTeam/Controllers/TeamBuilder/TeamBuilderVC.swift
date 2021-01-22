@@ -1,5 +1,5 @@
 //
-//  TeamBuilderViewController.swift
+//  TeamBuilderVC.swift
 //  PokeTeam
 //
 //  Created by Jon Duenas on 9/14/20.
@@ -9,18 +9,28 @@
 import UIKit
 import CoreData
 
-class TeamBuilderViewController: UIViewController {
+class TeamBuilderVC: UIViewController {
     private let detailSegueIdentifier = "detailSegue"
     let simpleOver = SimpleOver()
     var teamsArray = [TeamMO]()
     var team = [PokemonMO]()
-    var coreDataStack: CoreDataStack!
-    var dataManager: DataManager!
+    var coreDataStack: CoreDataStack
+    var dataManager: DataManager
     var fetchedResultsController: NSFetchedResultsController<PokemonMO>! = nil
     
     var dataSource: UICollectionViewDiffableDataSource<Int, NSManagedObjectID>! = nil
     
     @IBOutlet weak var collectionView: UICollectionView!
+    
+    init?(coder: NSCoder, coreDataStack: CoreDataStack, dataManager: DataManager) {
+        self.coreDataStack = coreDataStack
+        self.dataManager = dataManager
+        super.init(coder: coder)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -89,7 +99,7 @@ class TeamBuilderViewController: UIViewController {
 
 // MARK: - UINavigationController Transitioning Delegate Methods
 
-extension TeamBuilderViewController: UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
+extension TeamBuilderVC: UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
     
     func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         simpleOver.popStyle = (operation == .pop)
@@ -99,7 +109,7 @@ extension TeamBuilderViewController: UIViewControllerTransitioningDelegate, UINa
 
 // MARK: - NSFetchedResultsController Methods
 
-extension TeamBuilderViewController: NSFetchedResultsControllerDelegate {
+extension TeamBuilderVC: NSFetchedResultsControllerDelegate {
     private func configureFetchedResultsController() {
         let request: NSFetchRequest<PokemonMO> = PokemonMO.fetchRequest()
         
@@ -145,7 +155,7 @@ extension TeamBuilderViewController: NSFetchedResultsControllerDelegate {
 
 // MARK: - UICollectionView Methods
 
-extension TeamBuilderViewController: UICollectionViewDelegate {
+extension TeamBuilderVC: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let moc = dataManager.managedObjectContext
         

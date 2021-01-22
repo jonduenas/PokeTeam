@@ -11,14 +11,39 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-    //let coreDataStack = CoreDataStack()
-
-
+    
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
-        // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
-        // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-        guard let _ = (scene as? UIWindowScene) else { return }
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+        let window = UIWindow(windowScene: windowScene)
+        
+        let coreDataStack = CoreDataStack()
+        let dataManager = DataManager(managedObjectContext: coreDataStack.newDerivedContext(), coreDataStack: coreDataStack)
+        
+        // Setup Tab Controller
+        let tabController = CustomTabController()
+        
+        // Setup View Controllers
+        let pokedexVC = UIStoryboard(name: "Pokedex", bundle: .main).instantiateViewController(identifier: "PokedexVC") { coder in
+            PokedexVC(coder: coder, coreDataStack: coreDataStack, dataManager: dataManager)
+        }
+        let pokedexNav = CustomNavVC(rootViewController: pokedexVC)
+        
+        let teamBuilderVC = UIStoryboard(name: "TeamBuilder", bundle: .main).instantiateViewController(identifier: "TeamBuilderVC") { coder in
+            TeamBuilderVC(coder: coder, coreDataStack: coreDataStack, dataManager: dataManager)
+        }
+        let teamBuilderNav = CustomNavVC(rootViewController: teamBuilderVC)
+        
+        let typeCheckerVC = UIStoryboard(name: "TypeChecker", bundle: .main).instantiateViewController(identifier: "TypeCheckerVC") { coder in
+            TypeCheckerVC(coder: coder, coreDataStack: coreDataStack, dataManager: dataManager)
+        }
+        let typeCheckerNav = CustomNavVC(rootViewController: typeCheckerVC)
+        
+        let controllers = [pokedexNav, teamBuilderNav, typeCheckerNav]
+        tabController.setViewControllers(controllers, animated: false)
+        
+        window.rootViewController = tabController
+        window.makeKeyAndVisible()
+        self.window = window
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -49,7 +74,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
         
         // Save changes in the application's managed object context when the application transitions to the background.
-        //coreDataStack.saveContext()
+//        coreDataStack.saveContext()
     }
 
 

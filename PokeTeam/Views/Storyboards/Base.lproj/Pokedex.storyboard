@@ -13,7 +13,7 @@
         <!--Pokédex-->
         <scene sceneID="8cG-r6-onm">
             <objects>
-                <tableViewController id="Zp9-45-eKE" customClass="PokeDexVC" customModule="PokeTeam" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="PokedexVC" id="Zp9-45-eKE" customClass="PokedexVC" customModule="PokeTeam" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="oJQ-KJ-Bl1">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

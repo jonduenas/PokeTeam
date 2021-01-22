@@ -1,5 +1,5 @@
 //
-//  PokeDexVC.swift
+//  PokedexVC.swift
 //  PokeTeam
 //
 //  Created by Jon Duenas on 7/31/20.
@@ -10,7 +10,9 @@ import UIKit
 import Combine
 import CoreData
 
-class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
+class PokedexVC: UITableViewController, NSFetchedResultsControllerDelegate {
+    var coreDataStack: CoreDataStack
+    var dataManager: DataManager
     
     let nationalPokedexID = 1
     let pokemonCellID = "pokemonCell"
@@ -20,8 +22,6 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
     var colorBlockView: ColorBlockView!
     var indicatorView: UIActivityIndicatorView!
     private lazy var apiService = APIService()
-    private lazy var coreDataStack = CoreDataStack()
-    private lazy var backgroundDataManager = DataManager(managedObjectContext: coreDataStack.newDerivedContext(), coreDataStack: coreDataStack)
     
     var refreshButton: UIBarButtonItem?
     var fetchedResultsController: NSFetchedResultsController<PokemonMO>!
@@ -33,6 +33,16 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
     
     var isFiltering: Bool {
         return searchController.isActive && !isSearchBarEmpty
+    }
+    
+    init?(coder: NSCoder, coreDataStack: CoreDataStack, dataManager: DataManager) {
+        self.coreDataStack = coreDataStack
+        self.dataManager = dataManager
+        super.init(coder: coder)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {
@@ -71,18 +81,18 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
     
     private func initializeTeamBuilderTab() {
         let teamBuilderNav = tabBarController?.viewControllers?[1] as! CustomNavVC
-        let teamBuilderTab = teamBuilderNav.viewControllers[0] as! TeamBuilderViewController
+        let teamBuilderTab = teamBuilderNav.viewControllers[0] as! TeamBuilderVC
         teamBuilderTab.coreDataStack = coreDataStack
-        teamBuilderTab.dataManager = backgroundDataManager
+        teamBuilderTab.dataManager = dataManager
     }
     
     private func initializeTypeCheckerTab() {
         let typeCheckerNav = (tabBarController?.viewControllers?[2]) as! CustomNavVC
         let typeCheckerTab = typeCheckerNav.viewControllers[0] as! TypeCheckerVC
         typeCheckerTab.coreDataStack = coreDataStack
-        typeCheckerTab.dataManager = backgroundDataManager
+        typeCheckerTab.dataManager = dataManager
         
-        if let typeObjects = backgroundDataManager.getFromCoreData(entity: TypeMO.self) as? [TypeMO] {
+        if let typeObjects = dataManager.getFromCoreData(entity: TypeMO.self) as? [TypeMO] {
             if typeObjects.isEmpty {
                 fetchTypeDataFromAPI()
             }
@@ -110,12 +120,12 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
                 }
             } receiveValue: { [weak self] allTypeData in
                 guard let self = self else { return }
-                self.backgroundDataManager.parseTypeDataIntoCoreData(typeDataArray: allTypeData)
+                self.dataManager.parseTypeDataIntoCoreData(typeDataArray: allTypeData)
                 
                 DispatchQueue.main.async {
                     let typeCheckerNav = self.tabBarController?.viewControllers?[2] as! CustomNavVC
                     let typeCheckerTab = typeCheckerNav.viewControllers[0] as! TypeCheckerVC
-                    typeCheckerTab.allTypes = self.backgroundDataManager.getFromCoreData(entity: TypeMO.self, sortBy: "name", isAscending: true) as! [TypeMO]
+                    typeCheckerTab.allTypes = self.dataManager.getFromCoreData(entity: TypeMO.self, sortBy: "name", isAscending: true) as! [TypeMO]
                 }
             }
             .store(in: &subscriptions)
@@ -177,7 +187,7 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
                     let difference = pokedex.count - managedObjects.count
                     print("Found \(difference) more Pokemon on the API - Should update.")
                     
-                    self?.backgroundDataManager.updatePokedex(pokedex: pokedex)
+                    self?.dataManager.updatePokedex(pokedex: pokedex)
                     self?.loadSavedPokedexData()
                 } else {
                     print("Stored Pokemon count matches API - Should skip update")
@@ -274,7 +284,7 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
         } else {
             pokemon = fetchedResultsController.object(at: indexPath).objectID
         }
-        return PokemonDetailVC(coder: coder, pokemonObjectID: pokemon, coreDataStack: coreDataStack, dataManager: backgroundDataManager, apiService: apiService)
+        return PokemonDetailVC(coder: coder, pokemonObjectID: pokemon, coreDataStack: coreDataStack, dataManager: dataManager, apiService: apiService)
     }
     
     private func setState(loading: Bool) {
@@ -286,14 +296,14 @@ class PokeDexVC: UITableViewController, NSFetchedResultsControllerDelegate {
     }
 }
 
-extension PokeDexVC: UISearchResultsUpdating {
+extension PokedexVC: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         let searchBar = searchController.searchBar
         filterContentForSearchText(searchBar.text!)
     }
 }
 
-extension PokeDexVC: UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
+extension PokedexVC: UIViewControllerTransitioningDelegate, UINavigationControllerDelegate {
     
     func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         simpleOver.popStyle = (operation == .pop)

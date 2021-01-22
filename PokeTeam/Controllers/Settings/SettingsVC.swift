@@ -28,14 +28,14 @@ class SettingsVC: UITableViewController {
     
     private func clearAllTabData() {
         let pokedexNav = tabBarController?.viewControllers?[0] as! CustomNavVC
-        let pokedexTab = pokedexNav.viewControllers[0] as! PokeDexVC
+        let pokedexTab = pokedexNav.viewControllers[0] as! PokedexVC
         pokedexNav.popToRootViewController(animated: false)
         try? pokedexTab.fetchedResultsController.performFetch()
         pokedexTab.loadPokedex()
         pokedexTab.fetchTypeDataFromAPI()
         
         let teamNav = tabBarController?.viewControllers?[1] as! CustomNavVC
-        let teamTab = teamNav.viewControllers[0] as! TeamBuilderViewController
+        let teamTab = teamNav.viewControllers[0] as! TeamBuilderVC
         teamTab.reloadTeam()
         
         let typeCheckerNav = tabBarController?.viewControllers?[2] as! CustomNavVC
