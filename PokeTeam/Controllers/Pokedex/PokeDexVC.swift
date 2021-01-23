@@ -10,9 +10,9 @@ import UIKit
 import Combine
 import CoreData
 
-class PokedexVC: UITableViewController, NSFetchedResultsControllerDelegate {
-    var coreDataStack: CoreDataStack
-    var dataManager: DataManager
+class PokedexVC: UITableViewController, NSFetchedResultsControllerDelegate, CoreDataStackClient {
+    let coreDataStack: CoreDataStack
+    let dataManager: DataManager
     
     let nationalPokedexID = 1
     let pokemonCellID = "pokemonCell"
@@ -35,7 +35,7 @@ class PokedexVC: UITableViewController, NSFetchedResultsControllerDelegate {
         return searchController.isActive && !isSearchBarEmpty
     }
     
-    init?(coder: NSCoder, coreDataStack: CoreDataStack, dataManager: DataManager) {
+    required init?(coder: NSCoder, coreDataStack: CoreDataStack, dataManager: DataManager) {
         self.coreDataStack = coreDataStack
         self.dataManager = dataManager
         super.init(coder: coder)

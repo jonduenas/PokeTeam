@@ -8,11 +8,11 @@
 
 import UIKit
 
-class TypeCheckerVC: UIViewController {
+class TypeCheckerVC: UIViewController, CoreDataStackClient {
     let coreDataStack: CoreDataStack
     let dataManager: DataManager
     
-    init?(coder: NSCoder, coreDataStack: CoreDataStack, dataManager: DataManager) {
+    required init?(coder: NSCoder, coreDataStack: CoreDataStack, dataManager: DataManager) {
         self.coreDataStack = coreDataStack
         self.dataManager = dataManager
         super.init(coder: coder)

@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class TeamBuilderVC: UIViewController {
+class TeamBuilderVC: UIViewController, CoreDataStackClient {
     private let detailSegueIdentifier = "detailSegue"
     let simpleOver = SimpleOver()
     var teamsArray = [TeamMO]()
@@ -22,7 +22,7 @@ class TeamBuilderVC: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
     
-    init?(coder: NSCoder, coreDataStack: CoreDataStack, dataManager: DataManager) {
+    required init?(coder: NSCoder, coreDataStack: CoreDataStack, dataManager: DataManager) {
         self.coreDataStack = coreDataStack
         self.dataManager = dataManager
         super.init(coder: coder)
