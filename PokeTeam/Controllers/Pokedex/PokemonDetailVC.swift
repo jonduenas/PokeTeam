@@ -428,41 +428,46 @@ class PokemonDetailVC: UIViewController {
     }
     
     @objc private func addToTeam() {
+        let pokemonObjectID = pokemon.objectID
+        let pokemonToAdd = backgroundDataManager.managedObjectContext.object(with: pokemonObjectID) as! PokemonMO
+        
         if let existingTeam = loadTeam() {
-            let existingTeamArray = existingTeam.members?.array as! [PokemonMO]
-            if existingTeamArray.contains(pokemon) {
+            guard let existingTeamArray = existingTeam.members?.array as? [PokemonMO] else {
+                print("error loading team")
+                return
+            }
+            if existingTeamArray.contains(pokemonToAdd) {
                 showAlert(title: "Error adding to team", message: "This Pokemon is already in your team. Each team member must be a unique species.")
                 return
             } else if existingTeamArray.count >= 6 {
                 showAlert(title: "Error adding to team", message: "You can only have 6 Pokemon in a team. Please remove one before adding another.")
                 return
             } else {
-                showAddToTeamAlert(team: existingTeam)
+                showAddToTeamAlert(team: existingTeam, pokemon: pokemonToAdd)
             }
         } else {
-            showAddToTeamAlert(team: nil)
+            showAddToTeamAlert(team: nil, pokemon: nil)
         }
     }
     
-    private func showAddToTeamAlert(team: TeamMO?) {
+    private func showAddToTeamAlert(team: TeamMO?, pokemon: PokemonMO?) {
         let alertController = UIAlertController(title: "Add To Team",
-                                                message: "Would you like to add \(pokemon.name?.formatPokemonName() ?? "this pokemon") to your team?",
+                                                message: "Would you like to add \(pokemon?.name?.formatPokemonName() ?? "this pokemon") to your team?",
                                                 preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         alertController.addAction(UIAlertAction(title: "Add", style: .default, handler: { _ in
+            guard let moc = pokemon?.managedObjectContext else { return }
             if let existingTeam = team {
-                self.pokemon.managedObjectContext?.perform {
-                    self.pokemon.addToTeam(existingTeam)
-                    print("Adding \(self.pokemon.name!) to existing team.")
-                    self.coreDataStack.saveContext(self.backgroundDataManager.managedObjectContext)
+                moc.perform {
+                    pokemon?.addToTeam(existingTeam)
+                    self.coreDataStack.saveContext(moc)
                 }
             } else {
                 let newTeam = self.backgroundDataManager.addTeam(name: "defaultTeam")
                 
-                self.pokemon.managedObjectContext?.perform {
-                    self.pokemon.addToTeam(newTeam)
-                    print("Adding \(self.pokemon.name!) to new team.")
-                    self.coreDataStack.saveContext(self.backgroundDataManager.managedObjectContext)
+                moc.perform {
+                    pokemon?.addToTeam(newTeam)
+                    self.coreDataStack.saveContext(moc)
                 }
             }
         }))
@@ -484,7 +489,11 @@ class PokemonDetailVC: UIViewController {
     private func loadTeam() -> TeamMO? {
         if let allTeams = backgroundDataManager.getFromCoreData(entity: TeamMO.self) as? [TeamMO] {
             if !allTeams.isEmpty {
-                return allTeams[0]
+                let team = allTeams.first?.members?.array as! [PokemonMO]
+                for member in team {
+                    print(member.name!)
+                }
+                return allTeams.first
             } else {
                 return nil
             }
