@@ -9,8 +9,8 @@
 import UIKit
 
 class TypeCheckerVC: UIViewController {
-    var coreDataStack: CoreDataStack
-    var dataManager: DataManager
+    let coreDataStack: CoreDataStack
+    let dataManager: DataManager
     
     init?(coder: NSCoder, coreDataStack: CoreDataStack, dataManager: DataManager) {
         self.coreDataStack = coreDataStack

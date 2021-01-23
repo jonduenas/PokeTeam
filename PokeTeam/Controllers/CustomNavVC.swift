@@ -18,6 +18,9 @@ class CustomNavVC: UINavigationController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationBar.prefersLargeTitles = true
+        navigationBar.tintColor = .label
 
         edgeSwipeGestureRecognizer = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(handleSwipe))
         edgeSwipeGestureRecognizer!.edges = .left

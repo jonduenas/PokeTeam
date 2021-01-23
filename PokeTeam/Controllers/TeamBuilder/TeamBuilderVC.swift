@@ -14,8 +14,8 @@ class TeamBuilderVC: UIViewController {
     let simpleOver = SimpleOver()
     var teamsArray = [TeamMO]()
     var team = [PokemonMO]()
-    var coreDataStack: CoreDataStack
-    var dataManager: DataManager
+    let coreDataStack: CoreDataStack
+    let dataManager: DataManager
     var fetchedResultsController: NSFetchedResultsController<PokemonMO>! = nil
     
     var dataSource: UICollectionViewDiffableDataSource<Int, NSManagedObjectID>! = nil

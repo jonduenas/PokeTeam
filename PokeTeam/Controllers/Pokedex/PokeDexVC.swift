@@ -51,9 +51,7 @@ class PokedexVC: UITableViewController, NSFetchedResultsControllerDelegate {
         initializeNavigationBar()
         tableView.backgroundColor = .clear
 
-        initializeTeamBuilderTab()
         initializeTypeCheckerTab()
-        //initializeSettingsTab()
 
         initializeIndicatorView()
         initializeSearchBar()
@@ -74,24 +72,13 @@ class PokedexVC: UITableViewController, NSFetchedResultsControllerDelegate {
         navigationController?.delegate = self
         navigationItem.title = "POKEDEX"
         navigationItem.largeTitleDisplayMode = .always
+        
         navigationController?.navigationBar.setNavigationBarColor(to: UIColor.clear, backgroundEffect: UIBlurEffect(style: .systemUltraThinMaterial))
         
         refreshButton = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(fetchPokedex))
     }
     
-    private func initializeTeamBuilderTab() {
-        let teamBuilderNav = tabBarController?.viewControllers?[1] as! CustomNavVC
-        let teamBuilderTab = teamBuilderNav.viewControllers[0] as! TeamBuilderVC
-        teamBuilderTab.coreDataStack = coreDataStack
-        teamBuilderTab.dataManager = dataManager
-    }
-    
     private func initializeTypeCheckerTab() {
-        let typeCheckerNav = (tabBarController?.viewControllers?[2]) as! CustomNavVC
-        let typeCheckerTab = typeCheckerNav.viewControllers[0] as! TypeCheckerVC
-        typeCheckerTab.coreDataStack = coreDataStack
-        typeCheckerTab.dataManager = dataManager
-        
         if let typeObjects = dataManager.getFromCoreData(entity: TypeMO.self) as? [TypeMO] {
             if typeObjects.isEmpty {
                 fetchTypeDataFromAPI()
@@ -100,12 +87,6 @@ class PokedexVC: UITableViewController, NSFetchedResultsControllerDelegate {
             fetchTypeDataFromAPI()
         }
     }
-    
-//    private func initializeSettingsTab() {
-//        let settingsNav = tabBarController?.viewControllers?[3] as! CustomNavVC
-//        let settingsTab = settingsNav.viewControllers[0] as! SettingsVC
-//        settingsTab.coreDataStack = coreDataStack
-//    }
     
     func fetchTypeDataFromAPI() {
         let typesURL = apiService.createURL(for: .types)!
@@ -229,7 +210,7 @@ class PokedexVC: UITableViewController, NSFetchedResultsControllerDelegate {
         searchController.searchBar.placeholder = "Search Pokémon"
         definesPresentationContext = true
         searchController.hidesNavigationBarDuringPresentation = true
-        navigationItem.hidesSearchBarWhenScrolling = true
+        navigationItem.hidesSearchBarWhenScrolling = false
         
         searchController.searchBar.barTintColor = UIColor.label
         searchController.searchBar.tintColor = UIColor.label
