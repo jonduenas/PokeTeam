@@ -17,6 +17,7 @@ class CustomTabController: UITabBarController, UITabBarControllerDelegate {
         
         tabBar.barStyle = .black
         tabBar.isTranslucent = true
-        
+        tabBar.barTintColor = .black
+        tabBar.tintColor = .white
     }
 }

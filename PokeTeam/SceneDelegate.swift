@@ -19,25 +19,40 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let coreDataStack = CoreDataStack()
         let dataManager = DataManager(managedObjectContext: coreDataStack.newDerivedContext(), coreDataStack: coreDataStack)
         
-        // Setup Tab Controller
         let tabController = CustomTabController()
         
         // Setup View Controllers
+        // Pokedex
         let pokedexVC = UIStoryboard(name: "Pokedex", bundle: .main).instantiateViewController(identifier: "PokedexVC") { coder in
             PokedexVC(coder: coder, coreDataStack: coreDataStack, dataManager: dataManager)
         }
         let pokedexNav = CustomNavVC(rootViewController: pokedexVC)
         
+        let pokedexTabImage = UIImage(systemName: "book.fill")
+        let pokedexTabBarItem = UITabBarItem(title: "Pokedex", image: pokedexTabImage, selectedImage: nil)
+        pokedexNav.tabBarItem = pokedexTabBarItem
+        
+        // Team Builder
         let teamBuilderVC = UIStoryboard(name: "TeamBuilder", bundle: .main).instantiateViewController(identifier: "TeamBuilderVC") { coder in
             TeamBuilderVC(coder: coder, coreDataStack: coreDataStack, dataManager: dataManager)
         }
         let teamBuilderNav = CustomNavVC(rootViewController: teamBuilderVC)
         
+        let teamTabImage = UIImage(systemName: "shield.lefthalf.fill")
+        let teamTabBarItem = UITabBarItem(title: "Team Builder", image: teamTabImage, selectedImage: nil)
+        teamBuilderNav.tabBarItem = teamTabBarItem
+        
+        // Type Checker
         let typeCheckerVC = UIStoryboard(name: "TypeChecker", bundle: .main).instantiateViewController(identifier: "TypeCheckerVC") { coder in
             TypeCheckerVC(coder: coder, coreDataStack: coreDataStack, dataManager: dataManager)
         }
         let typeCheckerNav = CustomNavVC(rootViewController: typeCheckerVC)
         
+        let typeTabImage = UIImage(systemName: "gauge")
+        let typeTabBarItem = UITabBarItem(title: "Type Checker", image: typeTabImage, selectedImage: nil)
+        typeCheckerNav.tabBarItem = typeTabBarItem
+        
+        // Add View Controllers to Tab Controller
         let controllers = [pokedexNav, teamBuilderNav, typeCheckerNav]
         tabController.setViewControllers(controllers, animated: false)
         
