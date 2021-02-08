@@ -10,17 +10,13 @@ import Foundation
 import Combine
 
 extension Publisher where Output == URLSession.DataTaskPublisher.Output {
-  func validateHTTPStatus(_ expectedStatus: Int) -> Publishers.TryMap<Self, Data> {
-    tryMap { output in
-      if let response = output.response as? HTTPURLResponse, response.statusCode == expectedStatus {
-        return output.data
-      } else {
-        throw SomeError.unexpectedResponse(output.response)
-      }
+    func validateHTTPStatus(_ expectedStatus: Int) -> Publishers.TryMap<Self, Data> {
+        tryMap { output in
+            if let response = output.response as? HTTPURLResponse, response.statusCode == expectedStatus {
+                return output.data
+            } else {
+                throw HTTPError.unexpectedResponse(output.response)
+            }
+        }
     }
-  }
-}
-
-enum SomeError: Error {
-    case unexpectedResponse(_: URLResponse)
 }
