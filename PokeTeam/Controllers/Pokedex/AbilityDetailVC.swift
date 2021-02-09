@@ -14,7 +14,7 @@ class AbilityDetailVC: UIViewController {
     
     var coreDataStack: CoreDataStack!
     var backgroundDataManager: DataManager!
-    var apiService: APIService!
+    var apiService: APIService_Protocol!
     
     var abilityManagedObjectID: NSManagedObjectID?
     var abilityDetails: AbilityDetails?

@@ -20,9 +20,9 @@ class PokemonDetailVC: UIViewController {
     let pokemonObjectID: NSManagedObjectID
     
     var colorBlockView: ColorBlockView!
-    var backgroundDataManager: DataManager!
-    var coreDataStack: CoreDataStack!
-    var apiService: APIService!
+    let backgroundDataManager: DataManager
+    let coreDataStack: CoreDataStack
+    let apiService: APIService_Protocol
     
     var pokemon: PokemonMO
     var pokemonFormsArray = [PokemonMO]()
@@ -59,7 +59,7 @@ class PokemonDetailVC: UIViewController {
     @IBOutlet var abilitiesHeaderLabel: UILabel!
     @IBOutlet weak var abilitiesStackView: UIStackView!
     
-    init?(coder: NSCoder, pokemonObjectID: NSManagedObjectID, coreDataStack: CoreDataStack, dataManager: DataManager, apiService: APIService) {
+    init?(coder: NSCoder, pokemonObjectID: NSManagedObjectID, coreDataStack: CoreDataStack, dataManager: DataManager, apiService: APIService_Protocol) {
         self.coreDataStack = coreDataStack
         self.backgroundDataManager = dataManager
         self.apiService = apiService

@@ -13,15 +13,13 @@ import CoreData
 class PokedexVC: UITableViewController, NSFetchedResultsControllerDelegate, CoreDataStackClient {
     let coreDataStack: CoreDataStack
     let dataManager: DataManager
-    
-    let nationalPokedexID = 1
-    let pokemonCellID = "pokemonCell"
     let simpleOver = SimpleOver()
+    let pokemonCellID = "pokemonCell"
     
+    lazy var apiService: APIService_Protocol = APIService()
     var searchController: UISearchController!
     var colorBlockView: ColorBlockView!
     var indicatorView: UIActivityIndicatorView!
-    private lazy var apiService = APIService()
     
     var refreshButton: UIBarButtonItem?
     var fetchedResultsController: NSFetchedResultsController<PokemonMO>!
@@ -89,7 +87,11 @@ class PokedexVC: UITableViewController, NSFetchedResultsControllerDelegate, Core
     }
     
     func fetchTypeDataFromAPI() {
-        let typesURL = apiService.createURL(for: .types)!
+        guard let typesURL = apiService.createURL(for: .types, fromIndex: nil) else {
+            showAlert(message: "Error loading from API")
+            print("Error creating URL for pokemon type data")
+            return
+        }
         
         apiService.fetchAll(type: TypeData.self, from: typesURL)
             .sink { completion in
@@ -104,8 +106,8 @@ class PokedexVC: UITableViewController, NSFetchedResultsControllerDelegate, Core
                 self.dataManager.parseTypeDataIntoCoreData(typeDataArray: allTypeData)
                 
                 DispatchQueue.main.async {
-                    let typeCheckerNav = self.tabBarController?.viewControllers?[2] as! CustomNavVC
-                    let typeCheckerTab = typeCheckerNav.viewControllers[0] as! TypeCheckerVC
+                    guard let typeCheckerNav = self.tabBarController?.viewControllers?[2] as? CustomNavVC else { return }
+                    guard let typeCheckerTab = typeCheckerNav.viewControllers[0] as? TypeCheckerVC else { return }
                     typeCheckerTab.allTypes = self.dataManager.getFromCoreData(entity: TypeMO.self, sortBy: "name", isAscending: true) as! [TypeMO]
                 }
             }
@@ -145,7 +147,7 @@ class PokedexVC: UITableViewController, NSFetchedResultsControllerDelegate, Core
     @objc private func fetchPokedex() {
         setState(loading: true)
         
-        guard let url = apiService.createURL(for: .allPokemon) else {
+        guard let url = apiService.createURL(for: .allPokemon, fromIndex: nil) else {
             print("Error creating URL")
             return
         }

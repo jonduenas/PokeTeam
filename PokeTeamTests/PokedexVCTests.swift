@@ -7,21 +7,29 @@
 //
 
 import XCTest
+import Combine
 @testable import PokeTeam
 
 class PokedexVCTests: XCTestCase {
 
     var sut: PokedexVC!
+    var mockAPIService: MockAPIService!
     
     override func setUp() {
         super.setUp()
         
-        let testCoreDataStack = TestCoreDataStack()
+        mockAPIService = MockAPIService()
+        mockAPIService.currentValueSubject = CurrentValueSubject(createValidTestObject())
+        mockAPIService.currentValueSubjectArray = CurrentValueSubject(createValidTestObjectArray())
         
-        let storyboard = UIStoryboard(name: "Pokedex", bundle: nil)
-        sut = storyboard.instantiateInitialViewController() as? PokedexVC
-        sut.coreDataStack = testCoreDataStack
-        sut.backgroundDataManager = DataManager(managedObjectContext: testCoreDataStack.mainContext, coreDataStack: testCoreDataStack)
+        let testCoreDataStack = TestCoreDataStack()
+        let dataManager = DataManager(managedObjectContext: testCoreDataStack.mainContext, coreDataStack: testCoreDataStack)
+        
+        let storyboard = UIStoryboard(name: "Pokedex", bundle: .main)
+        sut = storyboard.instantiateViewController(identifier: "PokedexVC") { coder in
+            PokedexVC(coder: coder, coreDataStack: testCoreDataStack, dataManager: dataManager)
+        }
+        sut.apiService = mockAPIService
         
         sut.loadViewIfNeeded()
     }
@@ -31,6 +39,16 @@ class PokedexVCTests: XCTestCase {
         
         super.tearDown()
     }
-
     
+    func createValidTestObject() -> ResourceList {
+        return ResourceList(count: 100, results: [])
+    }
+    
+    func createValidTestObjectArray() -> [TypeData] {
+        return [TypeData(name: "normal", id: 1, damageRelations: DamageRelation(doubleDamageFrom: [], doubleDamageTo: [], halfDamageFrom: [], halfDamageTo: [], noDamageFrom: [], noDamageTo: []))]
+    }
+    
+    func testInitialLoadingState() {
+        XCTAssertTrue(sut.indicatorView.isAnimating)
+    }
 }

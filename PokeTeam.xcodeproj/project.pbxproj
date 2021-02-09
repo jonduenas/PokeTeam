@@ -843,6 +843,7 @@
 		6541AB1124FD7AB900960D17 /* FormData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6541AB1024FD7AB900960D17 /* FormData.swift */; };
 		6541AB1324FD97E200960D17 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6541AB1224FD97E200960D17 /* Strings.swift */; };
 		6541E39324E0B5D80000564D /* GenerationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6541E39224E0B5D80000564D /* GenerationData.swift */; };
+		6546D7CB25D1E97A008A5A21 /* type.json in Resources */ = {isa = PBXBuildFile; fileRef = 65A23FAD25D1D0C500844A44 /* type.json */; };
 		654AF694250D49A6000D09D3 /* CustomNavVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 654AF693250D49A6000D09D3 /* CustomNavVC.swift */; };
 		6554E7BC24D4E09B00081EA9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6554E7BB24D4E09B00081EA9 /* AppDelegate.swift */; };
 		6554E7BE24D4E09B00081EA9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6554E7BD24D4E09B00081EA9 /* SceneDelegate.swift */; };
@@ -2707,7 +2708,7 @@
 		6554E7D124D4E09E00081EA9 /* PokeTeamTests */ = {
 			isa = PBXGroup;
 			children = (
-				65A23FAE25D1D0C500844A44 /* Mock JSON */,
+				65A23FAE25D1D0C500844A44 /* MockJSON */,
 				65CC1D7F25B8E4F60098AEC6 /* PokedexVCTests.swift */,
 				65F2A77B25A6489B00175F26 /* APIServiceTests.swift */,
 				65FCBD2525C0CDBE00A513B2 /* MockSession.swift */,
@@ -2792,7 +2793,7 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
-		65A23FAE25D1D0C500844A44 /* Mock JSON */ = {
+		65A23FAE25D1D0C500844A44 /* MockJSON */ = {
 			isa = PBXGroup;
 			children = (
 				65A23FAD25D1D0C500844A44 /* type.json */,
@@ -2800,8 +2801,8 @@
 				6555D209253651C50037CE19 /* battle-armor.json */,
 				65221D12253508BC00C83E41 /* mewtwo.json */,
 			);
-			name = "Mock JSON";
-			path = "/Users/jonduenas/Local Documents/PokeTeam/PokeTeamTests/Mock JSON";
+			name = MockJSON;
+			path = "/Users/jonduenas/Local Documents/PokeTeam/PokeTeamTests/MockJSON";
 			sourceTree = "<absolute>";
 		};
 		65D98A772566F3C800BDE9B6 /* TypeChecker */ = {
@@ -3822,6 +3823,7 @@
 				65221D13253508BD00C83E41 /* mewtwo.json in Resources */,
 				65221D1B25350DB600C83E41 /* unown.json in Resources */,
 				6555D20A253651C50037CE19 /* battle-armor.json in Resources */,
+				6546D7CB25D1E97A008A5A21 /* type.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
